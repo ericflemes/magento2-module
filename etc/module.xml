@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author      Webjump Core Team <dev@webjump.com.br>
+ * @copyright   2017 Webjump (http://www.webjump.com.br)
+ * @license     http://www.webjump.com.br  Copyright
+ *
+ * @link        http://www.webjump.com.br
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="PayPalBR_PayPalPlus" setup_version="0.0.1">
+        <sequence>
+            <module name="Magento_Sales" />
+            <module name="Magento_Payment" />
+            <module name="Magento_Checkout"/>
+            <module name="Magento_Directory" />
+            <module name="Magento_Config" />
+        </sequence>
+    </module>
+</config>
