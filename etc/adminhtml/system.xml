@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment">
+            <group id="paypal_br" sortOrder="6" showInDefault="0" showInWebsite="0" showInStore="0">
+            	<group id="paypal_plus" translate="label comment" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+            		<label>PayPal Plus</label>
+            		<comment><![CDATA[Accept credit/debit cards and PayPal in your Magento store.<br/>No setup or monthly fees and your customers never leave your store to complete the purchase.]]></comment>
+            		<fieldset_css>complex paypalbr-section</fieldset_css>
+            		<frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
+            		<attribute type="activity_path">payment/paypal_plus/active</attribute>
+                    <attribute type="displayIn">recommended_solutions</attribute>
+                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Enable this Solution</label>
+                        <config_path>payment/paypal_plus/active</config_path>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+            	</group>
+            </group>
+        </section>
+    </system>
+</config>
