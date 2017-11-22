@@ -65,6 +65,10 @@
                         <label>Maximum Order Total</label>
                         <config_path>payment/paypal_plus/maximum_order_total</config_path>
                     </field>
+                    <field id="sort_order" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Sort Order</label>
+                        <config_path>payment/paypal_plus/sort_order</config_path>
+                    </field>
             	</group>
             </group>
         </section>
