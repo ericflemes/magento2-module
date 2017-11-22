@@ -1,0 +1,13 @@
+/**
+ * Copyright © Webjump Design em Informática. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+.paypalbr-section .heading {
+	background: url("images/paypalbr_logo.png") no-repeat 0 50% / 18rem auto; 
+	padding-left: 20rem;
+}
+
+.paypalbr-section .button-container {
+	float: right;
+}

@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment">
+            <group id="paypal_br" sortOrder="6" showInDefault="0" showInWebsite="0" showInStore="0">
+            	<group id="paypal_plus" translate="label comment" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+            		<label>PayPal Plus</label>
+            		<comment>The experience of a transparent checkout processed with a PayPal security. The user makes the payment directly on your site, without a need to create an account, use only the credit card.</comment>
+            		<fieldset_css>complex paypalbr-section</fieldset_css>
+            		<frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
+            		<attribute type="activity_path">payment/paypal_plus/active</attribute>
+                    <attribute type="displayIn">recommended_solutions</attribute>
+                    <field id="active" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Enable this Solution</label>
+                        <config_path>payment/paypal_plus/active</config_path>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="is_sandbox" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Is SandBox?</label>
+                        <config_path>payment/paypal_plus/active</config_path>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="client_id_sandbox" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Client ID SandBox</label>
+                        <config_path>payment/paypal_plus/client_id_sandbox</config_path>
+                    </field>
+                    <field id="secret_id_sandbox" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Secret ID SandBox</label>
+                        <config_path>payment/paypal_plus/secret_id_sandbox</config_path>
+                    </field>
+                    <field id="payment_action" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Payment Action</label>
+                        <config_path>payment/paypal_plus/secret_id_sandbox</config_path>
+                        <source_model>PayPalBR\PayPalPlus\Model\Config\Source\PaymentAction</source_model>
+                    </field>
+                    <field id="title" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Title</label>
+                        <config_path>payment/paypal_plus/title</config_path>
+                    </field>
+                    <field id="new_order_status" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>New Order Status</label>
+                        <config_path>payment/paypal_plus/new_order_status</config_path>
+                    </field>
+                    <field id="payment_from_applicable_countries" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Payment from Applicable Countries</label>
+                        <config_path>payment/paypal_plus/payment_from_applicable_countries</config_path>
+                        <source_model>PayPalBR\PayPalPlus\Model\Config\Source\PaymentFromApplicableCountries</source_model>
+                    </field>
+                    <field id="payment_from_specific_countries" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Payment from Specific Countries</label>
+                        <config_path>payment/paypal_plus/payment_from_specific_countries</config_path>
+                        <source_model>PayPalBR\PayPalPlus\Model\Config\Source\PaymentFromSpecificCountries</source_model>
+                    </field>
+                    <field id="minimum_order_total" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Minimum Order Total</label>
+                        <config_path>payment/paypal_plus/minimum_order_total</config_path>
+                    </field>
+                    <field id="maximum_order_total" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Maximum Order Total</label>
+                        <config_path>payment/paypal_plus/maximum_order_total</config_path>
+                    </field>
+            	</group>
+            </group>
+        </section>
+    </system>
+</config>
