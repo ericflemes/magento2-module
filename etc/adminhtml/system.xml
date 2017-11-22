@@ -29,10 +29,16 @@
                     <field id="client_id_sandbox" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Client ID SandBox</label>
                         <config_path>payment/paypal_plus/client_id_sandbox</config_path>
+                        <depends>
+                            <field id="is_sandbox">1</field>
+                        </depends>
                     </field>
                     <field id="secret_id_sandbox" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Secret ID SandBox</label>
                         <config_path>payment/paypal_plus/secret_id_sandbox</config_path>
+                        <depends>
+                            <field id="is_sandbox">1</field>
+                        </depends>
                     </field>
                     <field id="payment_action" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment Action</label>
@@ -56,6 +62,9 @@
                         <label>Payment from Specific Countries</label>
                         <config_path>payment/paypal_plus/payment_from_specific_countries</config_path>
                         <source_model>PayPalBR\PayPalPlus\Model\Config\Source\PaymentFromSpecificCountries</source_model>
+                        <depends>
+                            <field id="payment_from_applicable_countries">1</field>
+                        </depends>
                     </field>
                     <field id="minimum_order_total" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Minimum Order Total</label>
