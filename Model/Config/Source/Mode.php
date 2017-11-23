@@ -11,7 +11,7 @@ class Mode implements \Magento\Framework\Option\ArrayInterface
 	public function toOptionArray()
 	{
 		$options = [
-			"1" => __("SandBox"),
+			"1" => __("Sandbox"),
 			"2" => __("Production")
 		];
 
