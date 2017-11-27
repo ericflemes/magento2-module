@@ -11,31 +11,12 @@
 
 namespace PayPalBR\PayPalPlus\Gateway\Transaction\PayPalPlus\Config;
 
-
 interface ConfigInterface
 {
-    const PATH_INSTRUCTIONS     = 'payment/paypal_plus/instructions';
-    const PATH_TEXT             = 'payment/paypal_plus/text';
-    const PATH_TYPE_BANK        = 'payment/paypal_plus/types';
-    const PATH_EXPIRATION_DAYS  = 'payment/paypal_plus/expiration_days';
-
-    /**
-     * @return string
-     */
-    public function getInstructions();
+    const PATH_TEXT = 'payment/paypal_plus/text';
 
     /**
      * @return string
      */
     public function getText();
-
-    /**
-     * @return string
-     */
-    public function getTypeBank();
-
-    /**
-     * @return string
-     */
-    public function getExpirationDays();
 }
