@@ -30,7 +30,7 @@ define([
                  }
              ).fail(
                  function (response) {
-                     console.log("falhou");
+                     console.log(response);
                  }
              );
         },

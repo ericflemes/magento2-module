@@ -3,133 +3,131 @@ namespace PayPalBR\PayPalPlus\Model;
 
 class ObtainAccessToken
 {
+    /**
+    * @var \Magento\Framework\App\Config\ScopeConfigInterface
+    */
+    protected $_scopeConfig;
 
-   /**
-   * @var \Magento\Framework\App\Config\ScopeConfigInterface
-   */
-   protected $scopeConfig;
+    /**
+    * @var \Magento\Checkout\Model\Cart
+    */
+    protected $_cart;
 
-   /**
-   * Recipient email config path
-   */
-   const XML_PATH_CLIENT_ID = 'payment/paypal_plus/client_id_sandbox';
-   const XML_PATH_SECRET_ID = 'payment/paypal_plus/secret_id_sandbox';
-   const XML_PATH_MODE = 'payment/paypal_plus/mode';
+    /**
+    * Recipient email config path
+    */
+    const XML_PATH_CLIENT_ID = 'payment/paypal_plus/client_id_sandbox';
+    const XML_PATH_SECRET_ID = 'payment/paypal_plus/secret_id_sandbox';
+    const XML_PATH_MODE = 'payment/paypal_plus/mode';
 
-   public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
-   {
-      $this->scopeConfig = $scopeConfig;
-   }
+    public function __construct(
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Checkout\Model\Cart $cart
+    ) {
+        $this->_scopeConfig = $scopeConfig;
+        $this->_cart = $cart;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function postAccessToken()
     {
+        $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
+        $mode = $this->_scopeConfig->getValue(self::XML_PATH_MODE, $storeScope);
+        $mode = ($mode == 1) ? 'sandbox' : 'live';
 
+        $config_id = $this->_scopeConfig->getValue(self::XML_PATH_CLIENT_ID, $storeScope);
+        $secret_id = $this->_scopeConfig->getValue(self::XML_PATH_SECRET_ID, $storeScope);
 
-      $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
-      $mode =  $this->scopeConfig->getValue(self::XML_PATH_MODE, $storeScope);
-      $mode = ($mode == 1) ? 'sandbox' : 'live';
-
-      $config_id =  $this->scopeConfig->getValue(self::XML_PATH_CLIENT_ID, $storeScope);
-      $secret_id =  $this->scopeConfig->getValue(self::XML_PATH_SECRET_ID, $storeScope);
-
-
-        // if( $test_site == true ){
-        // $sdkConfig = array(
-        //     "mode" => "sandbox"
-        // );
-        // }else{
-        //     $sdkConfig = array(
-        //         "mode" => "live"
-        //     );
-        // }
-
-        $apiContext =  new \PayPal\Rest\ApiContext(
-             new \PayPal\Auth\OAuthTokenCredential(
+        $apiContext = new \PayPal\Rest\ApiContext(
+            new \PayPal\Auth\OAuthTokenCredential(
                 $config_id ,
                 $secret_id
             )
         );
 
-
         $apiContext->setConfig(
             array(
                 'mode' => $mode,
-                'log.LogEnabled' => true,
-                'log.FileName' => '../var/log/paypalplus.log',
-                'log.LogLevel' => 'DEBUG', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
+                // 'log.LogEnabled' => true,
+                // 'log.FileName' => '../var/log/paypalplus.log',
+                // 'log.LogLevel' => 'DEBUG', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
                 'cache.enabled' => true,
                 'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2'
-                // 'http.CURLOPT_CONNECTTIMEOUT' => 30
-                // 'http.headers.PayPal-Partner-Attribution-Id' => '123123123'
-                //'log.AdapterFactory' => '\PayPal\Log\DefaultLogFactory' // Factory class implementing \PayPal\Log\PayPalLogFactory
             )
         );
 
         $payer = new \PayPal\Api\Payer();
         $payer->setPaymentMethod('paypal');
 
+        $item1 = new \PayPal\Api\Item();
+        $item1->setName('My item 1')
+            ->setDescription('My description...')
+            ->setQuantity('1')
+            ->setPrice('0.50')
+            ->setTax('0.01')
+            ->setsku('asd123')
+            ->setCurrency('USD');
 
-        $item1 =  new \PayPal\Api\Item();
-        $item1->setName('My Custom Description')
-        ->setCurrency('GBP')
-        ->setQuantity('1')
-         ->setPrice('.5')
-         ->setsku('hjjh55');
+        $item2 = new \PayPal\Api\Item();
+        $item2->setName('My item 2')
+            ->setDescription('My description...')
+            ->setQuantity('2')
+            ->setPrice('0.70')
+            ->setTax('0.01')
+            ->setsku('zxc123')
+            ->setCurrency('USD');
 
+        $shippingAddress = new \PayPal\Api\ShippingAddress();
+        $shippingAddress->setRecipientName("Enzo Silva")
+            ->setLine1("4o andar")
+            ->setLine2("Unidade #34")
+            ->setCity("Itapevi")
+            ->setCountryCode("BR")
+            ->setPostalCode("01425000")
+            ->setPhone("5511987654321")
+            ->setState("SP");
 
         $itemList = new \PayPal\Api\ItemList();
-        $itemList->setItems(array($item1));
+        $itemList->addItem($item1);
+        $itemList->addItem($item2);
+        $itemList->setShippingAddress($shippingAddress);
 
-
-        $amount =  new \PayPal\Api\Amount();
+        $amount = new \PayPal\Api\Amount();
         $amount->setCurrency("USD");
         $amount->setTotal("12");
 
-
-        $transaction =  new \PayPal\Api\Transaction();
-        $transaction->setDescription("creating a payment");
+        $transaction = new \PayPal\Api\Transaction();
+        $transaction->setDescription("Creating a payment");
         $transaction->setAmount($amount);
-
+        // $transaction->setItemList($itemList);
 
         $baseUrl = 'http://paypal.dev';
         $redirectUrls = new \PayPal\Api\RedirectUrls();
-        $redirectUrls->setReturnUrl("$baseUrl/ExecutePayment.php?success=true")
-        ->setCancelUrl("$baseUrl/ExecutePayment.php?success=false");
+        $redirectUrls->setReturnUrl("$baseUrl/ExecutePayment.php?success=true")->setCancelUrl("$baseUrl/ExecutePayment.php?success=false");
 
-
-        $payment =  new \PayPal\Api\Payment();
-        $payment->setIntent("sale");
+        $payment = new \PayPal\Api\Payment();
+        $payment->setIntent("Sale");
         $payment->setPayer($payer);
         $payment->setRedirectUrls($redirectUrls);
         $payment->setTransactions(array($transaction));
 
-
         try {
-
-           $payment->create($apiContext);
-
+            $payment->create($apiContext);
         } catch (\PayPal\Exception\PPConnectionException $ex) {
-
-                echo "Exception: " . $ex->getMessage() . PHP_EOL;
-                $err_data = json_decode($ex->getData(), true);
-                print_r($err_data);
-                die();
-
+            echo "Exception: " . $ex->getMessage() . PHP_EOL;
+            $err_data = json_decode($ex->getData(), true);
+            print_r($err_data);
+            die();
         }
 
         $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/paypalplus.log');
         $logger = new \Zend\Log\Logger();
         $logger->addWriter($writer);
         $logger->info($payment);
+
         return  $payment->getApprovalLink();
-
-
-
-        die;
-
-
 
         $curl = curl_init();
         $data_string = '{
