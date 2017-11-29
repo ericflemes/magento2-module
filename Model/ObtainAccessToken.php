@@ -14,6 +14,7 @@ class ObtainAccessToken
    */
    const XML_PATH_CLIENT_ID = 'payment/paypal_plus/client_id_sandbox';
    const XML_PATH_SECRET_ID = 'payment/paypal_plus/secret_id_sandbox';
+   const XML_PATH_MODE = 'payment/paypal_plus/mode';
 
    public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
    {
@@ -27,6 +28,8 @@ class ObtainAccessToken
 
 
       $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
+      $mode =  $this->scopeConfig->getValue(self::XML_PATH_MODE, $storeScope);
+      $mode = ($mode == 1) ? 'sandbox' : 'live';
 
       $config_id =  $this->scopeConfig->getValue(self::XML_PATH_CLIENT_ID, $storeScope);
       $secret_id =  $this->scopeConfig->getValue(self::XML_PATH_SECRET_ID, $storeScope);
@@ -52,7 +55,7 @@ class ObtainAccessToken
 
         $apiContext->setConfig(
             array(
-                'mode' => 'sandbox',
+                'mode' => $mode,
                 'log.LogEnabled' => true,
                 'log.FileName' => '/var/log/paypalplus.log',
                 'log.LogLevel' => 'DEBUG', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
