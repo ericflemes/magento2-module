@@ -14,6 +14,21 @@ class ObtainAccessToken
     protected $_cart;
 
     /**
+     * @var \Magento\Customer\Model\Session
+     */
+    protected $_customer;
+
+    /**
+     * @var \Magento\Customer\Model\CustomerFactory
+     */
+    protected $_customerFactory;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
     * Recipient email config path
     */
     const XML_PATH_CLIENT_ID = 'payment/paypal_plus/client_id_sandbox';
@@ -22,10 +37,16 @@ class ObtainAccessToken
 
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Checkout\Model\Cart $cart
+        \Magento\Checkout\Model\Cart $cart,
+        \Magento\Customer\Model\Session $customer,
+        \Magento\Customer\Model\CustomerFactory $customerFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_cart = $cart;
+        $this->_customer = $customer;
+        $this->_customerFactory = $customerFactory;
+        $this->_storeManager = $storeManager;
     }
 
     /**
@@ -37,75 +58,88 @@ class ObtainAccessToken
         $mode = $this->_scopeConfig->getValue(self::XML_PATH_MODE, $storeScope);
         $mode = ($mode == 1) ? 'sandbox' : 'live';
 
-        $config_id = $this->_scopeConfig->getValue(self::XML_PATH_CLIENT_ID, $storeScope);
-        $secret_id = $this->_scopeConfig->getValue(self::XML_PATH_SECRET_ID, $storeScope);
+        $configId = $this->_scopeConfig->getValue(self::XML_PATH_CLIENT_ID, $storeScope);
+        $secretId = $this->_scopeConfig->getValue(self::XML_PATH_SECRET_ID, $storeScope);
 
         $apiContext = new \PayPal\Rest\ApiContext(
             new \PayPal\Auth\OAuthTokenCredential(
-                $config_id ,
-                $secret_id
+                $configId,
+                $secretId
             )
         );
 
         $apiContext->setConfig(
             array(
-                'mode' => $mode,
-                // 'log.LogEnabled' => true,
-                // 'log.FileName' => '../var/log/paypalplus.log',
-                // 'log.LogLevel' => 'DEBUG', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
-                'cache.enabled' => true,
-                'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2'
+              'http.headers.PayPal-Partner-Attribution-Id' => 'MagentoBrazil_Ecom_PPPlus2',
+              'mode' => $mode,
+              'log.LogEnabled' => true,
+              'log.FileName' => '../var/log/paypalplus.log',
+              'log.LogLevel' => 'DEBUG', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
+              'cache.enabled' => true,
+              'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2'
             )
         );
+
+        $customerId = $this->_customer->getId();
+        $customerSession = $this->_customerFactory->create()->load($customerId);
+        $quote = $this->_cart->getQuote();
+        $storeCurrency = $this->_storeManager->getStore()->getCurrentCurrency()->getCode();
 
         $payer = new \PayPal\Api\Payer();
         $payer->setPaymentMethod('paypal');
 
-        $item1 = new \PayPal\Api\Item();
-        $item1->setName('My item 1')
-            ->setDescription('My description...')
-            ->setQuantity('1')
-            ->setPrice('0.50')
-            ->setTax('0.01')
-            ->setsku('asd123')
-            ->setCurrency('USD');
-
-        $item2 = new \PayPal\Api\Item();
-        $item2->setName('My item 2')
-            ->setDescription('My description...')
-            ->setQuantity('2')
-            ->setPrice('0.70')
-            ->setTax('0.01')
-            ->setsku('zxc123')
-            ->setCurrency('USD');
-
-        $shippingAddress = new \PayPal\Api\ShippingAddress();
-        $shippingAddress->setRecipientName("Enzo Silva")
-            ->setLine1("4o andar")
-            ->setLine2("Unidade #34")
-            ->setCity("Itapevi")
-            ->setCountryCode("BR")
-            ->setPostalCode("01425000")
-            ->setPhone("5511987654321")
-            ->setState("SP");
-
         $itemList = new \PayPal\Api\ItemList();
-        $itemList->addItem($item1);
-        $itemList->addItem($item2);
+        $cartItems = $quote->getItems();
+        foreach ($cartItems as $cartItem) {
+            $item = new \PayPal\Api\Item();
+            $item->setName($cartItem->getName())
+                ->setDescription($cartItem->getDescription())
+                ->setQuantity($cartItem->getQty())
+                ->setPrice($cartItem->getPrice())
+                ->setTax('0.01')
+                ->setSku($cartItem->getSku())
+                ->setCurrency($storeCurrency);
+
+            $itemList->addItem($item);
+        }
+
+        $cartShippingAddress = $quote->getShippingAddress();
+        $shippingAddress = new \PayPal\Api\ShippingAddress();
+        $customerShippingAddress = $this->_customerFactory->create()->load($cartShippingAddress->getCustomerId());
+
+        $shippingAddress->setRecipientName($customerShippingAddress->getName())
+            ->setLine1($cartShippingAddress->getStreetLine(1))
+            ->setLine2($cartShippingAddress->getStreetLine(2))
+            ->setCity($cartShippingAddress->getCity())
+            ->setCountryCode($cartShippingAddress->getCountryId())
+            ->setPostalCode($cartShippingAddress->getPostcode())
+            ->setPhone($cartShippingAddress->getTelephone())
+            ->setState($cartShippingAddress->getRegion());
+
         $itemList->setShippingAddress($shippingAddress);
 
+        $details = new \PayPal\Api\Details();
+        $details->setShipping($cartShippingAddress->getShippingAmount())
+           ->setSubtotal($quote->getSubtotal());
+
         $amount = new \PayPal\Api\Amount();
-        $amount->setCurrency("USD");
-        $amount->setTotal("12");
+        $amount->setCurrency($storeCurrency);
+        $amount->setTotal($quote->getGrandTotal());
+        $amount->setDetails($details);
+
+        $paymentOptions = new \PayPal\Api\PaymentOptions();
+        $paymentOptions->setAllowedPaymentMethod("IMMEDIATE_PAY");
 
         $transaction = new \PayPal\Api\Transaction();
         $transaction->setDescription("Creating a payment");
         $transaction->setAmount($amount);
-        // $transaction->setItemList($itemList);
+        $transaction->setItemList($itemList);
+        $transaction->setPaymentOptions($paymentOptions);
 
-        $baseUrl = 'http://paypal.dev';
+        $baseUrl = "http://paypal.dev";
         $redirectUrls = new \PayPal\Api\RedirectUrls();
-        $redirectUrls->setReturnUrl("$baseUrl/ExecutePayment.php?success=true")->setCancelUrl("$baseUrl/ExecutePayment.php?success=false");
+        $redirectUrls->setReturnUrl("{$baseUrl}/ExecutePayment.php?success=true")
+            ->setCancelUrl("{$baseUrl}/ExecutePayment.php?success=false");
 
         $payment = new \PayPal\Api\Payment();
         $payment->setIntent("Sale");
@@ -115,9 +149,11 @@ class ObtainAccessToken
 
         try {
             $payment->create($apiContext);
-        } catch (\PayPal\Exception\PPConnectionException $ex) {
-            echo "Exception: " . $ex->getMessage() . PHP_EOL;
-            $err_data = json_decode($ex->getData(), true);
+        } catch (\PayPal\Exception\PayPalConnectionException $e) {
+            echo $e->getCode();
+            echo $e->getData();
+            echo "Exception: " . $e->getMessage() . PHP_EOL;
+            $err_data = json_decode($e->getData(), true);
             print_r($err_data);
             die();
         }
@@ -127,88 +163,6 @@ class ObtainAccessToken
         $logger->addWriter($writer);
         $logger->info($payment);
 
-        return  $payment->getApprovalLink();
-
-        $curl = curl_init();
-        $data_string = '{
-                            "intent":"sale",
-                            "payer":{
-                                "payment_method":"paypal"
-                            },
-                            "transactions":[
-                                {
-                                    "amount":{
-                                        "total":"30.11",
-                                        "currency":"USD",
-                                        "details":{
-                                            "subtotal":"30.00",
-                                            "tax":"0.07",
-                                            "shipping":"0.03",
-                                            "handling_fee":"1.00",
-                                            "shipping_discount":"-1.00",
-                                            "insurance":"0.01"
-                                        }
-                                    },
-                                    "description":"The payment transaction description.",
-                                    "custom":"EBAY_EMS_90048630024435",
-                                    "invoice_number":"48787589673",
-                                    "payment_options":{
-                                        "allowed_payment_method":"INSTANT_FUNDING_SOURCE"
-                                    },
-                                    "soft_descriptor":"ECHI5786786",
-                                    "item_list":{
-                                        "items":[
-                                            {
-                                                "name":"hat",
-                                                "description":"Brown hat.",
-                                                "quantity":"5",
-                                                "price":"3",
-                                                "tax":"0.01",
-                                                "sku":"1",
-                                                "currency":"USD"
-                                            },
-                                            {
-                                                "name":"handbag",
-                                                "description":"Black handbag.",
-                                                "quantity":"1",
-                                                "price":"15",
-                                                "tax":"0.02",
-                                                "sku":"product34",
-                                                "currency":"USD"
-                                            }
-                                        ],
-                                        "shipping_address":{
-                                            "recipient_name":"Brian Robinson",
-                                            "line1":"4th Floor",
-                                            "line2":"Unit #34",
-                                            "city":"San Jose",
-                                            "country_code":"US",
-                                            "postal_code":"95131",
-                                            "phone":"011862212345678",
-                                            "state":"CA"
-                                        }
-                                    }
-                                }
-                            ],
-                            "note_to_payer":"Contact us for any questions on your order.",
-                            "redirect_urls":{
-                                "return_url":"http://www.paypal.com/return",
-                                "cancel_url":"http://www.paypal.com/cancel"
-                            }
-                        }';
-
-          curl_setopt_array($curl, array(
-          CURLOPT_URL => "https://api.sandbox.paypal.com/v1/payments/payment ",
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_CUSTOMREQUEST => "POST",
-          CURLOPT_POSTFIELDS => $data_string,
-          CURLOPT_SSL_VERIFYPEER => false,
-          CURLOPT_HTTPHEADER => array(
-            "authorization: Bearer $cred->accessToken",
-            "content-type: application/json"
-          ),
-        ));
-
-        return $url;
+        return $payment->getApprovalLink();
     }
 }
