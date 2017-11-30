@@ -3,7 +3,7 @@ define([
     'jquery',
     'ko',
     'mage/url',
-    'mage/storage',
+    'mage/storage'
 ], function (Component, $, ko, urlBuilder, storage) {
     'use strict';
 
