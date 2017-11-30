@@ -3,7 +3,7 @@ define([
     'ko',
     'jquery',
     'mage/url',
-    'mage/storage'
+    'mage/storage',
 ], function (Component , ko , $ , urlBuilder , storage) {
     'use strict';
 
@@ -20,12 +20,22 @@ define([
              ).done(
                  function (response) {
 
-                     var ppp = PAYPAL.apps.PPP({
-                     "approvalUrl": response,
-                     "placeholder": "ppplus",
-                     "mode": "sandbox",
-                    "country": "BR"
-                     });
+                         var ppp = PAYPAL.apps.PPP({
+                             "approvalUrl": response,
+                             "placeholder": "ppplusDiv",
+                             "mode": "sandbox" ,
+                            "payerFirstName": "Diego",
+                            "payerLastName": " Lisboa",
+                            "payerPhone": "05511998548609",
+                            "payerEmail": "diego.giglioli@gmail.com",
+                            "payerTaxId": "31767933835",
+                            "payerTaxIdType": "BR_CPF",
+                            "language": "pt_BR",
+                            "country": "BR",
+                            "enableContinue": "orderPP",
+                            "disableContinue": "orderPPs",
+                        });
+
                     console.log(response);
                  }
              ).fail(
