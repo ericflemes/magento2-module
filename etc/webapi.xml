@@ -6,4 +6,10 @@
 			<resource ref="anonymous"/>
 		</resources>
 	</route>
+            <route method="POST" url="/V1/paypalplus/obtainaccesstoken">
+                        <service class="PayPalBR\PayPalPlus\Api\ObtainAccessTokenInterface" method="postAccessToken"/>
+                        <resources>
+                            <resource ref="anonymous"/>
+                        </resources>
+            </route>
 </routes>
