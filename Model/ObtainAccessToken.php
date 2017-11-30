@@ -120,7 +120,8 @@ class ObtainAccessToken
 
         $details = new \PayPal\Api\Details();
         $details->setShipping($cartShippingAddress->getShippingAmount())
-           ->setSubtotal($quote->getSubtotal());
+           ->setSubtotal($quote->getSubtotal())
+           ->setTax('0.01');
 
         $amount = new \PayPal\Api\Amount();
         $amount->setCurrency($storeCurrency);
