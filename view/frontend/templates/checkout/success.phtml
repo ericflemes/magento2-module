@@ -1,0 +1,31 @@
+
+<?php
+/**
+
+ * @author Diego Lisboa <diego@webjump.com.br>
+ * @category PayPalBR
+ * @package paypalbr\PayPalPlus\
+ * @copyright   qbo (http://www.webjump.com.br)
+ *
+ * © 2016 WEB JUMP SOLUTIONS
+ *
+ */
+?>
+
+<?php /** @var $block qbo\PayPalPlusMx\Block\Checkout\Success */ ?>
+
+<!-- Custom PPPlus additional info -->
+<?php $block->_initOrder(); ?>
+
+<?php if($block->getIsMethodActive()) : ?>
+    <!-- Add Custom PayPal Message for pending payments -->
+    <?php if ($block->isPaymentPending() && !empty($block->getPendingMessage())) : ?>
+        <div id="warning" class="message notice">
+            <div><?php echo $block->escapeHtml($block->getPendingMessage()) ?></div>
+        </div>
+    <?php endif; ?>
+    <!-- Add PayPal Logo -->
+    <img src="<?php echo $block->escapeHtml($block->getPayPalLogo()) ?>" border="0" />
+<?php endif; ?>
+<!-- End of Custom PPPlus additional info -->
+

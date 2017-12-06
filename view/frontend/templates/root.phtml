@@ -1,0 +1,28 @@
+<?php
+/**
+
+ * @author Diego Lisboa <diego@webjump.com.br>
+ * @category PayPalBR
+ * @package paypalbr\PayPalPlus\
+ * @copyright   qbo (http://www.webjump.com.br)
+ *
+ * © 2016 WEB JUMP SOLUTIONS
+ *
+ */
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$rootTemplate = $objectManager->create('qbo\PayPalPlusMx\Block\View\Root');
+?>
+<!doctype html>
+<html <?php /* @escapeNotVerified */ echo $htmlAttributes ?>>
+    <head <?php /* @escapeNotVerified */ echo $headAttributes ?>>
+        <?php if($rootTemplate->canIncludePayPalScript()) : ?>
+            <script type="text/javascript" src="<?php echo $rootTemplate->getScriptSource() ?>"></script>
+        <?php endif; ?>
+        <?php /* @escapeNotVerified */ echo $requireJs ?>
+        <?php /* @escapeNotVerified */ echo $headContent ?>
+        <?php /* @escapeNotVerified */ echo $headAdditional ?>
+    </head>
+    <body data-container="body" data-mage-init='{"loaderAjax": {}, "loader": { "icon": "<?php /* @escapeNotVerified */ echo $loaderIcon; ?>"}}' <?php /* @escapeNotVerified */ echo $bodyAttributes ?>>
+        <?php /* @escapeNotVerified */ echo $layoutContent ?>
+    </body>
+</html>

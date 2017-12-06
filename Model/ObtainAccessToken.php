@@ -96,7 +96,7 @@ class ObtainAccessToken
                 ->setDescription($cartItem->getDescription())
                 ->setQuantity($cartItem->getQty())
                 ->setPrice($cartItem->getPrice())
-                ->setTax('0.01')
+                ->setTax('0.00')
                 ->setSku($cartItem->getSku())
                 ->setCurrency($storeCurrency);
 
@@ -121,7 +121,7 @@ class ObtainAccessToken
         $details = new \PayPal\Api\Details();
         $details->setShipping($cartShippingAddress->getShippingAmount())
            ->setSubtotal($quote->getSubtotal())
-           ->setTax('0.01');
+           ->setTax('0.00');
 
         $amount = new \PayPal\Api\Amount();
         $amount->setCurrency($storeCurrency);
