@@ -10,6 +10,6 @@
         <observer name="PayPalBR_PayPalPlus_Payment_Data" instance="PayPalBR\PayPalPlus\Observer\clearPaymentDataAfterSaveOrder"/>
     </event>
     <event name="admin_system_config_changed_section_payment">
-        <observer name="PayPalBR_PayPalPlus_DataAssign" instance="PayPalBR\PayPalPlus\Observer\DataAssignObserver" />
+        <observer name="PayPalBR_PayPalPlus_DataAssign" instance="PayPalBR\PayPalPlus\Observer\DataAssign" />
     </event>
 </config>

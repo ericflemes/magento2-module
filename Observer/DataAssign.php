@@ -12,8 +12,10 @@ class DataAssign implements ObserverInterface
 
     protected $_configInterface;
 
-    const XML_PATH_CLIENT_ID = 'payment/paypalbr_paypalplus/client_id_sandbox';
-    const XML_PATH_SECRET_ID = 'payment/paypalbr_paypalplus/secret_id_sandbox';
+    const XML_PATH_CLIENT_ID_SANDBOX = 'payment/paypalbr_paypalplus/client_id_sandbox';
+    const XML_PATH_SECRET_ID_SANDBOX = 'payment/paypalbr_paypalplus/secret_id_sandbox';
+    const XML_PATH_CLIENT_ID_PROD = 'payment/paypalbr_paypalplus/client_id_production';
+    const XML_PATH_SECRET_ID_PROD = 'payment/paypalbr_paypalplus/secret_id_production';
     const XML_PATH_MODE = 'payment/paypalbr_paypalplus/mode';
     const XML_PATH_ACTIVE = 'payment/paypalbr_paypalplus/active';
     const XML_PATH_TAX = 'customer/address/taxvat_show';
@@ -40,8 +42,7 @@ class DataAssign implements ObserverInterface
     {
 
         $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
-        $clientId = $this->_scopeConfig->getValue(self::XML_PATH_CLIENT_ID, $storeScope);
-        $secret = $this->_scopeConfig->getValue(self::XML_PATH_SECRET_ID, $storeScope);
+
         $active = $this->_scopeConfig->getValue(self::XML_PATH_ACTIVE, $storeScope);
         $mode = $this->_scopeConfig->getValue(self::XML_PATH_MODE, $storeScope);
         $tax = $this->_scopeConfig->getValue(self::XML_PATH_TAX, $storeScope);
@@ -54,12 +55,18 @@ class DataAssign implements ObserverInterface
         }
 
         if($mode == "sandbox"){
-           $uri = "https://api.sandbox.paypal.com/v1/oauth2/token";
+            $uri = "https://api.sandbox.paypal.com/v1/oauth2/token";
+            $clientId = $this->_scopeConfig->getValue(self::XML_PATH_CLIENT_ID_SANDBOX, $storeScope);
+            $secret = $this->_scopeConfig->getValue(self::XML_PATH_SECRET_ID_SANDBOX, $storeScope);
         }else{
-           $uri = "https://api.paypal.com/v1/oauth2/token";
+
+            $uri = "https://api.paypal.com/v1/oauth2/token";
+            $clientId = $this->_scopeConfig->getValue(self::XML_PATH_CLIENT_ID_PROD, $storeScope);
+            $secret = $this->_scopeConfig->getValue(self::XML_PATH_SECRET_ID_PROD, $storeScope);
         }
 
         try{
+
         $client = new \GuzzleHttp\Client();
         $response = $client->request('POST', $uri, [
                 'headers' =>

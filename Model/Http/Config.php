@@ -107,6 +107,7 @@ class Config
      */
     public function getSandBoxFlag()
     {
+
        return  $this->scopeConfig->getValue(
             self::XML_PATH_SANDBOX_MODE,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -122,7 +123,11 @@ class Config
     {
         $config = array();
 
-        if(self::XML_PATH_SANDBOX_MODE == "1"){
+
+        $mode = $this->scopeConfig->getValue(self::XML_PATH_SANDBOX_MODE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+
+
+        if($mode == "1"){
             $config['ClientId'] = $this->scopeConfig->getValue(
                 self::XML_PATH_CLIENT_ID_SANDBOX,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -142,9 +147,7 @@ class Config
                 self::XML_PATH_CLIENT_SECRET_PROD,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
-
         }
-
          return array(
             'user'     => $config['ClientId'],
             'password' => $config['ClientSecret']

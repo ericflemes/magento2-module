@@ -10,16 +10,13 @@
         <section id="payment">
             <group id="paypalbr" sortOrder="6" showInDefault="0" showInWebsite="0" showInStore="0">
             	<group id="paypalplus" translate="label comment" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-            		<label>PayPal Plus</label>
-            		<comment>The experience of a transparent checkout processed with a PayPal security. The user makes the payment directly on your site, without a need to create an account, use only the credit card.</comment>
-            		<fieldset_css>complex paypalbr-section</fieldset_css>
-            		<frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
-            		<attribute type="activity_path">payment/paypalbr_paypalplus/active</attribute>
-                          <attribute type="displayIn">recommended_solutions</attribute>
 
-
-
-
+                    <label>PayPal Plus</label>
+                    <comment>The experience of a transparent checkout processed with a PayPal security. The user makes the payment directly on your site, without a need to create an account, use only the credit card.</comment>
+                    <fieldset_css>complex paypalbr-section</fieldset_css>
+                    <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
+                    <attribute type="activity_path">payment/paypalbr_paypalplus/active</attribute>
+                    <attribute type="displayIn">recommended_solutions</attribute>
                     <field id="active" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Enable this Solution</label>
                         <config_path>payment/paypalbr_paypalplus/active</config_path>
@@ -92,49 +89,28 @@
                         <label>Sort Order</label>
                         <config_path>payment/paypalbr_paypalplus/sort_order</config_path>
                     </field>
-                    <field id="debug" translate="label comment tooltip" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="depuration_mode" translate="label comment tooltip" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Depuration Mode</label>
                         <config_path>payment/paypalbr_paypalplus/depuration_mode</config_path>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <comment>The logs will be saved at: var/log/paypalbr/</comment>
                         <tooltip>Enable this mode to debug the application in homologation or errors case.</tooltip>
                     </field>
-                    <field id="profile_experience_id" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
-                        <label>Profile Experience ID</label>
-                        <backend_model>PayPalBR\PayPalPlus\Model\Config\Backend\ExperienceProfile</backend_model>
-                        <comment>Leave empty to create a new Experience Profile</comment>
-                    </field>
 
-                    <field id="save_cards_token" translate="label comment" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Remember cards</label>
-                        <comment>Remember user cards for next purchase</comment>
-                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    </field>
-                    <field id="status_pending" translate="label comment" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Process Pending Transactions</label>
-                        <comment>If not active, all PayPal trasnactions with "pending" status will be automatically declined</comment>
-                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    </field>
-                    <field id="pending_payment_message" translate="label comment" type="textarea" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Pending Payment Message Warning</label>
-                        <comment>Displayed on Sucess Page when Pending Payment status is present</comment>
-                    </field>
-                    <field id="pending_payment_email_template" translate="label" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Pending Payment Email Template</label>
-                        <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
-                    </field>
-                    <field id="installments" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Enable Installments</label>
-                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    </field>
-                    <field id="installments_months" translate="label comment" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Default Installment Months</label>
-                        <comment>The selected value will be used to pre-select a month plan to the user at checkout</comment>
-                        <source_model>PayPalBR\PayPalPlus\Model\Source\Months</source_model>
-                    </field>
-                     <field id="iframe_height" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Iframe Height</label>
-                    </field>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             	</group>
             </group>
