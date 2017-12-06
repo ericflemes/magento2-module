@@ -124,7 +124,7 @@ define(
                                 //Are installmets activated and order total is greater than $500 ? ($500 is because thats the minimum amount allowed by PayPal)
                                 "merchantInstallmentSelectionOptional": installmentsActive,
                                 "hideMxDebitCards": false,
-                                "iframeHeight": window.checkoutConfig.payment.paypalPlusIframe.config.iframeHeight,
+                                "iframeHeight": 500,
                                 /**
                                  * Do stuff after iframe is loaded
                                  * @returns {undefined}
@@ -339,7 +339,7 @@ define(
                         return false;
                     }
 
-                    if (typeof this.customerData.postcode === 'undefined' || this.customerData.postcode.length === 0 || !postcodeValidator.validate(this.customerData.postcode, "BR")) {
+                    if (typeof this.customerData.postcode === 'undefined' || this.customerData.postcode.length === 0) {
                         return false;
                     }
 
