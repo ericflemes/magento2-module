@@ -10,7 +10,7 @@
  *
  */
 
-namespace qbo\PayPalPlusMx\Block\Payment;
+namespace PayPalBR\PayPalPlus\Block\Payment;
 
 class Info extends \Magento\Payment\Block\Info
 {

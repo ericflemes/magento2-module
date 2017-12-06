@@ -9,15 +9,15 @@
  * © 2016 WEB JUMP SOLUTIONS
  *
  */
-namespace qbo\PayPalPlusMx\Block\Checkout;
+namespace PayPalBR\PayPalPlus\Block\Checkout;
 
-use qbo\PayPalPlusMx\Model\Payment;
+use PayPalBR\PayPalPlus\Model\Payment;
 
 class Success extends \Magento\Checkout\Block\Onepage\Success
 {
     const SCOPE_STORE = 'store';
-    const XML_PATH_PENDING_PAYMENT_MESSAGE = 'payment/qbo_paypalplusmx/pending_payment_message';
-    const XML_PATH_IS_METHOD_ACTIVE        = 'payment/qbo_paypalplusmx/active';
+    const XML_PATH_PENDING_PAYMENT_MESSAGE = 'payment/paypalbr_paypalplus/pending_payment_message';
+    const XML_PATH_IS_METHOD_ACTIVE        = 'payment/paypalbr_paypalplus/active';
     const PAYPAL_LOGO                      = 'https://www.paypalobjects.com/webstatic/mktg/logo-center/logotipo_paypal_pagos_seguros.png';
     const PENDING_PAYMENT_STATUS_CODE      = 'payment_review';
 

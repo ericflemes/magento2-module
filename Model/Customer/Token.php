@@ -3,7 +3,7 @@
  * Copyright © 2016 qbo. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace qbo\PayPalPlusMx\Model\Customer;
+namespace PayPalBR\PayPalPlus\Model\Customer;
 
 use Magento\Framework\Exception\LocalizedException;
 

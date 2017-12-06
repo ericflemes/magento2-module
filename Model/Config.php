@@ -12,7 +12,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace qbo\PayPalPlusMx\Model;
+namespace PayPalBR\PayPalPlus\Model;
 use Magento\Framework\App\ProductMetadataInterface;
 
 
@@ -35,7 +35,7 @@ class Config extends \Magento\Paypal\Model\Config
     /**
      * @var string
      */
-    const METHOD_PAYPALPLUS = 'qbo_paypalplusmx';
+    const METHOD_PAYPALPLUS = 'paypalbr_paypalplus';
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Directory\Helper\Data $directoryHelper

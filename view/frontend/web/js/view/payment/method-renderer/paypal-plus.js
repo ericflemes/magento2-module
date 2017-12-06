@@ -27,7 +27,7 @@ define(
 
             return Component.extend({
                 defaults: {
-                    template: 'qbo_PayPalPlusMx/payment/paypal-plus',
+                    template: 'PayPalBR_PayPalPlus/payment/paypal-plus',
                     paymentReady: true
                 },
                 accessToken: false,
@@ -279,7 +279,7 @@ define(
                 },
                 paypalObject: {},
                 getCode: function () {
-                    return 'qbo_paypalplusmx';
+                    return 'paypalbr_paypalplus';
                 },
                 /**
                  * Places order (PayNow Button)
@@ -339,9 +339,9 @@ define(
                         return false;
                     }
 
-                    //if (typeof this.customerData.postcode === 'undefined' || this.customerData.postcode.length === 0 || !postcodeValidator.validate(this.customerData.postcode, "MX")) {
-                    //    return false;
-                    //}
+                    if (typeof this.customerData.postcode === 'undefined' || this.customerData.postcode.length === 0 || !postcodeValidator.validate(this.customerData.postcode, "BR")) {
+                        return false;
+                    }
 
                     if (typeof this.customerData.street === 'undefined' || this.customerData.street[0].length === 0 ) {
                         return false;

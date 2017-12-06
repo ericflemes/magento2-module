@@ -9,7 +9,7 @@
  * © 2016 WEB JUMP SOLUTIONS
  *
  */
-namespace qbo\PayPalPlusMx\Model\Http;
+namespace PayPalBR\PayPalPlus\Model\Http;
 
 use Magento\Framework\DataObject;
 use Magento\Sales\Model\Order;

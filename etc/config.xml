@@ -8,12 +8,12 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <payment>
-            <paypal_plus>
+            <paypalbr_paypalplus>
             	<active>1</active>
             	<title>PayPal Plus</title>
             	<model>PayPalBR\PayPalPlus\Model\Payment\PayPalPlus</model>
                 <sort_order>0</sort_order>
-            </paypal_plus>
+            </paypalbr_paypalplus>
         </payment>
     </default>
 </config>

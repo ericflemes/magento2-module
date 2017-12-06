@@ -1,7 +1,7 @@
 <?php
 
 
-namespace qbo\PayPalPlusMx\Model;
+namespace PayPalBR\PayPalPlus\Model;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\UrlInterface;
@@ -9,22 +9,22 @@ use Magento\Payment\Helper\Data as PaymentHelper;
 
 class IframeConfigProvider implements ConfigProviderInterface
 {
-    const XML_PATH_SAVE_CARDS_TOKEN    = 'payment/qbo_paypalplusmx/save_cards_token';
-    const XML_PATH_SAVE_STATUS_PENDING = 'payment/qbo_paypalplusmx/status_pending';
-    const XML_PATH_EXPERIENCE_ID       = 'payment/qbo_paypalplusmx/profile_experience_id';
-    const XML_PATH_ALLOW_SPECIFIC      = 'payment/qbo_paypalplusmx/allowspecific';
-    const XML_PATH_SPECIFIC_COUNTRY    = 'payment/qbo_paypalplusmx/specificcountry';
-    const XML_PATH_MIN_ORDER_TOTAL     = 'payment/qbo_paypalplusmx/min_order_total';
-    const XML_PATH_INSTALLMENTS        = 'payment/qbo_paypalplusmx/installments';
-    const XML_PATH_INSTALLMENTS_MONTHS = 'payment/qbo_paypalplusmx/installments_months';
-    const XML_PATH_IFRAME_HEIGHT       = 'payment/qbo_paypalplusmx/iframe_height';
+    const XML_PATH_SAVE_CARDS_TOKEN    = 'payment/paypalbr_paypalplus/save_cards_token';
+    const XML_PATH_SAVE_STATUS_PENDING = 'payment/paypalbr_paypalplus/status_pending';
+    const XML_PATH_EXPERIENCE_ID       = 'payment/paypalbr_paypalplus/profile_experience_id';
+    const XML_PATH_ALLOW_SPECIFIC      = 'payment/paypalbr_paypalplus/allowspecific';
+    const XML_PATH_SPECIFIC_COUNTRY    = 'payment/paypalbr_paypalplus/specificcountry';
+    const XML_PATH_MIN_ORDER_TOTAL     = 'payment/paypalbr_paypalplus/min_order_total';
+    const XML_PATH_INSTALLMENTS        = 'payment/paypalbr_paypalplus/installments';
+    const XML_PATH_INSTALLMENTS_MONTHS = 'payment/paypalbr_paypalplus/installments_months';
+    const XML_PATH_IFRAME_HEIGHT       = 'payment/paypalbr_paypalplus/iframe_height';
     const XML_PATH_IFRAME_LANGUAGE     = 'general/locale/code';
-    const XML_PATH_SANDBOX_MODE        = 'payment/qbo_paypalplusmx/sandbox_flag';
+    const XML_PATH_SANDBOX_MODE        = 'payment/paypalbr_paypalplus/sandbox_flag';
     const IFRAME_CONFIG_CODE_NAME      = 'paypalPlusIframe';
     /**
      * @var string[]
      */
-    protected $code = 'qbo_paypalplusmx';
+    protected $code = 'paypalbr_paypalplus';
 
     /**
      * @var \Magento\Payment\Model\Method\AbstractMethod[]

@@ -9,7 +9,7 @@
  * © 2016 WEB JUMP SOLUTIONS
  *
  */
-namespace qbo\PayPalPlusMx\Observer;
+namespace PayPalBR\PayPalPlus\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
@@ -32,7 +32,7 @@ class clearPaymentDataAfterSaveOrder implements ObserverInterface
     /**
      * @var string
      */
-    const METHOD_CODE = 'qbo_paypalplusmx';
+    const METHOD_CODE = 'paylpalbr_paypalplus';
 
     /**
      * Constructor

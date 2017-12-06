@@ -10,7 +10,7 @@
  *
  */
 
-namespace qbo\PayPalPlusMx\Setup;
+namespace PayPalBR\PayPalPlus\Setup;
 
 use Magento\Customer\Setup\CustomerSetupFactory;
 use Magento\Customer\Model\Customer;
@@ -66,7 +66,7 @@ class InstallData implements InstallDataInterface
             'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             'label' => 'PayPalPlusMx Card Token ID',
             'input' => 'text',
-            'backend' => 'qbo\PayPalPlusMx\Model\Customer\Token',
+            'backend' => 'PayPalBR\PayPalPlus\Model\Customer\Token',
             'required' => false,
             'visible' => false,
             'user_defined' => false,

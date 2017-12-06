@@ -1,6 +1,6 @@
 <?php
 
-namespace qbo\PayPalPlusMx\Helper;
+namespace PayPalBR\PayPalPlus\Helper;
 
 /**
  * Profile Experience Helper

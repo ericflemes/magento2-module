@@ -11,9 +11,9 @@
  *
  */
 
-namespace qbo\PayPalPlusMx\Controller\Payment;
+namespace PayPalBR\PayPalPlus\Controller\Payment;
 
-use qbo\PayPalPlusMx\Model\Http\Api;
+use PayPalBR\PayPalPlus\Model\Http\Api;
 use Magento\Framework\UrlInterface;
 use Magento\Payment\Helper\Data as PaymentHelper;
 
@@ -21,7 +21,7 @@ class Index extends \Magento\Framework\App\Action\Action
 {
 
     const IFRAME_CODE_NAME            = 'paypalPlusIframe';
-    const XML_PATH_EXPERIENCE_ID      = 'payment/qbo_paypalplusmx/profile_experience_id';
+    const XML_PATH_EXPERIENCE_ID      = 'payment/paypalbr_paypalplus/profile_experience_id';
     const SESSION_INSTANCE            = 'Magento\Customer\Model\Session';
     const CUSTOMER_INSTANCE           = 'Magento\Customer\Model\Customer';
     const PAYMENT_NO_READY_CODE       = 'payment_not_ready';
@@ -29,7 +29,7 @@ class Index extends \Magento\Framework\App\Action\Action
     /**
      * @var string[]
      */
-    protected $code = 'qbo_paypalplusmx';
+    protected $code = 'paypalbr_paypalplus';
 
     /**
      * @var \Magento\Payment\Model\Method\AbstractMethod[]

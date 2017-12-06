@@ -1,6 +1,6 @@
 <?php
 
-namespace qbo\PayPalPlusMx\Model\Config\Backend;
+namespace PayPalBR\PayPalPlus\Model\Config\Backend;
 
 /**
  * Generate ExperienceProfile Backend Model

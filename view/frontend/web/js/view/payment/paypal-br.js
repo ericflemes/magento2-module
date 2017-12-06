@@ -21,8 +21,8 @@ define(
             'use strict';
             rendererList.push(
                     {
-                        type: 'qbo_paypalplusmx',
-                        component: 'qbo_PayPalPlusMx/js/view/payment/method-renderer/paypal-plus'
+                        type: 'paypalbr_paypalplus',
+                        component: 'PayPalBR_PayPalPlus/js/view/payment/method-renderer/paypal-plus'
                     }
 
             );

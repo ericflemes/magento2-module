@@ -10,7 +10,7 @@
  * © 2016 WEB JUMP SOLUTIONS
  *
  */
-namespace qbo\PayPalPlusMx\Model;
+namespace PayPalBR\PayPalPlus\Model;
 
 use Exception;
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
@@ -25,7 +25,7 @@ use Magento\Paypal\Model\Info;
  */
 class Ipn extends \Magento\Paypal\Model\Ipn
 {
-    const XML_PATH_METHOD_ACTIVE = 'payment/qbo_paypalplusmx/active';
+    const XML_PATH_METHOD_ACTIVE = 'payment/paypalbr_paypalplus/active';
 
     protected $_logger;
     protected $_ipnRequest;

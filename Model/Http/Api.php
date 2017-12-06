@@ -10,10 +10,10 @@
  * © 2016 WEB JUMP SOLUTIONS
  *
  */
-namespace qbo\PayPalPlusMx\Model\Http;
+namespace PayPalBR\PayPalPlus\Model\Http;
 
-use qbo\PayPalPlusMx\Model\Http\Config;
-use qbo\PayPalPlusMx\Model\Http\Payment;
+use PayPalBR\PayPalPlus\Model\Http\Config;
+use PayPalBR\PayPalPlus\Model\Http\Payment;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\DataObject;
@@ -27,8 +27,8 @@ use qbo\PayPalPlusMx\Model\Config as PayPalConfig;
 class Api
 {
     const XML_PATH_STORE_NAME    = 'general/store_information/name';
-    const XML_PATH_DEBUG_MODE    = 'payment/qbo_paypalplusmx/debug';
-    const XML_PATH_PROFILE_NAME  = 'payment/qbo_paypalplusmx/profile_name';
+    const XML_PATH_DEBUG_MODE    = 'payment/paypalbr_paypalplus/debug';
+    const XML_PATH_PROFILE_NAME  = 'payment/paypalbr_paypalplus/profile_name';
     const XP_VALIDATION_ERROR    = 'VALIDATION_ERROR';
     const XP_URL_CODE            = 'xp';
     const PAYMENT                = 'payment';

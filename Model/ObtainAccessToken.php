@@ -31,9 +31,9 @@ class ObtainAccessToken
     /**
     * Recipient email config path
     */
-    const XML_PATH_CLIENT_ID = 'payment/paypal_plus/client_id_sandbox';
-    const XML_PATH_SECRET_ID = 'payment/paypal_plus/secret_id_sandbox';
-    const XML_PATH_MODE = 'payment/paypal_plus/mode';
+    const XML_PATH_CLIENT_ID = 'payment/paypalbr_paypalplus/client_id_sandbox';
+    const XML_PATH_SECRET_ID = 'payment/paypalbr_paypalplus/secret_id_sandbox';
+    const XML_PATH_MODE = 'payment/paypalbr_paypalplus/mode';
 
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,

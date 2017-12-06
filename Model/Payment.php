@@ -9,7 +9,7 @@
  * © 2016 WEB JUMP SOLUTIONS
  *
  */
-namespace qbo\PayPalPlusMx\Model;
+namespace PayPalBR\PayPalPlus\Model;
 
 use Magento\Framework\Exception\CouldNotSaveException;
 use qbo\PayPalPlusMx\Model\Http\Api;
@@ -17,7 +17,7 @@ use qbo\PayPalPlusMx\Model\Http\Payment as PaymentObject;
 
 class Payment extends \Magento\Payment\Model\Method\AbstractMethod
 {
-    const CODE                              = 'qbo_paypalplusmx';
+    const CODE                              = 'paypalbr_paypalplus';
     const PAYMENT_REVIEW_STATE              = 'pending';
     const PENDING_PAYMENT_NOTIFICATION      = 'This order is on hold due to a pending payment. The order will be processed after the payment is approved at the payment gateway.';
     const DECLINE_ERROR_MESSAGE             = 'Declining Pending Payment Transaction as configured in PPPlus module.';
@@ -27,13 +27,13 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
     const DENIED_SALE_CODE                  = 'denied';
     const REFUNDED_SALE_CODE                = 'refunded';
     const FAILED_STATE_CODE                 = 'failed';
-    const XML_PATH_EMAIL_PENDING_PAYMENT    = 'payment/qbo_paypalplusmx/pending_payment_email_template';
+    const XML_PATH_EMAIL_PENDING_PAYMENT    = 'payment/paypalbr_paypalplus/pending_payment_email_template';
     const XML_PATH_EMAIL_SUPPORT_EMAIL      = 'trans_email/ident_sales/email';
     const XML_PATH_EMAIL_SUPPORT_PHONE      = 'general/store_information/phone';
     const XML_PATH_STORE_NAME               = 'general/store_information/name';
 
     protected $_code = self::CODE;
-    protected $_infoBlockType               = 'qbo\PayPalPlusMx\Block\Payment\Info';
+    protected $_infoBlockType               = 'PayPalBR\PayPalPlus\Block\Payment\Info';
     protected $_api;
     protected $_paymentObject;
     protected $_response;

@@ -10,7 +10,7 @@
  *
  */
 
-namespace qbo\PayPalPlusMx\Controller\Payment;
+namespace PayPalBR\PayPalPlus\Controller\Payment;
 
 use \Magento\Framework\Json\Helper\Data;
 
