@@ -5,7 +5,7 @@
  * @author Diego Lisboa <diego@webjump.com.br>
  * @category PayPalBR
  * @package paypalbr\PayPalPlus\
- * @copyright   qbo (http://www.webjump.com.br)
+ * @copyright   WebJump (http://www.webjump.com.br)
  *
  * © 2016 WEB JUMP SOLUTIONS
  *
@@ -20,8 +20,6 @@ use Magento\Paypal\Model\Info;
  * Instant Payment Notification Model
  *
  * Rewritten Methods from parent PayPal IPN
- *  *
- * @author José Catsañeda <jose@qbo.tech>
  */
 class Ipn extends \Magento\Paypal\Model\Ipn
 {

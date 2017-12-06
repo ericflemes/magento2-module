@@ -10,7 +10,7 @@ namespace PayPalBR\PayPalPlus\Model\Config\Backend;
 class ExperienceProfile extends \Magento\Framework\App\Config\Value  {
 
     /**
-     * @var \qbo\PayPalPlusMx\Model\Http\Api
+     * @var \PayPalBR\PayPalPlus\Model\Http\Api
      */
     protected $_api;
 
@@ -23,7 +23,7 @@ class ExperienceProfile extends \Magento\Framework\App\Config\Value  {
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-     * @param \qbo\PayPalPlusMx\Model\Http\Api $api
+     * @param \PayPalBR\PayPalPlus\Model\Http\Api $api
      * @param array $data
      */
     public function __construct(

@@ -8,8 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="payment">
-            <group id="paypal_br" sortOrder="6" showInDefault="0" showInWebsite="0" showInStore="0">
-            	<group id="paypalbr_paypalplus" translate="label comment" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="paypalbr" sortOrder="6" showInDefault="0" showInWebsite="0" showInStore="0">
+            	<group id="paypalplus" translate="label comment" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
             		<label>PayPal Plus</label>
             		<comment>The experience of a transparent checkout processed with a PayPal security. The user makes the payment directly on your site, without a need to create an account, use only the credit card.</comment>
             		<fieldset_css>complex paypalbr-section</fieldset_css>
@@ -101,55 +101,40 @@
                     </field>
                     <field id="profile_experience_id" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Profile Experience ID</label>
-                        <backend_model>qbo\PayPalPlusMx\Model\Config\Backend\ExperienceProfile</backend_model>
+                        <backend_model>PayPalBR\PayPalPlus\Model\Config\Backend\ExperienceProfile</backend_model>
                         <comment>Leave empty to create a new Experience Profile</comment>
                     </field>
 
-
-
-
-
-                <field id="save_cards_token" translate="label comment" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Remember cards</label>
-                    <comment>Remember user cards for next purchase</comment>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="status_pending" translate="label comment" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Process Pending Transactions</label>
-                    <comment>If not active, all PayPal trasnactions with "pending" status will be automatically declined</comment>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="pending_payment_message" translate="label comment" type="textarea" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Pending Payment Message Warning</label>
-                    <comment>Displayed on Sucess Page when Pending Payment status is present</comment>
-                </field>
-                <field id="pending_payment_email_template" translate="label" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Pending Payment Email Template</label>
-                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
-                </field>
-                <field id="installments" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Enable Installments</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="installments_months" translate="label comment" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Default Installment Months</label>
-                    <comment>The selected value will be used to pre-select a month plan to the user at checkout</comment>
-                    <source_model>qbo\PayPalPlusMx\Model\Source\Months</source_model>
-                </field>
-                <field id="sort_order" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Sort Order</label>
-                </field>
-                <field id="iframe_height" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Iframe Height</label>
-                </field>
-                <field id="allowspecific" translate="label"  type="allowspecific" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Payment from Applicable Countries</label>
-                    <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                </field>
-                <field id="specificcountry" translate="label" type="multiselect" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Payment from Specific Countries</label>
-                    <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                </field>
+                    <field id="save_cards_token" translate="label comment" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Remember cards</label>
+                        <comment>Remember user cards for next purchase</comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="status_pending" translate="label comment" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Process Pending Transactions</label>
+                        <comment>If not active, all PayPal trasnactions with "pending" status will be automatically declined</comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="pending_payment_message" translate="label comment" type="textarea" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Pending Payment Message Warning</label>
+                        <comment>Displayed on Sucess Page when Pending Payment status is present</comment>
+                    </field>
+                    <field id="pending_payment_email_template" translate="label" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Pending Payment Email Template</label>
+                        <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                    </field>
+                    <field id="installments" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Enable Installments</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                    <field id="installments_months" translate="label comment" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Default Installment Months</label>
+                        <comment>The selected value will be used to pre-select a month plan to the user at checkout</comment>
+                        <source_model>PayPalBR\PayPalPlus\Model\Source\Months</source_model>
+                    </field>
+                     <field id="iframe_height" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Iframe Height</label>
+                    </field>
 
             	</group>
             </group>

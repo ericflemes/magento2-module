@@ -3,7 +3,7 @@
  * @author Diego Lisboa <diego@webjump.com.br>
  * @category PayPalBR
  * @package paypalbr\PayPalPlus\
- * @copyright   qbo (http://www.webjump.com.br)
+ * @copyright   WebJump (http://www.webjump.com.br)
  *
  * © 2016 WEB JUMP SOLUTIONS
  *
@@ -258,7 +258,7 @@ define(
                 /**
                  * Gather and set payment after payment is authorized.
                  * This data is sent to the Capture methos via ajax.
-                 * @see qbo\PayPalPlusMgetDatax\Model\Payment
+                 * @see PayPalBR\PayPalPlus\Model\Payment
                  *
                  * @returns {array}
                  */

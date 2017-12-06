@@ -4,7 +4,7 @@
  * @author Diego Lisboa <diego@webjump.com.br>
  * @category PayPalBR
  * @package paypalbr\PayPalPlus\
- * @copyright   qbo (http://www.webjump.com.br)
+ * @copyright   WebJump (http://www.webjump.com.br)
  *
  * © 2016 WEB JUMP SOLUTIONS
  *
@@ -15,7 +15,7 @@ use \Magento\Framework\App\Config\ScopeConfigInterface;
 /**
  * Class Config
  *
- * @package PayPalPlusMx
+ * @package PayPalPlusBR
  */
 class Config
 {

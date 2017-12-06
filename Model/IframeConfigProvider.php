@@ -81,8 +81,6 @@ class IframeConfigProvider implements ConfigProviderInterface
             ],
         ];
         $config['payment'][self::IFRAME_CONFIG_CODE_NAME]['config']['save_cards_token']      = $this->getStoreConfig(self::XML_PATH_SAVE_CARDS_TOKEN);
-        $config['payment'][self::IFRAME_CONFIG_CODE_NAME]['config']['allowspecific']         = $this->getStoreConfig(self::XML_PATH_ALLOW_SPECIFIC);
-        $config['payment'][self::IFRAME_CONFIG_CODE_NAME]['config']['specificcountry']       = $this->getStoreConfig(self::XML_PATH_SPECIFIC_COUNTRY);
         $config['payment'][self::IFRAME_CONFIG_CODE_NAME]['config']['min_order_total']       = $this->getStoreConfig(self::XML_PATH_MIN_ORDER_TOTAL);
         $config['payment'][self::IFRAME_CONFIG_CODE_NAME]['config']['status_pending']        = $this->getStoreConfig(self::XML_PATH_SAVE_STATUS_PENDING);
         $config['payment'][self::IFRAME_CONFIG_CODE_NAME]['config']['profile_experience_id'] = $this->getStoreConfig(self::XML_PATH_EXPERIENCE_ID);

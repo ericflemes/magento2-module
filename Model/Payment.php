@@ -4,7 +4,7 @@
  * @author Diego Lisboa <diego@webjump.com.br>
  * @category PayPalBR
  * @package paypalbr\PayPalPlus\
- * @copyright   qbo (http://www.webjump.com.br)
+ * @copyright   WebJump (http://www.webjump.com.br)
  *
  * © 2016 WEB JUMP SOLUTIONS
  *
@@ -12,8 +12,8 @@
 namespace PayPalBR\PayPalPlus\Model;
 
 use Magento\Framework\Exception\CouldNotSaveException;
-use qbo\PayPalPlusMx\Model\Http\Api;
-use qbo\PayPalPlusMx\Model\Http\Payment as PaymentObject;
+use PayPalBR\PayPalPlus\Model\Http\Api;
+use PayPalBR\PayPalPlus\Model\Http\Payment as PaymentObject;
 
 class Payment extends \Magento\Payment\Model\Method\AbstractMethod
 {
@@ -157,7 +157,7 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
         $data = $this->_getPaymentData($payerId);
         /**
          *  Call PayPal API to Execute Payment
-         *  @var qbo\PayPalPlusMx\Model\Http\Api
+         *  @var PayPalBR\PayPalPlus\Model\Http\Api
          */
         $this->_response = $this->_api->_executePayment($data, $executeUrl, $accessToken);
 
@@ -290,10 +290,10 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
-        if (!$this->getConfigValue('payment/qbo_paypalplusmx/client_id')) {
+        if (!$this->getConfigValue('payment/paypalbr_paypalplus/client_id')) {
             return false;
         }
-        if (!$this->getConfigValue('payment/qbo_paypalplusmx/client_secret')) {
+        if (!$this->getConfigValue('payment/paypalbr_paypalplus/client_secret')) {
             return false;
         }
 
@@ -383,7 +383,7 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
         $transactionId = $payment->getParentTransactionId();
 
         try {
-           // qbo\PayPalPlusMx\Model\Charge::retrieve($transactionId)->refund();
+
         } catch (\Exception $e) {
             $this->debugData(['transaction_id' => $transactionId, 'exception' => $e->getMessage()]);
             $this->_logger->error(__('Payment refunding error.'));

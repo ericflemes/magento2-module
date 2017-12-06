@@ -4,7 +4,7 @@
  * @author Diego Lisboa <diego@webjump.com.br>
  * @category PayPalBR
  * @package paypalbr\PayPalPlus\
- * @copyright   qbo (http://www.webjump.com.br)
+ * @copyright   WebJump (http://www.webjump.com.br)
  *
  * © 2016 WEB JUMP SOLUTIONS
  *
@@ -26,7 +26,7 @@ class clearPaymentDataAfterSaveOrder implements ObserverInterface
     protected $_logger;
     /**
      *
-     * @var qbo\PayPalPlusMx\Model\Http\Api
+     * @var PayPalBR\PayPalPlus\Model\Http\Api
      */
     protected $_api;
     /**

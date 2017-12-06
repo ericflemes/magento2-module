@@ -4,7 +4,7 @@
  * @author Diego Lisboa <diego@webjump.com.br>
  * @category PayPalBR
  * @package paypalbr\PayPalPlus\
- * @copyright   qbo (http://www.webjump.com.br)
+ * @copyright   WebJump (http://www.webjump.com.br)
  *
  * © 2016 WEB JUMP SOLUTIONS
  *
@@ -99,7 +99,7 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
      */
     public function getPendingMessage()
     {
-        if($this->isPaymentPending() && $this->_order->getPayment()->getMethod() == \qbo\PayPalPlusMx\Model\Payment::CODE) {
+        if($this->isPaymentPending() && $this->_order->getPayment()->getMethod() == \PayPalBR\PayPalPlus\Model\Payment::CODE) {
             return $this->getConfigValue(self::XML_PATH_PENDING_PAYMENT_MESSAGE);
         }
         return '';
@@ -114,7 +114,7 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
         if(!$this->_order->getPayment()){
             return;
         }
-        if($this->_order->getPayment()->getMethod() == \qbo\PayPalPlusMx\Model\Payment::CODE) {
+        if($this->_order->getPayment()->getMethod() == \PayPalBR\PayPalPlus\Model\Payment::CODE) {
            return self::PAYPAL_LOGO;
         }
     }
