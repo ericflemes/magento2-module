@@ -19,7 +19,7 @@ class IframeConfigProvider implements ConfigProviderInterface
     const XML_PATH_INSTALLMENTS_MONTHS = 'payment/paypalbr_paypalplus/installments_months';
     const XML_PATH_IFRAME_HEIGHT       = 'payment/paypalbr_paypalplus/iframe_height';
     const XML_PATH_IFRAME_LANGUAGE     = 'general/locale/code';
-    const XML_PATH_SANDBOX_MODE        = 'payment/paypalbr_paypalplus/sandbox_flag';
+    const XML_PATH_SANDBOX_MODE        = 'payment/paypalbr_paypalplus/mode';
     const IFRAME_CONFIG_CODE_NAME      = 'paypalPlusIframe';
     /**
      * @var string[]

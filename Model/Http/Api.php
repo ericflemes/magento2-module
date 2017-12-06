@@ -17,8 +17,8 @@ use PayPalBR\PayPalPlus\Model\Http\Payment;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\DataObject;
-use qbo\PayPalPlusMx\Helper\Profile;
-use qbo\PayPalPlusMx\Model\Config as PayPalConfig;
+use PayPalBR\PayPalPlus\Helper\Profile;
+use PayPalBR\PayPalPlus\Model\Config as PayPalConfig;
 /**
  * PayPal Plus API Client
  *

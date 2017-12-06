@@ -33,7 +33,7 @@ class ExperienceProfile extends \Magento\Framework\App\Config\Value  {
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        \qbo\PayPalPlusMx\Model\Http\Api $api,
+        \PayPalBR\PayPalPlus\Model\Http\Api $api,
         array $data = []
     ) {
         $this->_api = $api;

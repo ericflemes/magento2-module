@@ -13,7 +13,7 @@ namespace PayPalBR\PayPalPlus\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
-use qbo\PayPalPlusMx\Model\Http\Api;
+use PayPalBR\PayPalPlus\Model\Http\Api;
 
 /**
  * PayPalPlus module observer

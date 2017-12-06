@@ -48,9 +48,13 @@ class Config
     const XP_REQUEST_SANDBOX_URL       = 'https://api.sandbox.paypal.com/v1/payment-experience/web-profiles';
     const XP_REQUEST_URL               = 'https://api.paypal.com/v1/v1/payment-experience/web-profiles';
 
-    const XML_PATH_CLIENT_ID           = 'payment/qbo_paypalplusmx/client_id';
-    const XML_PATH_CLIENT_SECRET       = 'payment/qbo_paypalplusmx/client_secret';
-    const XML_PATH_SANDBOX_MODE        = 'payment/qbo_paypalplusmx/sandbox_flag';
+    const XML_PATH_CLIENT_ID_SANDBOX         = 'payment/paypalbr_paypalplus/client_id_sandbox';
+    const XML_PATH_CLIENT_SECRET_SANDBOX        = 'payment/paypalbr_paypalplus/secret_id_sandbox';
+
+    const XML_PATH_CLIENT_ID_PROD         = 'payment/paypalbr_paypalplus/client_id_production';
+    const XML_PATH_CLIENT_SECRET_PROD       = 'payment/paypalbr_paypalplus/secret_id_production';
+
+    const XML_PATH_SANDBOX_MODE        = 'payment/paypalbr_paypalplus/mode';
 
     private $headers = array();
     private $curlOptions;
@@ -118,14 +122,29 @@ class Config
     {
         $config = array();
 
-        $config['ClientId'] = $this->scopeConfig->getValue(
-            self::XML_PATH_CLIENT_ID,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-        $config['ClientSecret'] =  $this->scopeConfig->getValue(
-            self::XML_PATH_CLIENT_SECRET,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        if(self::XML_PATH_SANDBOX_MODE == "1"){
+            $config['ClientId'] = $this->scopeConfig->getValue(
+                self::XML_PATH_CLIENT_ID_SANDBOX,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+
+            $config['ClientSecret'] =  $this->scopeConfig->getValue(
+                self::XML_PATH_CLIENT_SECRET_SANDBOX,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+        }else{
+            $config['ClientId'] = $this->scopeConfig->getValue(
+                self::XML_PATH_CLIENT_ID_PROD,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+
+            $config['ClientSecret'] =  $this->scopeConfig->getValue(
+                self::XML_PATH_CLIENT_SECRET_PROD,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+
+        }
+
          return array(
             'user'     => $config['ClientId'],
             'password' => $config['ClientSecret']

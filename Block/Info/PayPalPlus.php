@@ -16,7 +16,7 @@ use Magento\Framework\DataObject;
 
 class PayPalPlus extends Info
 {
-    const TEMPLATE = 'PayPalBR_PayPalPlus::info/paypalplus.phtml';
+    const TEMPLATE = 'PayPalBR_PayPalPlus::info/paypal-plus.html';
 
     public function _construct()
     {

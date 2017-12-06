@@ -138,7 +138,7 @@ class Config extends \Magento\Paypal\Model\Config
     protected function _mapPayPalPlusFieldset($fieldName)
     {
         switch ($fieldName) {
-            case 'sandbox_flag':
+            case 'mode':
             case 'business_account':
                 return "payment/" . self::METHOD_PAYPALPLUS . "/{$fieldName}";
             default:

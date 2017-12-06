@@ -64,7 +64,7 @@ class InstallData implements InstallDataInterface
 
         $customerSetup->addAttribute(Customer::ENTITY, 'card_token_id', [
             'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            'label' => 'PayPalPlusMx Card Token ID',
+            'label' => 'PayPalPlusBR Card Token ID',
             'input' => 'text',
             'backend' => 'PayPalBR\PayPalPlus\Model\Customer\Token',
             'required' => false,

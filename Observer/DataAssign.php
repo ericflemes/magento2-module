@@ -5,7 +5,7 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\ObjectManager;
 
 
-class DataAssignObserver implements ObserverInterface
+class DataAssign implements ObserverInterface
 {
 
     protected $_scopeConfig;
@@ -17,6 +17,9 @@ class DataAssignObserver implements ObserverInterface
     const XML_PATH_MODE = 'payment/paypalbr_paypalplus/mode';
     const XML_PATH_ACTIVE = 'payment/paypalbr_paypalplus/active';
     const XML_PATH_TAX = 'customer/address/taxvat_show';
+
+
+
 
     public function __construct(\Psr\Log\LoggerInterface $logger,
         \Magento\Framework\App\Config\ConfigResource\ConfigInterface $configInterface,
@@ -47,7 +50,7 @@ class DataAssignObserver implements ObserverInterface
 
         if($tax != "req"){
            $this->_configInterface->saveConfig('payment/paypalbr_paypalplus/active', 0, 'default', 0);
-           return  $this->messageManager->addErrorMessage(__('Identificamos que a sua loja nÃ£o possui suporte para CPF/CNPJ (TAXVAT). Para adicionar o suporte, acesse <<hyperlink>> e vÃ¡ em â€œLojas->ConfiguraÃ§Ãµes->Clientes->OpÃ§Ãµes de nome e endereÃ§o->Mostrar nÃºmero TAX/VAT.'));
+           return  $this->messageManager->addErrorMessage(__('Identificamos que a sua loja não possui suporte para CPF/CNPJ (TAXVAT). Para adicionar o suporte, acesse <<hyperlink>> e vÃ¡ em â€œLojas->ConfiguraÃ§Ãµes->Clientes->OpÃ§Ãµes de nome e endereÃ§o->Mostrar nÃºmero TAX/VAT.'));
         }
 
         if($mode == "sandbox"){
