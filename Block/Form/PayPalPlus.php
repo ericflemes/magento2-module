@@ -12,5 +12,5 @@ class PayPalPlus extends \Magento\Payment\Block\Form
      *
      * @var string
      */
-    protected $_template = 'PayPalBR_PayPalPlus::form/paypalplus.phtml';
+    protected $_template = 'PayPalBR_PayPalPlus::form/paypal-plus.html';
 }

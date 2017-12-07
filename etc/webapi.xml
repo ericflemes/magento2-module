@@ -1,15 +1,86 @@
 <?xml version="1.0" ?>
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
-	<route method="POST" url="/V1/paypalplus/webhook">
-		<service class="PayPalBR\PayPalPlus\Api\WebHookManagementInterface" method="postWebHook"/>
-		<resources>
-			<resource ref="anonymous"/>
-		</resources>
-	</route>
-            <route method="POST" url="/V1/paypalplus/obtainaccesstoken">
-                        <service class="PayPalBR\PayPalPlus\Api\ObtainAccessTokenInterface" method="postAccessToken"/>
-                        <resources>
-                            <resource ref="anonymous"/>
-                        </resources>
-            </route>
+
+
+        <route method="POST" url="/V1/notifications/webhooks">
+                <service class="PayPalBR\PayPalPlus\Api\WebHookManagementInterface" method="postWebHook"/>
+            <resources>
+                <resource ref="anonymous"/>
+            </resources>
+        </route>
+
+
+        <route url="/V1/notifications/webhooks" method="GET">
+                <service class="PayPalBR\PayPalPlus\Api\WebHookManagementInterface" method="getWebHook"/>
+            <resources>
+                <resource ref="self"/>
+            </resources>
+            <data>
+                <parameter name="webhookId" force="true">%webhookId%</parameter>
+            </data>
+        </route>
+
+
+        <route url="/V1/notifications/webhooks" method="PATCH">
+                <service class="PayPalBR\PayPalPlus\Api\WebHookManagementInterface" method="patchWebHook"/>
+            <resources>
+                <resource ref="self"/>
+            </resources>
+            <data>
+                <parameter name="params" force="true">%params%</parameter>
+            </data>
+        </route>
+
+
+        <route url="/V1/notifications/webhooks" method="DELETE">
+                <service class="PayPalBR\PayPalPlus\Api\WebHookManagementInterface" method="deleteWebHook"/>
+            <resources>
+                <resource ref="self"/>
+            </resources>
+            <data>
+                <parameter name="id" force="true">%id%</parameter>
+            </data>
+        </route>
+
+
+        <route url="/V1/notifications/webhooks-events" method="GET">
+            <service class="PayPalBR\PayPalPlus\Api\WebHookManagementInterface" method="getEvent"/>
+            <resources>
+                <resource ref="self"/>
+            </resources>
+            <data>
+                <parameter name="id" force="true">%id%</parameter>
+            </data>
+        </route>
+
+
+        <route method="POST" url="/V1/notifications/verify-webhook-signature">
+                <service class="PayPalBR\PayPalPlus\Api\WebHookManagementInterface" method="verifySignature"/>
+            <resources>
+                <resource ref="anonymous"/>
+            </resources>
+        </route>
+
+        <route url="/V1/notifications/verify-webhook-signature/:id/resend" method="POST">
+                <service class="PayPalBR\PayPalPlus\Api\WebHookManagementInterface" method="resendEvent"/>
+            <resources>
+                <resource ref="self"/>
+            </resources>
+            <data>
+                <parameter name="id" force="true">%id%</parameter>
+            </data>
+        </route>
+
+
+        <route url="/V1/notifications/webhooks-events" method="GET">
+                <service class="PayPalBR\PayPalPlus\Api\WebHookManagementInterface" method="getEventByParams"/>
+            <resources>
+                <resource ref="self"/>
+            </resources>
+            <data>
+                <parameter name="params" force="true">%params%</parameter>
+            </data>
+        </route>
+
+
 </routes>
