@@ -219,8 +219,6 @@ class Payment {
                   'cancel_url' => self::$_cancelUrl,
                 )
         );
-
-        die(print_r($result));
         return $result;
     }
     /**
