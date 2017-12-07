@@ -2,7 +2,7 @@
     <virtualType name="PayPalBR\PayPalPlus\Model\ConfigProvider" type="Magento\Payment\Model\CcGenericConfigProvider">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
-                <item name="aypalbr_paypalplus" xsi:type="const">PayPalBR\PayPalPlus\Model\Payment::CODE</item>
+                <item name="paypalbr_paypalplus" xsi:type="const">PayPalBR\PayPalPlus\Model\Payment::CODE</item>
             </argument>
         </arguments>
     </virtualType>
