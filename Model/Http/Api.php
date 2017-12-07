@@ -126,7 +126,7 @@ class Api
      *
      * @var int
      */
-    protected $_debugMode = false;
+    protected $_debugMode = true;
     protected $_config = false;
 
     /**
@@ -167,7 +167,6 @@ class Api
         $this->_checkoutSession = $checkoutSession;
         $this->scopeConfig = $scopeConfig;
         $this->_profileHelper = $profileHelper;
-        $this->_debugMode = $this->getStoreConfig(self::XML_PATH_DEBUG_MODE);
         $this->_config = $config;
     }
     /**
