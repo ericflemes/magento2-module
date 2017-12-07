@@ -54,7 +54,7 @@ class UpgradeSchema implements  UpgradeSchemaInterface
 
         $setup->startSetup();
 
-        if (version_compare($context->getVersion(), '1.0.1') < 0) {
+        if (version_compare($context->getVersion(), '0.1.0') < 0) {
 
 
                 /** @var CustomerSetup $customerSetup */

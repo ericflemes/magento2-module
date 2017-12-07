@@ -1,9 +1,7 @@
 <?xml version="1.0" ?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 	<preference for="PayPalBR\PayPalPlus\Api\WebHookManagementInterface" type="PayPalBR\PayPalPlus\Model\WebHookManagement"/>
-           <preference for="PayPalBR\PayPalPlus\Api\ObtainAccessTokenInterface" type="PayPalBR\PayPalPlus\Model\ObtainAccessToken"/>
-
-	<!-- PayPalPlus Adapter -->
+        	<!-- PayPalPlus Adapter -->
 	<virtualType name="PayPalPlusRemoteMethodAdapter" type="Magento\Payment\Model\Method\Adapter">
         <arguments>
             <argument name="code" xsi:type="const">PayPalBR\PayPalPlus\Model\PayPalPlus::PAYMENT_METHOD_PAYPALPLUS_CODE</argument>
