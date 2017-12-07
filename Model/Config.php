@@ -152,6 +152,7 @@ class Config extends \Magento\Paypal\Model\Config
      */
     public function getBuildNotationCode()
     {
-        return sprintf(self::$bnCodeMx, $this->_metaDataInterface->getEdition());
+        return 'MagentoBrazil_Ecom_PPPlus2';
+        //return sprintf(self::$bnCodeMx, $this->_metaDataInterface->getEdition());
     }
 }

@@ -25,11 +25,11 @@ use PayPalBR\PayPalPlus\Model\Config as PayPalConfig;
  */
 class Api
 {
-    const XML_PATH_STORE_NAME    = 'general/store_information/name';
+    const XML_PATH_STORE_NAME     = 'general/store_information/name';
     const XML_PATH_DEBUG_MODE    = 'payment/paypalbr_paypalplus/debug';
-    const XML_PATH_PROFILE_NAME  = 'payment/paypalbr_paypalplus/profile_name';
-    const XP_VALIDATION_ERROR    = 'VALIDATION_ERROR';
-    const XP_URL_CODE            = 'xp';
+    const XML_PATH_PROFILE_NAME   = 'payment/paypalbr_paypalplus/profile_name';
+    const XP_VALIDATION_ERROR      = 'VALIDATION_ERROR';
+    const XP_URL_CODE                    = 'xp';
     const PAYMENT                = 'payment';
     const EXECUTE                = 'execute';
     const APPROVAL_URL_CODE      = 'approval_url';
@@ -167,6 +167,7 @@ class Api
         $this->_checkoutSession = $checkoutSession;
         $this->scopeConfig = $scopeConfig;
         $this->_profileHelper = $profileHelper;
+        //$this->_debugMode = $this->getStoreConfig(self::XML_PATH_DEBUG_MODE);
         $this->_config = $config;
     }
     /**
