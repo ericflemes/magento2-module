@@ -193,7 +193,6 @@ class Payment {
 
         $result = array(
             'intent' => 'sale',
-            'experience_profile_id' => $profileId,
             'payer' =>
                 array('payment_method' => self::PAYMENT_METHOD),
             'application_context' =>
