@@ -88,7 +88,7 @@ class DataAssign implements ObserverInterface
         }catch (\Exception $ex) {
 
            $this->_configInterface->saveConfig('payment/paypalbr_paypalplus/active', 0, 'default', 0);
-           return  $this->messageManager->addErrorMessage(__('Credenciais de API incompletas, favor revisar.'));
+           return  $this->messageManager->addErrorMessage(__('Credenciais de API incorretas, favor revisar.'));
 
         }
 
