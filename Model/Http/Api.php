@@ -197,6 +197,8 @@ class Api
         }
         return array('success' => true);
     }
+
+
     public function getPaymentRequest()
     {
         return $this->_paymentRequest;

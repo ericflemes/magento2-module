@@ -196,6 +196,10 @@ class Payment {
             'experience_profile_id' => $profileId,
             'payer' =>
                 array('payment_method' => self::PAYMENT_METHOD),
+            'application_context' =>
+                array('locale' => 'pt-BR',
+                          'brand_name' => 'Magento 2',
+                          'shipping_preference' => 'SET_PROVIDED_ADDRESS'),
             'transactions' =>
                 array (
                    0 =>
@@ -205,8 +209,8 @@ class Payment {
                         array(
                           'allowed_payment_method' => self::ALLOWED_PAYMENT_METHOD,
                         ),
-                        'item_list' => $this->getItemList(),
-                        'notify_url' => self::$_notifyUrl
+                        'item_list' => $this->getItemList()
+                        //'notify_url' => self::$_notifyUrl
                     ),
                 ),
             'redirect_urls' =>
@@ -215,6 +219,8 @@ class Payment {
                   'cancel_url' => self::$_cancelUrl,
                 )
         );
+
+        die(print_r($result));
         return $result;
     }
     /**
@@ -304,7 +310,7 @@ class Payment {
             'details' => array(
                 'shipping' => $this->_formatPrice($this->_cartPayment->getBaseShippingAmount()),
                 'subtotal' => $this->_formatPrice($baseSubtotal),
-                'tax'      => $this->_formatPrice($this->_cartPayment->getBaseTaxAmount())
+               // 'tax'      => $this->_formatPrice($this->_cartPayment->getBaseTaxAmount()) NAO UTILIZADO NO br ATUALEMENTE
             )
         ];
     }
