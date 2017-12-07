@@ -193,7 +193,6 @@ class Payment {
 
         $result = array(
             'intent' => 'sale',
-            'experience_profile_id' => $profileId,
             'payer' =>
                 array('payment_method' => self::PAYMENT_METHOD),
             'application_context' =>
@@ -219,8 +218,6 @@ class Payment {
                   'cancel_url' => self::$_cancelUrl,
                 )
         );
-
-        die(print_r($result));
         return $result;
     }
     /**
