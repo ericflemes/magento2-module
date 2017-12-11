@@ -2,6 +2,7 @@
 namespace PayPalBR\PayPalPlus\Model;
 
 use Magento\Framework\Exception\LocalizedException;
+use PayPalBR\PayPalPlus\Model\Config\Source\Mode;
 
 /**
  * Class PaypalPlusApi
@@ -104,6 +105,17 @@ class PaypalPlusApi
                 $this->configId,
                 $this->secretId
             )
+        );
+        $apiContext->setConfig(
+            [
+                'http.headers.PayPal-Partner-Attribution-Id' => 'MagentoBrazil_Ecom_PPPlus2',
+                'mode' => $this->configProvider->isModeSandbox() ? 'sandbox' : 'live',
+                'log.LogEnabled' => true,
+                'log.FileName' => '/var/www/magento2.2/var/log/paypalplus.log',
+                'log.LogLevel' => 'DEBUG', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
+                'cache.enabled' => true,
+                'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2'
+            ]
         );
 
         return $apiContext;
@@ -213,21 +225,22 @@ class PaypalPlusApi
          * If subtotal + shipping + tax not equals grand total,
          * then a disscount might be applying, get subtotal with disscount then.
          */
-        $baseSubtotal =  $this->cartSalesModelQuote->getBaseSubtotal() + $this->cartSalesModelQuote->getBaseDiscountAmount();
+        $baseSubtotal = $this->cartSalesModelQuote->getBaseSubtotal();
 
         if ($quote->getBaseGiftCardsAmount()) {
             $baseSubtotal -= $quote->getBaseGiftCardsAmount();
         }
 
         if ($quote->getBaseCustomerBalAmountUsed()) {
-            $baseSubtotal -= $this->_quote->getBaseCustomerBalAmountUsed();
+            $baseSubtotal -= $quote->getBaseCustomerBalAmountUsed();
         }
 
 
         $details = new \PayPal\Api\Details();
         $details
             ->setShipping($this->cartSalesModelQuote->getBaseShippingAmount())
-            ->setSubtotal($baseSubtotal);
+            ->setSubtotal($baseSubtotal)
+            ->setShippingDiscount($this->cartSalesModelQuote->getBaseDiscountAmount());
         return $details;
     }
 
@@ -293,7 +306,11 @@ class PaypalPlusApi
             echo $result->toJSON();
             exit;
         } catch (\PayPal\Exception\PayPalConnectionException $e) {
-            throw new LocalizedException(__($e->getMessage()));
+            echo $e->getMessage();
+            echo "<hr>";
+            echo $e->getTraceAsString();
+            exit;
+            // throw new LocalizedException(__($e->getMessage()));
         }
     }
 }
