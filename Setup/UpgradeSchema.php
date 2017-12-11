@@ -33,24 +33,24 @@ class UpgradeData implements UpgradeDataInterface
     {
         $dbVersion = $context->getVersion();
 
-        if (version_compare($dbVersion, '0.0.13', '<')) {
-
-            /** @var CustomerSetup $customerSetup */
-            $customerSetup = $this->customerSetupFactory->create(['setup' => $setup]);
-            $customerSetup->addAttribute(
-            'customer_token',
-                [
-                    'label'         => 'Token Access PayPal',
-                    'type'          => 'static',
-                    'input'         => 'text',
-                    'required'      => false,
-                    'default'       => '',
-
-                ]
-            );
-            $customerSetup->getEavConfig()->getAttribute('customer', 'customer_token')
-                ->setData('used_in_forms', ['adminhtml_customer'])
-                ->save();
-        }
+//        if (version_compare($dbVersion, '0.0.13', '<')) {
+//
+//            /** @var CustomerSetup $customerSetup */
+//            $customerSetup = $this->customerSetupFactory->create(['setup' => $setup]);
+//            $customerSetup->addAttribute(
+//            'customer_token',
+//                [
+//                    'label'         => 'Token Access PayPal',
+//                    'type'          => 'static',
+//                    'input'         => 'text',
+//                    'required'      => false,
+//                    'default'       => '',
+//
+//                ]
+//            );
+//            $customerSetup->getEavConfig()->getAttribute('customer', 'customer_token')
+//                ->setData('used_in_forms', ['adminhtml_customer'])
+//                ->save();
+//        }
     }
 }

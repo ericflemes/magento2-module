@@ -1,28 +1,30 @@
 <?php
-
 namespace PayPalBR\PayPalPlus\Model\Config\Source;
 
 class Mode implements \Magento\Framework\Option\ArrayInterface
 {
-	/*
-	* Option getter
-	* @return array
-	*/
-	public function toOptionArray()
-	{
-		$options = [
-			"1" => __("Sandbox"),
-			"2" => __("Production")
-		];
+    const SANDBOX = 1;
+    const PRODUCTION = 2;
 
-		$ret = [];
-		foreach ($options as $key => $value) {
-			$ret[] = [
-				"value" => $key,
-				"label" => $value
-			];
-		}
+    /*
+    * Option getter
+    * @return array
+    */
+    public function toOptionArray()
+    {
+        $options = [
+            self::SANDBOX => __("Sandbox"),
+            self::PRODUCTION => __("Production")
+        ];
 
-		return $ret;
-	}
+        $ret = [];
+        foreach ($options as $key => $value) {
+            $ret[] = [
+                "value" => $key,
+                "label" => $value
+            ];
+        }
+
+        return $ret;
+    }
 }
