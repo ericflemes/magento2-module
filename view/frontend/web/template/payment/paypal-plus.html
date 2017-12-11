@@ -9,14 +9,18 @@
         <input type="radio"
                name="payment[method]"
                class="radio"
-               data-bind="attr: {'id': getCode()},
-                                  value: getCode(),
-                                  checked: isChecked,
-                                  click: selectPaymentMethod,
-                                  visible: isRadioButtonVisible()" />
-        <label data-bind="attr: {'for': getCode()}" class="label">
-            <span data-bind="text: getTitle()"></span>
-        </label>
+               data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"/>
+
+        <label data-bind="attr: {'for': getCode()}" class="label"><span data-bind="text: getTitle()"></span></label>
+    </div>
+    <div id="iframe-error" data-bind="visible: false" class="message notice">
+        <div><!-- ko i18n: "We cannot process PayPal Payments at this time. Please try again later" --><!-- /ko --></div>
+    </div>
+    <div id="iframe-error-payment-not-ready" data-bind="visible: false" class="message notice">
+        <div><!-- ko i18n: "In order to use this payment method, please select it and add a Billing Address." --><!-- /ko --></div>
+    </div>
+    <div id="iframe-error-email" data-bind="visible: false" class="message notice">
+        <div><!-- ko i18n: "Please specify an e-mail address and try again" --><!-- /ko --></div>
     </div>
     <div class="payment-method-content">
         <!-- ko foreach: getRegion('messages') -->
@@ -27,26 +31,32 @@
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
         </div>
-        <div id="ppplusDiv" style="width:775px! important"> </div>
-
         <div class="checkout-agreements-block">
             <!-- ko foreach: $parent.getRegion('before-place-order') -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
         </div>
-        <div class="actions-toolbar">
+        <div data-bind="visible: false" id="auth-div-success">
+            <span class="success"><!-- ko i18n: 'Payment has been authorized.' --><!-- /ko --></span>
+        </div>
+        <div data-bind="visible: false" id="auth-div-error">
+            <span class="error-msg"><!-- ko i18n: 'Paymen has been rejected, please try again with a different card.' --><!-- /ko --></span>
+        </div>
+        <div style="width: 100%;" id="ppplus"></div>
+        <div class="actions-toolbar" data-bind="visible: true">
             <div class="primary">
-                <button class="action primary checkout"
-                        type="submit"
-                        data-bind="
-                        click: placeOrder,
-                        attr: {title: $t('Place Order')},
-                        css: {disabled: !isPlaceOrderActionAllowed()},
-                        enable: (getCode() == isChecked())
-                        "
-                        disabled>
+                <button
+                    id="continueButton"
+                    type="submit"
+                    data-bind="click: doContinue, attr: {title: $t('Continue')}"
+                    class="action primary checkout">
                     <span data-bind="i18n: 'Place Order'"></span>
                 </button>
+            </div>
+        </div>
+        <div>
+            <div id="iframe-warning" class="message notice">
+                <div><!-- ko i18n: 'Please do not refresh the page until you complete payment.' --><!-- /ko --></div>
             </div>
         </div>
     </div>

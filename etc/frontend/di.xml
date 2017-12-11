@@ -7,4 +7,12 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Framework\View\Result\Page">
+        <arguments>
+           <argument name="template" xsi:type="string">PayPalBR_PayPalPlus::root.phtml</argument>
+    </arguments>
+    </type>
+
 </config>
+
