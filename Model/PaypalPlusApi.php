@@ -299,18 +299,20 @@ class PaypalPlusApi
         $payment->setRedirectUrls($redirectUrls);
         $payment->addTransaction($transaction);
 
+        $result = [];
         try {
             /** @var \PayPal\Api\Payment $result */
-            $result = $payment->create($apiContext);
-            echo "<pre>";
-            echo $result->toJSON();
-            exit;
+            $paypalPayment = $payment->create($apiContext);
+            $result = [
+                'status' => 'success',
+                'message' => $paypalPayment->toArray()
+            ];
         } catch (\PayPal\Exception\PayPalConnectionException $e) {
-            echo $e->getMessage();
-            echo "<hr>";
-            echo $e->getTraceAsString();
-            exit;
-            // throw new LocalizedException(__($e->getMessage()));
+            $result = [
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ];
         }
+        return $result;
     }
 }

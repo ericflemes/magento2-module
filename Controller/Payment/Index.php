@@ -20,6 +20,11 @@ class Index extends \Magento\Framework\App\Action\Action
     protected $paypalPlusApi;
 
     /**
+     * @var \Magento\Framework\Controller\Result\JsonFactory
+     */
+    protected $jsonFactory;
+
+    /**
      * Index constructor.
      *
      * @param \Magento\Framework\App\Action\Context $context
@@ -27,9 +32,12 @@ class Index extends \Magento\Framework\App\Action\Action
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
-        \PayPalBR\PayPalPlus\Model\PaypalPlusApi $paypalPlusApi
+        \PayPalBR\PayPalPlus\Model\PaypalPlusApi $paypalPlusApi,
+        \Magento\Framework\Controller\Result\JsonFactory $jsonFactory
     ) {
         $this->paypalPlusApi = $paypalPlusApi;
+        $this->jsonFactory = $jsonFactory;
+
         parent::__construct($context);
     }
 
@@ -42,6 +50,28 @@ class Index extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        $this->paypalPlusApi->execute();
+        $resultJson = $this->jsonFactory->create();
+
+        /**
+         * Returns an array with the following structure
+         *
+         * [
+         *     'status' => 'success',
+         *     'message' => ...
+         * ]
+         */
+        $response = $this->paypalPlusApi->execute();
+        if ($response['status'] == 'success') {
+            $resultJson
+                ->setHttpResponseCode(200)
+                ->setData($response['message']);
+        } else {
+            $resultJson
+                ->setHttpResponseCode(400)
+                ->setData([
+                    'message' => $response['message']
+                ]);
+        }
+        return $resultJson;
     }
 }

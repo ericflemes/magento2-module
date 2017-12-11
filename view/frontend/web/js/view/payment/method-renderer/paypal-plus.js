@@ -15,15 +15,19 @@ define([
 
         initializeIframe: function () {
             var self = this;
-            var serviceUrl = urlBuilder.build('rest/default/V1/paypalplus/obtainaccesstoken');
+            var serviceUrl = urlBuilder.build('paypalplus/payment/index');
             return storage.post(serviceUrl,'')
                 .done(function (response) {
-
-
-
+                    var approvalUrl = '';
+                    for(var i = 0; i<response.links.length; i++) {
+                        if (response.links[i].rel == 'approval_url') {
+                            approvalUrl = response.links[i].href;
+                        }
+                    }
+                    console.log("Approval URL: " + approvalUrl);
                             this.paypalObject = PAYPAL.apps.PPP(
                             {
-                                "approvalUrl": response,
+                                "approvalUrl": approvalUrl,
                                 "placeholder": "ppplus",
                                 "mode": "sandbox" ,
                                 "payerFirstName": "Diego",
