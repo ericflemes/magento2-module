@@ -9,15 +9,18 @@ class Index extends \Magento\Framework\App\Action\Action
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    protected $_logger;
+    protected $logger;
+    
     /**
      * @var \PayPalBR\PayPalPlus\Model\Webhook\EventFactory
      */
-    protected $_webhookEventFactory;
+    protected $webhookEventFactory;
+    
     /**
      * @var \PayPalBR\PayPalPlus\Model\ApiFactory
      */
     protected $_apiFactory;
+    
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \PayPalBR\PayPalPlus\Model\Webhook\EventFactory $webhookEventFactory
@@ -30,8 +33,8 @@ class Index extends \Magento\Framework\App\Action\Action
         \PayPalBR\PayPalPlus\Model\ApiFactory $apiFactory,
         \Psr\Log\LoggerInterface $logger
     ) {
-        $this->_logger = $logger;
-        $this->_webhookEventFactory = $webhookEventFactory;
+        $this->logger = $logger;
+        $this->webhookEventFactory = $webhookEventFactory;
         $this->_apiFactory = $apiFactory;
         parent::__construct($context);
     }
@@ -53,9 +56,9 @@ class Index extends \Magento\Framework\App\Action\Action
             if (!$webhookEvent) {
                 throw new LocalizedException(__('Event not found.'));
             }
-            $this->_webhookEventFactory->create()->processWebhookRequest($webhookEvent);
+            $this->webhookEventFactory->create()->processWebhookRequest($webhookEvent);
         } catch (\Exception $e) {
-            $this->_logger->critical($e);
+            $this->logger->critical($e);
             $this->getResponse()->setStatusHeader(503, '1.1', 'Service Unavailable')->sendResponse();
         }
     }
