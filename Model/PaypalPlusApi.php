@@ -114,7 +114,8 @@ class PaypalPlusApi
                 'log.FileName' => '/var/log/paypalplus.log',
                 'log.LogLevel' => 'DEBUG', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
                 'cache.enabled' => true,
-                'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2'
+                'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2',
+                ''
             ]
         );
 
@@ -295,13 +296,18 @@ class PaypalPlusApi
         $payment = new \PayPal\Api\Payment();
         $payment->setIntent("Sale");
         $payment->setPayer($payer);
+
+        $payment->this->getAplicationContext();
+
         $payment->setRedirectUrls($redirectUrls);
         $payment->addTransaction($transaction);
+
 
         $result = [];
         try {
             /** @var \PayPal\Api\Payment $result */
             $paypalPayment = $payment->create($apiContext);
+
             $result = [
                 'status' => 'success',
                 'message' => $paypalPayment->toArray()

@@ -9,7 +9,7 @@ use Magento\Framework\View\LayoutFactory;
  *
  * @category   PayPalBR
  * @package    PayPalBR_PayPalPlus
- * @author Diego Lisboa
+ * @author Dev
  */
 class Data extends \Magento\Payment\Helper\Data
 {

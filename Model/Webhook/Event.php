@@ -6,7 +6,7 @@ namespace PayPalBR\PayPalPlus\Model\Webhook;
  *
  * @category   PayPalBR
  * @package    PayPalBR_PayPalPlus
- * @author Diego Lisboa
+ * @author Dev
  */
 class Event
 {

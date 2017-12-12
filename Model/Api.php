@@ -25,12 +25,13 @@ use \PayPal\Api\PatchRequest;
 use \PayPal\Api\Patch;
 use \PayPal\Api\PaymentExecution;
 use \PayPal\Exception\PayPalConnectionException;
+use PayPalBR\PayPalPlus\Model\Config\Source\Mode;
 /**
  * PayPalBR PayPal Rest Api wrapper
  *
  * @category   PayPalBR
  * @package    PayPalBR_PayPalPlus
- * @author Diego lisboa
+ * @author Dev
  */
 class Api
 {
@@ -105,6 +106,25 @@ class Api
      */
     protected $urlBuilder;
     /**
+     * Contains the config ID to be used in PayPal API
+     *
+     * @var string
+     */
+    protected $configId;
+
+    /**
+     * Contains the secret ID to be used in PayPal API
+     *
+     * @var string
+     */
+    protected $secretId;
+    /**
+     * Contains the config provider for Magento 2 back-end configurations
+     *
+     * @var ConfigProvider
+     */
+    protected $configProvider;
+    /**
      * Prepare PayPal REST SDK ApiContent
      *
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -136,7 +156,8 @@ class Api
         \Magento\Framework\Message\ManagerInterface $messageManager,
         EncryptorInterface $encryptor,
         \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Framework\UrlInterface $urlBuilder
+        \Magento\Framework\UrlInterface $urlBuilder,
+         \PayPalBR\PayPalPlus\Model\ConfigProvider $configProvider
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->registry = $registry;
@@ -152,6 +173,7 @@ class Api
         $this->encryptor = $encryptor;
         $this->assetRepo = $assetRepo;
         $this->urlBuilder = $urlBuilder;
+        $this->configProvider = $configProvider;
         $this->setApiContext(null);
     }
     /**
@@ -163,37 +185,29 @@ class Api
     public function setApiContext($website = null)
     {
 
-        $this->_mode = $this->scopeConfig->getValue('payment/paypalbr_paypalplus/mode',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $website);
+        $this->configId = $this->configProvider->getClientId();
+        $this->secretId = $this->configProvider->getSecretId();
 
-        if($this->_mode == 1){
-           $clientId = 'payment/paypalbr_paypalplus/client_id_sandbox';
-           $secretId = 'payment/paypalbr_paypalplus/secret_id_sandbox';
-        }else{
-           $clientId = 'payment/paypalbr_paypalplus/client_id_production';
-           $secretId = 'payment/paypalbr_paypalplus/secret_id_production';
-        }
-
-        $this->_apiContext = new ApiContext(
-            new OAuthTokenCredential(
-                $this->scopeConfig->getValue($clientId,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $website),
-                $this->scopeConfig->getValue($secretId ,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $website)
+        $apiContext = new \PayPal\Rest\ApiContext(
+            new \PayPal\Auth\OAuthTokenCredential(
+                $this->configId,
+                $this->secretId
             )
         );
-
-        $this->_apiContext->setConfig(
+        $apiContext->setConfig(
             [
-                'http.ConnectionTimeOut' => 30,
-                'http.Retry' => 1,
-                'mode' => $this->_mode,
-                'log.FileName' =>'/var/log/paypalplus.log',
-                'log.LogLevel' => 'INFO'
+                'http.headers.PayPal-Partner-Attribution-Id' => 'MagentoBrazil_Ecom_PPPlus2',
+                'mode' => $this->configProvider->isModeSandbox() ? 'sandbox' : 'live',
+                'log.LogEnabled' => true,
+                'log.FileName' => '/var/log/paypalplus.log',
+                'log.LogLevel' => 'DEBUG', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
+                'cache.enabled' => true,
+                'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2',
+                ''
             ]
         );
-        $this->_apiContext->addRequestHeader('PayPal-Partner-Attribution-Id', 'MagentoBrazil_Ecom_PPPlus2');
-        return $this;
+
+        return $apiContext;
     }
     /**
      * Get ApprovalLink for curretn Quote
