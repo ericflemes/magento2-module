@@ -29,6 +29,10 @@ define([
         errorProcessor: errorProcesor,
         customerInfo: quote.billingAddress._latestValue,
 
+        getNamePay: function(){
+            return "Pay Pal Plus " + window.checkoutConfig.payment.paypalbr_paypalplus.exibitionName;
+        },
+
         initialize: function () {
 
             fullScreenLoader.startLoader();
