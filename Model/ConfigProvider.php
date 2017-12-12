@@ -63,6 +63,11 @@ class ConfigProvider
     const XML_CUSTOMER_TAX_SHOW = 'customer/address/taxvat_show';
 
     /**
+     * Contains the base currency of the store
+     */
+    const XML_PATH_CURRENCY_OPTIONS_BASE = 'currency/options/base';
+
+    /**
      * ConfigProvider constructor.
      *
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -224,5 +229,27 @@ class ConfigProvider
     public function deactivateModule()
     {
         $this->config->saveConfig(self::XML_PATH_ACTIVE, 0, 'default', 0);
+    }
+
+    /**
+     * Returns the base currency
+     *
+     * @return string
+     */
+    public function getCurrencyBase()
+    {
+        $currencyBase = $this->scopeConfig->getValue(self::XML_PATH_CURRENCY_OPTIONS_BASE, ScopeInterface::SCOPE_STORE);
+
+        return $currencyBase;
+    }
+
+    /**
+     * Checks if the base currency is BRL or not
+     *
+     * @return bool
+     */
+    public function isCurrencyBaseBRL()
+    {
+        return $this->getCurrencyBase() == 'BRL';
     }
 }
