@@ -23,7 +23,7 @@ class PaypalPlusApi
 
     /**
      * Contains the current customer session
-     * 
+     *
      * @var \Magento\Customer\Model\Session
      */
     protected $customerSession;
@@ -120,7 +120,6 @@ class PaypalPlusApi
 
         return $apiContext;
     }
-
     /**
      * Returns the payer
      *
