@@ -21,6 +21,18 @@ class ConfigProvider
     protected $scopeConfig;
 
     /**
+     * Contains the configurations
+     *
+     * @var \Magento\Framework\App\Config\ConfigResource\ConfigInterface
+     */
+    protected $config;
+
+    /**
+     * Contains if the module is active or not
+     */
+    const XML_PATH_ACTIVE = 'payment/paypalbr_paypalplus/active';
+
+    /**
      * Contains the client ID of PayPal Plus (Sandbox)
      */
     const XML_PATH_CLIENT_ID_SBOX = 'payment/paypal_plus/client_id_sandbox';
@@ -46,15 +58,27 @@ class ConfigProvider
     const XML_PATH_MODE = 'payment/paypal_plus/mode';
 
     /**
+     * Contains the configuration path for showing customer tax show
+     */
+    const XML_CUSTOMER_TAX_SHOW = 'customer/address/taxvat_show';
+
+    /**
+     * Contains the base currency of the store
+     */
+    const XML_PATH_CURRENCY_OPTIONS_BASE = 'currency/options/base';
+
+    /**
      * ConfigProvider constructor.
      *
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ConfigResource\ConfigInterface $config
     )
     {
         $this->scopeConfig = $scopeConfig;
+        $this->config = $config;
     }
 
     /**
@@ -168,5 +192,64 @@ class ConfigProvider
             throw new \Exception("Could not determine which mode is used!");
         }
         return $secretId;
+    }
+
+    /**
+     * Returns if the module is activated
+     *
+     * This configuration uses \Magento\Config\Model\Config\Source\Yesno as backend.
+     * 1 is for YES, and 0 is for NO.
+     *
+     * @return bool
+     */
+    public function isActive()
+    {
+        $active = $this->scopeConfig->getValue(self::XML_PATH_ACTIVE, ScopeInterface::SCOPE_STORE);
+
+        return $active == 1;
+    }
+
+    /**
+     * Checks if customer tax number is required or not.
+     *
+     * @return bool
+     */
+    public function isCustomerTaxRequired()
+    {
+        $customerTaxShow = $this->scopeConfig->getValue(self::XML_CUSTOMER_TAX_SHOW, ScopeInterface::SCOPE_STORE);
+
+        return $customerTaxShow == 'req';
+    }
+
+    /**
+     * Deactivates module
+     *
+     * This functions sets the active configuration to 0 (zero), which will disable the module.
+     */
+    public function deactivateModule()
+    {
+        $this->config->saveConfig(self::XML_PATH_ACTIVE, 0, 'default', 0);
+    }
+
+    /**
+     * Returns the base currency
+     *
+     * @return string
+     */
+    public function getCurrencyBase()
+    {
+        $currencyBase = $this->scopeConfig->getValue(self::XML_PATH_CURRENCY_OPTIONS_BASE, ScopeInterface::SCOPE_STORE);
+
+        return $currencyBase;
+    }
+
+    /**
+     * Checks if the base currency is BRL or not
+     *
+     * @return bool
+     */
+    public function isCurrencyBaseBRL()
+    {
+        return $this->getCurrencyBase() == 'BRL';
     }
 }
