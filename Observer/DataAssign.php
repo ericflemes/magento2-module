@@ -36,6 +36,11 @@ class DataAssign implements ObserverInterface
             $disableMessage = __('Identificamos que a sua loja não possui suporte para CPF/CNPJ (TAXVAT). Para adicionar o suporte, acesse <<hyperlink>> e vÃ¡ em â€œLojas->ConfiguraÃ§Ãµes->Clientes->OpÃ§Ãµes de nome e endereÃ§o->Mostrar nÃºmero TAX/VAT.');
         }
 
+        if (! $this->configProvider->isCurrencyBaseBRL()) {
+            $disableModule = true;
+            $disableMessage = __("Your base currency has to be BRL in order to activate this module.");
+        }
+
         try {
             $clientId = $this->configProvider->getClientId();
             $secretId = $this->configProvider->getSecretId();
@@ -53,11 +58,6 @@ class DataAssign implements ObserverInterface
         } catch (\Exception $e) {
             $disableModule = true;
             $disableMessage = __('Credenciais de API incorretas, favor revisar.');
-        }
-
-        if (! $this->configProvider->isCurrencyBaseBRL()) {
-            $disableModule = true;
-            $disableMessage = __("Your base currency has to be BRL in order to activate this module.");
         }
 
         if ($disableModule) {
