@@ -4,32 +4,32 @@ namespace PayPalBR\PayPalPlus\Model;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Quote\Model\Quote;
-use PayPal\Api\Refund;
-use PayPal\Rest\ApiContext;
-use PayPal\Auth\OAuthTokenCredential;
-use PayPal\Api\Address;
-use PayPal\Api\WebProfile;
-use PayPal\Api\Presentation;
-use PayPal\Api\Payment as PayPalPayment;
-use PayPal\Api\Amount;
-use PayPal\Api\Details;
-use PayPal\Api\InputFields;
-use PayPal\Api\Item;
-use PayPal\Api\ItemList;
-use PayPal\Api\Payer;
-use PayPal\Api\RedirectUrls;
-use PayPal\Api\Transaction;
-use PayPal\Api\PayerInfo;
-use PayPal\Api\ShippingAddress;
-use PayPal\Api\PatchRequest;
-use PayPal\Api\Patch;
-use PayPal\Api\PaymentExecution;
-use PayPal\Exception\PayPalConnectionException;
+use \PayPal\Api\Refund;
+use \PayPal\Rest\ApiContext;
+use \PayPal\Auth\OAuthTokenCredential;
+use \PayPal\Api\Address;
+use \PayPal\Api\WebProfile;
+use \PayPal\Api\Presentation;
+use \PayPal\Api\Payment as PayPalPayment;
+use \PayPal\Api\Amount;
+use \PayPal\Api\Details;
+use \PayPal\Api\InputFields;
+use \PayPal\Api\Item;
+use \PayPal\Api\ItemList;
+use \PayPal\Api\Payer;
+use \PayPal\Api\RedirectUrls;
+use \PayPal\Api\Transaction;
+use \PayPal\Api\PayerInfo;
+use \PayPal\Api\ShippingAddress;
+use \PayPal\Api\PatchRequest;
+use \PayPal\Api\Patch;
+use \PayPal\Api\PaymentExecution;
+use \PayPal\Exception\PayPalConnectionException;
 /**
  * PayPalBR PayPal Rest Api wrapper
  *
  * @category   PayPalBR
- * @package    IPayPalBR_PayPalPlus
+ * @package    PayPalBR_PayPalPlus
  * @author Diego lisboa
  */
 class Api
