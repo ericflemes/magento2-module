@@ -57,6 +57,8 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_successCodes                = ['200', '201'];
     protected $_badSaleCodes                = ['partially_refunded', 'pending', 'refunded', 'denied'];
 
+    protected $configProvider;
+
     /**
      * Constructor method
      *
@@ -85,7 +87,8 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         PaymentObject $paymentObject,
-        Api $api
+        Api $api,
+        \PayPalBR\PayPalPlus\Model\ConfigProvider $configProvider
     ) {
         parent::__construct(
             $context,
@@ -103,6 +106,7 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
         $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
         $this->_logger = $context->getLogger();
+        $this->configProvider = $configProvider;
 
     }
     /**
@@ -282,6 +286,7 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
             $this->_logger->log(100, "Unable to send pending payment email: " . $ex->getMessage());
         }
     }
+
     /**
      * Determine method availability based on quote amount and config data
      *
@@ -290,10 +295,9 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
-        if (!$this->getConfigValue('payment/paypalbr_paypalplus/client_id')) {
-            return false;
-        }
-        if (!$this->getConfigValue('payment/paypalbr_paypalplus/client_secret')) {
+        die("xXx");
+
+        if (! $this->configProvider->isActive()) {
             return false;
         }
 

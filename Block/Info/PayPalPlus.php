@@ -9,7 +9,7 @@
  * @link        http://www.webjump.com.br
  */
 
-namespace PayPalBR\PayPalPlus\Block\Payment\Info;
+namespace PayPalBR\PayPalPlus\Block\Info;
 
 use Magento\Payment\Block\Info;
 use Magento\Framework\DataObject;
