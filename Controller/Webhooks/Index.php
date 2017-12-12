@@ -1,8 +1,7 @@
 <?php
-
 namespace PayPalBR\PayPalPlus\Controller\Webhooks;
-use Magento\Framework\Exception\LocalizedException;
 
+use Magento\Framework\Exception\LocalizedException;
 
 class Index extends \Magento\Framework\App\Action\Action
 {
@@ -19,7 +18,7 @@ class Index extends \Magento\Framework\App\Action\Action
     /**
      * @var \PayPalBR\PayPalPlus\Model\ApiFactory
      */
-    protected $_apiFactory;
+    protected $apiFactory;
     
     /**
      * @param \Magento\Framework\App\Action\Context $context
@@ -35,24 +34,26 @@ class Index extends \Magento\Framework\App\Action\Action
     ) {
         $this->logger = $logger;
         $this->webhookEventFactory = $webhookEventFactory;
-        $this->_apiFactory = $apiFactory;
+        $this->apiFactory = $apiFactory;
         parent::__construct($context);
     }
+
     /**
-     * Instantiate Event model and pass Webhook request to it
+     * Instantiate event model and pass Webhook request to it
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function execute()
     {
-        if (!$this->getRequest()->isPost()) {
+        if (! $this->getRequest()->isPost()) {
             return;
         }
         try {
             $data = file_get_contents('php://input');
+
             /** @var \PayPal\Api\WebhookEvent $webhookEvent */
-            $webhookEvent = $this->_apiFactory->create()->validateWebhook($data);
+            $webhookEvent = $this->apiFactory->create()->validateWebhook($data);
             if (!$webhookEvent) {
                 throw new LocalizedException(__('Event not found.'));
             }
