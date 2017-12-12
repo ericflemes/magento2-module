@@ -15,12 +15,44 @@ define([
     'mage/url',
     'mage/storage',
     'Magento_Checkout/js/model/full-screen-loader',
-], function (Component, $, ko, urlBuilder, storage,fullScreenLoader) {
+    'Magento_Checkout/js/model/error-processor',
+    'Magento_Checkout/js/model/quote',
+    'Magento_Checkout/js/model/postcode-validator'
+], function (Component, $, ko, urlBuilder, storage,fullScreenLoader , errorProcesor , quote,  postcodeValidator) {
     'use strict';
 
     return Component.extend({
         defaults: {
             template: 'PayPalBR_PayPalPlus/payment/paypal-plus'
+        },
+
+        errorProcessor: errorProcesor,
+        customerInfo: quote.billingAddress._latestValue,
+
+        initialize: function () {
+
+            fullScreenLoader.startLoader();
+
+            this._super();
+            this._render();
+            var self = this;
+            var iframeLoaded = setInterval(function ()
+            {
+                if ($('#ppplus').length )
+                {
+
+                    if (breakError) {
+                        $('#iframe-warning').hide();
+                        $('#iframe-error').show();
+                        $('#continueButton').prop("disabled", true);
+                        return false;
+                    }
+
+                    self.initializeIframe();
+                    fullScreenLoader.stopLoader();
+                    clearInterval(iframeLoaded);
+                }
+            }, 300);
         },
 
         initializeIframe: function () {
@@ -29,13 +61,16 @@ define([
             return storage.post(serviceUrl, '')
                 .done(function (response) {
                     var approvalUrl = '';
+                    var breakError = false;
                     for(var i = 0; i<response.links.length; i++) {
                         if (response.links[i].rel == 'approval_url') {
                             approvalUrl = response.links[i].href;
                         }
                     }
                     console.log("Approval URL: " + approvalUrl);
+
                     var customerData = window.checkoutConfig.customerData;
+
                     this.paypalObject = PAYPAL.apps.PPP(
                     {
                         "approvalUrl": approvalUrl,
@@ -62,25 +97,31 @@ define([
                         /**
                          * Continue after payment is verifies (continueButton)
                          *
-                         * @param {string} rememberedCards
                          * @param {string} payerId
                          * @param {string} token
                          * @param {string} term
                          * @returns {}
                          */
-                        onContinue: function () {
+                        onContinue: function (payerId, token, term) {
                             $('#continueButton').hide();
                             $('#payNowButton').show();
+                            self.payerId = payerId;
+                            //Show Place Order button
 
                             var message = {
                                 message: $.mage.__('Payment has been authorized.')
                             };
                             self.messageContainer.addSuccessMessage(message);
+
+                            if (typeof term !== 'undefined') {
+                                self.term = term;
+                            }
                             $('#ppplus').hide();
 
                             //end aproved card and payment method, run placePendingOrder
-                            //self.placePendingOrder();
+                            self.placePendingOrder();
                         },
+
                         /**
                          * Handle iframe error (if payment fails for example)
                          *
@@ -88,11 +129,13 @@ define([
                          * @returns {undefined}
                          */
                         onError: function (err) {
+
+                            breakError = true;
                             var message = {
                                 message: JSON.stringify(err.cause)
                             };
                             //Display response error
-                            //that.messageContainer.addErrorMessage(message);
+                            that.messageContainer.addErrorMessage(message);
                         }
                     });
                     // console.log(response);
@@ -101,39 +144,56 @@ define([
                 });
         },
 
+
+        placePendingOrder: function () {
+            var self = this;
+            if (this.placeOrder()) {
+                // capture all click events
+                document.addEventListener('click', iframe.stopEventPropagation, true);
+            }
+        },
+
         doContinue: function () {
             var self = this;
-
-            self.paypalObject.doContinue();
-
+            if (this.validateAddress() !== false) {
+                self.paypalObject.doContinue();
+            } else {
+                var message = {
+                    message: $.mage.__('Please verify shipping address.')
+                };
+                self.messageContainer.addErrorMessage(message);
+            }
         },
 
-        initialize: function () {
+        /**
+         * Validate shipping address.
+         *
+         * @returns {Boolean}
+         */
+        validateAddress: function () {
 
-            fullScreenLoader.startLoader();
+            this.customerData = quote.billingAddress._latestValue;
 
-            this._super();
-            this._render();
-            var self = this;
-            var iframeLoaded = setInterval(function ()
-            {
-                if ($('#ppplus').length )
-                {
-                    /*
-                    if (!window.checkoutConfig.payment.paypalPlusIframe.api.isQuoteReady || window.checkoutConfig.payment.paypalPlusIframe.api.error) {
-                        $('#iframe-warning').hide();
-                        $('#iframe-error').show();
-                        $('#continueButton').prop("disabled", true);
-                        return false;
-                    }
-                    */
-                    self.initializeIframe();
-                    fullScreenLoader.stopLoader();
-                    clearInterval(iframeLoaded);
-                }
-            }, 300);
+            if (typeof this.customerInfo.city === 'undefined' || this.customerInfo.city.length === 0) {
+                return false;
+            }
+
+            if (typeof this.customerInfo.countryId === 'undefined' || this.customerInfo.countryId.length === 0) {
+                return false;
+            }
+
+            if (typeof this.customerInfo.postcode === 'undefined' || this.customerInfo.postcode.length === 0 || !postcodeValidator.validate(this.customerInfo.postcode, "BR")) {
+                return false;
+            }
+
+            if (typeof this.customerInfo.street === 'undefined' || this.customerInfo.street[0].length === 0 ) {
+                return false;
+            }
+            if (typeof this.customerInfo.region === 'undefined' || this.customerInfo.region.length === 0) {
+                return false;
+            }
+            return true;
         },
-
         _render:function(){
 
         }
