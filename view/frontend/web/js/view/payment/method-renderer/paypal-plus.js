@@ -36,10 +36,8 @@ define([
             this._super();
             this._render();
             var self = this;
-            var iframeLoaded = setInterval(function ()
-            {
-                if ($('#ppplus').length )
-                {
+            var iframeLoaded = setInterval(function () {
+                if ($('#ppplus').length) {
 
                     if (breakError) {
                         $('#iframe-warning').hide();
@@ -62,7 +60,7 @@ define([
                 .done(function (response) {
                     var approvalUrl = '';
                     var breakError = false;
-                    for(var i = 0; i<response.links.length; i++) {
+                    for (var i = 0; i < response.links.length; i++) {
                         if (response.links[i].rel == 'approval_url') {
                             approvalUrl = response.links[i].href;
                         }
@@ -72,72 +70,72 @@ define([
                     var customerData = window.checkoutConfig.customerData;
 
                     this.paypalObject = PAYPAL.apps.PPP(
-                    {
-                        "approvalUrl": approvalUrl,
-                        "placeholder": "ppplus",
-                        "mode": "sandbox" ,
-                        "payerFirstName": customerData.firstname,
-                        "payerLastName": customerData.lastname,
-                        "payerPhone": "05511998548609",
-                        "payerEmail": customerData.email,
-                        "payerTaxId": customerData.taxvat,
-                        "payerTaxIdType": "BR_CPF",
-                        "language": "pt_BR",
-                        "country": "BR",
-                        "enableContinue": "orderPP",
-                        "disableContinue": "orderPPs",
-                        "iframeHeight": "500",
-                        /**
-                         * Do stuff after iframe is loaded
-                         * @returns {undefined}
-                         */
-                        onLoad: function () {
-                            console.log("Iframe successfully lo aded !");
-                        },
-                        /**
-                         * Continue after payment is verifies (continueButton)
-                         *
-                         * @param {string} payerId
-                         * @param {string} token
-                         * @param {string} term
-                         * @returns {}
-                         */
-                        onContinue: function (payerId, token, term) {
-                            $('#continueButton').hide();
-                            $('#payNowButton').show();
-                            self.payerId = payerId;
-                            //Show Place Order button
+                        {
+                            "approvalUrl": approvalUrl,
+                            "placeholder": "ppplus",
+                            "mode": "sandbox",
+                            "payerFirstName": customerData.firstname,
+                            "payerLastName": customerData.lastname,
+                            "payerPhone": "05511998548609",
+                            "payerEmail": customerData.email,
+                            "payerTaxId": customerData.taxvat,
+                            "payerTaxIdType": "BR_CPF",
+                            "language": "pt_BR",
+                            "country": "BR",
+                            "enableContinue": "orderPP",
+                            "disableContinue": "orderPPs",
+                            "iframeHeight": "500",
+                            /**
+                             * Do stuff after iframe is loaded
+                             * @returns {undefined}
+                             */
+                            onLoad: function () {
+                                console.log("Iframe successfully lo aded !");
+                            },
+                            /**
+                             * Continue after payment is verifies (continueButton)
+                             *
+                             * @param {string} payerId
+                             * @param {string} token
+                             * @param {string} term
+                             * @returns {}
+                             */
+                            onContinue: function (payerId, token, term) {
+                                $('#continueButton').hide();
+                                $('#payNowButton').show();
+                                self.payerId = payerId;
+                                //Show Place Order button
 
-                            var message = {
-                                message: $.mage.__('Payment has been authorized.')
-                            };
-                            self.messageContainer.addSuccessMessage(message);
+                                var message = {
+                                    message: $.mage.__('Payment has been authorized.')
+                                };
+                                self.messageContainer.addSuccessMessage(message);
 
-                            if (typeof term !== 'undefined') {
-                                self.term = term;
+                                if (typeof term !== 'undefined') {
+                                    self.term = term;
+                                }
+                                $('#ppplus').hide();
+
+                                //end aproved card and payment method, run placePendingOrder
+                                self.placePendingOrder();
+                            },
+
+                            /**
+                             * Handle iframe error (if payment fails for example)
+                             *
+                             * @param {type} err
+                             * @returns {undefined}
+                             */
+                            onError: function (err) {
+
+                                breakError = true;
+                                var message = {
+                                    message: JSON.stringify(err.cause)
+                                };
+                                //Display response error
+                                that.messageContainer.addErrorMessage(message);
                             }
-                            $('#ppplus').hide();
-
-                            //end aproved card and payment method, run placePendingOrder
-                            self.placePendingOrder();
-                        },
-
-                        /**
-                         * Handle iframe error (if payment fails for example)
-                         *
-                         * @param {type} err
-                         * @returns {undefined}
-                         */
-                        onError: function (err) {
-
-                            breakError = true;
-                            var message = {
-                                message: JSON.stringify(err.cause)
-                            };
-                            //Display response error
-                            that.messageContainer.addErrorMessage(message);
-                        }
-                    });
+                        });
                     // console.log(response);
                 }).fail(function (response) {
                     console.log(response);
@@ -186,7 +184,7 @@ define([
                 return false;
             }
 
-            if (typeof this.customerInfo.street === 'undefined' || this.customerInfo.street[0].length === 0 ) {
+            if (typeof this.customerInfo.street === 'undefined' || this.customerInfo.street[0].length === 0) {
                 return false;
             }
             if (typeof this.customerInfo.region === 'undefined' || this.customerInfo.region.length === 0) {
@@ -194,9 +192,11 @@ define([
             }
             return true;
         },
-        _render:function(){
+
+        _render: function () {
 
         }
-);
+    });
+});
 
 
