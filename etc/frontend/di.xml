@@ -1,21 +1,4 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <virtualType name="PayPalBR\PayPalPlus\Model\ConfigProvider" type="Magento\Payment\Model\CcGenericConfigProvider">
-        <arguments>
-            <argument name="methodCodes" xsi:type="array">
-                <item name="paypalbr_paypalplus" xsi:type="const">PayPalBR\PayPalPlus\Model\Payment::CODE</item>
-            </argument>
-        </arguments>
-    </virtualType>
-
-
-    <type name="Magento\Checkout\Model\CompositeConfigProvider">
-        <arguments>
-            <argument name="configProviders" xsi:type="array">
-                <item name="paypalbr_paypalplus_config_provider" xsi:type="object">PayPalBR\PayPalPlus\Model\IframeConfigProvider</item>
-            </argument>
-        </arguments>
-    </type>
-
 
     <type name="Magento\Framework\View\Result\Page">
         <arguments>
