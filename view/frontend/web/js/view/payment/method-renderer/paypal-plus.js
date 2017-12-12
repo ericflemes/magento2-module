@@ -15,7 +15,10 @@ define([
     'mage/url',
     'mage/storage',
     'Magento_Checkout/js/model/full-screen-loader',
-], function (Component, $, ko, urlBuilder, storage,fullScreenLoader) {
+    'Magento_Checkout/js/model/error-processor',
+    'Magento_Checkout/js/model/quote',
+    'Magento_Checkout/js/model/postcode-validator'
+], function (Component, $, ko, urlBuilder, storage,fullScreenLoader , errorProcesor , quote,  postcodeValidator) {
     'use strict';
 
     return Component.extend({
@@ -23,19 +26,25 @@ define([
             template: 'PayPalBR_PayPalPlus/payment/paypal-plus'
         },
 
+        errorProcessor: errorProcesor,
+        customerInfo: quote.billingAddress._latestValue,
+
         initializeIframe: function () {
             var self = this;
             var serviceUrl = urlBuilder.build('paypalplus/payment/index');
             return storage.post(serviceUrl, '')
                 .done(function (response) {
                     var approvalUrl = '';
+                    var breakError = false;
                     for(var i = 0; i<response.links.length; i++) {
                         if (response.links[i].rel == 'approval_url') {
                             approvalUrl = response.links[i].href;
                         }
                     }
                     console.log("Approval URL: " + approvalUrl);
+
                     var customerData = window.checkoutConfig.customerData;
+
                     this.paypalObject = PAYPAL.apps.PPP(
                     {
                         "approvalUrl": approvalUrl,
@@ -79,7 +88,7 @@ define([
                             $('#ppplus').hide();
 
                             //end aproved card and payment method, run placePendingOrder
-                            //self.placePendingOrder();
+                            self.placePendingOrder();
                         },
                         /**
                          * Handle iframe error (if payment fails for example)
@@ -88,11 +97,13 @@ define([
                          * @returns {undefined}
                          */
                         onError: function (err) {
+
+                            breakError = true;
                             var message = {
                                 message: JSON.stringify(err.cause)
                             };
                             //Display response error
-                            //that.messageContainer.addErrorMessage(message);
+                            that.messageContainer.addErrorMessage(message);
                         }
                     });
                     // console.log(response);
@@ -101,11 +112,55 @@ define([
                 });
         },
 
+
+        placePendingOrder: function () {
+            var self = this;
+            if (this.placeOrder()) {
+                // capture all click events
+                document.addEventListener('click', iframe.stopEventPropagation, true);
+            }
+        },
+
         doContinue: function () {
             var self = this;
+            if (this.validateAddress() !== false) {
+                self.paypalObject.doContinue();
+            } else {
+                var message = {
+                    message: $.mage.__('Please verify shipping address.')
+                };
+                self.messageContainer.addErrorMessage(message);
+            }
+        },
 
-            self.paypalObject.doContinue();
+        /**
+         * Validate shipping address.
+         *
+         * @returns {Boolean}
+         */
+        validateAddress: function () {
 
+            this.customerData = quote.billingAddress._latestValue;
+
+            if (typeof this.customerInfo.city === 'undefined' || this.customerInfo.city.length === 0) {
+                return false;
+            }
+
+            if (typeof this.customerInfo.countryId === 'undefined' || this.customerInfo.countryId.length === 0) {
+                return false;
+            }
+
+            if (typeof this.customerInfo.postcode === 'undefined' || this.customerInfo.postcode.length === 0 || !postcodeValidator.validate(this.customerInfo.postcode, "BR")) {
+                return false;
+            }
+
+            if (typeof this.customerInfo.street === 'undefined' || this.customerInfo.street[0].length === 0 ) {
+                return false;
+            }
+            if (typeof this.customerInfo.region === 'undefined' || this.customerInfo.region.length === 0) {
+                return false;
+            }
+            return true;
         },
 
         initialize: function () {
@@ -119,14 +174,14 @@ define([
             {
                 if ($('#ppplus').length )
                 {
-                    /*
-                    if (!window.checkoutConfig.payment.paypalPlusIframe.api.isQuoteReady || window.checkoutConfig.payment.paypalPlusIframe.api.error) {
+
+                    if (breakError) {
                         $('#iframe-warning').hide();
                         $('#iframe-error').show();
                         $('#continueButton').prop("disabled", true);
                         return false;
                     }
-                    */
+
                     self.initializeIframe();
                     fullScreenLoader.stopLoader();
                     clearInterval(iframeLoaded);
