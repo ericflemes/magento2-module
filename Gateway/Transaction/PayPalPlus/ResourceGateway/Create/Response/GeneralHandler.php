@@ -11,7 +11,6 @@
 
 namespace PayPalBR\PayPalPlus\Gateway\Transaction\PayPalPlus\ResourceGateway\Create\Response;
 
-
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use PayPalBR\PayPalPlus\Gateway\Transaction\Base\ResourceGateway\Response\AbstractHandler;
 
