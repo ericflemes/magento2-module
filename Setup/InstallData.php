@@ -1,4 +1,5 @@
 <?php
+
 namespace PayPalBR\PayPalPlus\Setup;
 
 use Magento\Eav\Setup\EavSetup;

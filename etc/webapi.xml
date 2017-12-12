@@ -1,15 +1,14 @@
 <?xml version="1.0" ?>
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
-	<route method="POST" url="/V1/paypalplus/webhook">
-		<service class="PayPalBR\PayPalPlus\Api\WebHookManagementInterface" method="postWebHook"/>
-		<resources>
-			<resource ref="anonymous"/>
-		</resources>
-	</route>
-            <route method="POST" url="/V1/paypalplus/obtainaccesstoken">
-                        <service class="PayPalBR\PayPalPlus\Api\ObtainAccessTokenInterface" method="postAccessToken"/>
-                        <resources>
-                            <resource ref="anonymous"/>
-                        </resources>
-            </route>
+
+
+        <route method="POST" url="/V1/notifications/webhooks">
+                <service class="PayPalBR\PayPalPlus\Api\WebHookManagementInterface" method="postWebHook"/>
+            <resources>
+                <resource ref="anonymous"/>
+            </resources>
+        </route>
+
+
+
 </routes>

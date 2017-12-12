@@ -48,7 +48,7 @@ final class PayPalPlusConfigProvider implements ConfigProviderInterface
         return [
             'payment' => [
                 $this->methodCode => [
-                    'text' => 'payment/paypal_plus/text'
+                    'text' => 'payment/paypalbr_paypalplus/text'
                 ]
             ]
         ];

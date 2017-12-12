@@ -6,6 +6,7 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+
     <body>
         <referenceBlock name="checkout.root">
             <arguments>
@@ -26,7 +27,7 @@
                                                                 <item name="paypal-br" xsi:type="array">
                                                                     <item name="component" xsi:type="string">PayPalBR_PayPalPlus/js/view/payment/paypal-br</item>
                                                                     <item name="methods" xsi:type="array">
-                                                                        <item name="paypal_plus" xsi:type="array">
+                                                                        <item name="paypalbr_paypalplus" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">false</item>
                                                                         </item>
                                                                     </item>

@@ -4,7 +4,6 @@
  * @author Diego Lisboa <diego@webjump.com.br>
  * @category PayPalBR
  * @package paypalbr\PayPalPlus\
- * @copyright   qbo (http://www.webjump.com.br)
  *
  * © 2016 WEB JUMP SOLUTIONS
  *
@@ -14,6 +13,7 @@ namespace PayPalBR\PayPalPlus\Block\View;
 use Magento\Framework\View;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
+
 class Root {
 
     protected $_requestPath = array();
@@ -22,7 +22,9 @@ class Root {
 
     const PPPLUS_SCRIPT_SOURCE = 'https://www.paypalobjects.com/webstatic/ppplusdcc/ppplusdcc.min.js';
     const CHECKOUT_ROUTE       = 'checkout/index/index';
-    const XML_PATH_IS_ACTIVE   = 'payment/paypal_plus/active';
+
+    const XML_PATH_IS_ACTIVE   = 'payment/paypalbr_paypalplus/active';
+
 
     /**
      *

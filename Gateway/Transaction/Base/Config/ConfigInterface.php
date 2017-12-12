@@ -13,11 +13,11 @@ namespace PayPalBR\PayPalPlus\Gateway\Transaction\Base\Config;
 
 interface ConfigInterface
 {
-    const PATH_PUBLIC_KEY_TEST    = 'paypal_plus/global/public_key_test';
-    const PATH_SECRET_KEY_TEST    = 'paypal_plus/global/secret_key_test';
-    const PATH_PUBLIC_KEY         = 'paypal_plus/global/public_key';
-    const PATH_SECRET_KEY         = 'paypal_plus/global/secret_key';
-    const PATH_TEST_MODE          = 'paypal_plus/global/test_mode';
+    const PATH_PUBLIC_KEY_TEST    = 'paypalbr_paypalplus/global/public_key_test';
+    const PATH_SECRET_KEY_TEST    = 'paypalbr_paypalplus/global/secret_key_test';
+    const PATH_PUBLIC_KEY         = 'paypalbr_paypalplus/global/public_key';
+    const PATH_SECRET_KEY         = 'paypalbr_paypalplus/global/secret_key';
+    const PATH_TEST_MODE          = 'paypalbr_paypalplus/global/test_mode';
 
     /**
      * @return string

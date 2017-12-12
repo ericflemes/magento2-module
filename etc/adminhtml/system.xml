@@ -8,34 +8,35 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="payment">
-            <group id="paypal_br" sortOrder="6" showInDefault="0" showInWebsite="0" showInStore="0">
-            	<group id="paypal_plus" translate="label comment" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-            		<label>PayPal Plus</label>
-            		<comment>The experience of a transparent checkout processed with a PayPal security. The user makes the payment directly on your site, without a need to create an account, use only the credit card.</comment>
-            		<fieldset_css>complex paypalbr-section</fieldset_css>
-            		<frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
-            		<attribute type="activity_path">payment/paypal_plus/active</attribute>
+            <group id="paypalbr" sortOrder="6" showInDefault="0" showInWebsite="0" showInStore="0">
+            	<group id="paypalplus" translate="label comment" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+
+                    <label>PayPal Plus</label>
+                    <comment>The experience of a transparent checkout processed with a PayPal security. The user makes the payment directly on your site, without a need to create an account, use only the credit card.</comment>
+                    <fieldset_css>complex paypalbr-section</fieldset_css>
+                    <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
+                    <attribute type="activity_path">payment/paypalbr_paypalplus/active</attribute>
                     <attribute type="displayIn">recommended_solutions</attribute>
                     <field id="active" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Enable this Solution</label>
-                        <config_path>payment/paypal_plus/active</config_path>
+                        <config_path>payment/paypalbr_paypalplus/active</config_path>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
                     <field id="exhibition_name" translate="label comment tooltip" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Exhibition Name</label>
-                        <config_path>payment/paypal_plus/exhibition_name</config_path>
+                        <config_path>payment/paypalbr_paypalplus/exhibition_name</config_path>
                         <comment>Will be displayed in checkout: Credit Card (Parceled in 12x)</comment>
                         <tooltip>By default, the PayPal Plus solution is displayed as a "Credit Card". Use this option to set additional text, such as installments or discounts.</tooltip>
                     </field>
                     <field id="mode" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Mode</label>
-                        <config_path>payment/paypal_plus/mode</config_path>
+                        <config_path>payment/paypalbr_paypalplus/mode</config_path>
                         <source_model>PayPalBR\PayPalPlus\Model\Config\Source\Mode</source_model>
                         <comment>Use this option to switch between Sandbox and Production modes. Sandbox is used for testing and production for actual purchases.</comment>
                     </field>
                     <field id="client_id_sandbox" translate="label comment" type="password" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Client ID (Sandbox)</label>
-                        <config_path>payment/paypal_plus/client_id_sandbox</config_path>
+                        <config_path>payment/paypalbr_paypalplus/client_id_sandbox</config_path>
                         <comment><![CDATA[To generate the Client ID, access <a href="#">here</a> and look for the "REST API Apps" section.]]></comment>
                         <depends>
                             <field id="mode">1</field>
@@ -44,7 +45,7 @@
                     </field>
                     <field id="secret_id_sandbox" translate="label comment" type="password" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Secret ID (Sandbox)</label>
-                        <config_path>payment/paypal_plus/secret_id_sandbox</config_path>
+                        <config_path>payment/paypalbr_paypalplus/secret_id_sandbox</config_path>
                         <comment><![CDATA[To generate the Secret ID, access <a href="#">here</a> and look for the "REST API Apps" section.]]></comment>
                         <depends>
                             <field id="mode">1</field>
@@ -54,7 +55,7 @@
                     <field id="client_id_production" translate="label comment" type="password" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Client ID (Production)</label>
                         <comment><![CDATA[To generate the Client ID, access <a href="#">here</a> and look for the "REST API Apps" section.]]></comment>
-                        <config_path>payment/paypal_plus/client_id_production</config_path>
+                        <config_path>payment/paypalbr_paypalplus/client_id_production</config_path>
                         <depends>
                             <field id="mode">2</field>
                         </depends>
@@ -62,7 +63,7 @@
                     </field>
                     <field id="secret_id_production" translate="label comment" type="password" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Secret ID (Production)</label>
-                        <config_path>payment/paypal_plus/secret_id_production</config_path>
+                        <config_path>payment/paypalbr_paypalplus/secret_id_production</config_path>
                         <comment><![CDATA[To generate the Secret ID, access <a href="#">here</a> and look for the "REST API Apps" section.]]></comment>
                         <depends>
                             <field id="mode">2</field>
@@ -72,29 +73,45 @@
                     <field id="new_order_status" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>New Order Status</label>
                         <source_model>Magento\Sales\Model\Config\Source\Order\Status\Processing</source_model>
-                        <config_path>payment/paypal_plus/new_order_status</config_path>
+                        <config_path>payment/paypalbr_paypalplus/new_order_status</config_path>
                     </field>
                     <field id="reject_order_status" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Reject Order Status</label>
                         <source_model>PayPalBR\PayPalPlus\Model\Config\Source\Review</source_model>
-                        <config_path>payment/paypal_plus/reject_order_status</config_path>
+                        <config_path>payment/paypalbr_paypalplus/reject_order_status</config_path>
                     </field>
                    <field id="review_order_status" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Review Order Status</label>
                         <source_model>PayPalBR\PayPalPlus\Model\Config\Source\Review</source_model>
-                        <config_path>payment/paypal_plus/review_order_status</config_path>
+                        <config_path>payment/paypalbr_paypalplus/review_order_status</config_path>
                     </field>
                     <field id="sort_order" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>
-                        <config_path>payment/paypal_plus/sort_order</config_path>
+                        <config_path>payment/paypalbr_paypalplus/sort_order</config_path>
                     </field>
                     <field id="depuration_mode" translate="label comment tooltip" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Depuration Mode</label>
-                        <config_path>payment/paypal_plus/depuration_mode</config_path>
+                        <config_path>payment/paypalbr_paypalplus/depuration_mode</config_path>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <comment>The logs will be saved at: var/log/paypalbr/</comment>
                         <tooltip>Enable this mode to debug the application in homologation or errors case.</tooltip>
                     </field>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             	</group>
             </group>
         </section>
