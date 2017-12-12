@@ -44,6 +44,7 @@ class DataAssign implements ObserverInterface
         try {
             $clientId = $this->configProvider->getClientId();
             $secretId = $this->configProvider->getSecretId();
+
             $paypalConfig = [
                 'http.headers.PayPal-Partner-Attribution-Id' => 'MagentoBrazil_Ecom_PPPlus2',
                 'mode' => $this->configProvider->isModeSandbox() ? 'sandbox' : 'live',
@@ -56,6 +57,7 @@ class DataAssign implements ObserverInterface
             $oauth = new \PayPal\Auth\OAuthTokenCredential($clientId, $secretId);
             $oauth->getAccessToken($paypalConfig);
         } catch (\Exception $e) {
+
             $disableModule = true;
             $disableMessage = __('Credenciais de API incorretas, favor revisar.');
         }
