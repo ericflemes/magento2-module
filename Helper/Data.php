@@ -72,9 +72,8 @@ class Data extends \Magento\Payment\Helper\Data
      */
     public function handleException(\Exception $e)
     {
-        if ($this->scopeConfig->getValue('iways_paypalplus/dev/debug', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
             $this->messageManager->addWarning($e->getData());
-        }
+
     }
     /**
      * Build webhook listener url

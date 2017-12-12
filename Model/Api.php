@@ -162,33 +162,37 @@ class Api
      */
     public function setApiContext($website = null)
     {
+
+        $this->_mode = $this->scopeConfig->getValue('payment/paypalbr_paypalplus/mode',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $website);
+
+        if($this->_mode == 1){
+           $clientId = 'payment/paypalbr_paypalplus/client_id_sandbox';
+           $secretId = 'payment/paypalbr_paypalplus/secret_id_sandbox';
+        }else{
+           $clientId = 'payment/paypalbr_paypalplus/client_id_production';
+           $secretId = 'payment/paypalbr_paypalplus/secret_id_production';
+        }
+
         $this->_apiContext = new ApiContext(
             new OAuthTokenCredential(
-                $this->scopeConfig->getValue('iways_paypalplus/api/client_id',
+                $this->scopeConfig->getValue($clientId,
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $website),
-                $this->scopeConfig->getValue('iways_paypalplus/api/client_secret',
+                $this->scopeConfig->getValue($secretId ,
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $website)
             )
         );
-        $this->_mode = $this->scopeConfig->getValue('iways_paypalplus/api/mode',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $website);
+
         $this->_apiContext->setConfig(
             [
                 'http.ConnectionTimeOut' => 30,
                 'http.Retry' => 1,
-                'cache.enabled' => $this->scopeConfig->getValue(
-                    'iways_paypalplus/dev/token_cache',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    $website
-                ),
                 'mode' => $this->_mode,
-                'log.LogEnabled' => $this->scopeConfig->getValue('iways_paypalplus/dev/debug',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $website),
-                'log.FileName' => $this->directoryList->getPath(DirectoryList::LOG) . '/PayPal.log',
+                'log.FileName' =>'/var/log/paypalplus.log',
                 'log.LogLevel' => 'INFO'
             ]
         );
-        $this->_apiContext->addRequestHeader('PayPal-Partner-Attribution-Id', 'Magento_Cart_PayPalPlusMagento2');
+        $this->_apiContext->addRequestHeader('PayPal-Partner-Attribution-Id', 'MagentoBrazil_Ecom_PPPlus2');
         return $this;
     }
     /**
@@ -669,73 +673,7 @@ class Api
             ->setTotal($total);
         return $amount;
     }
-    /**
-     * Build WebProfile
-     *
-     * @return boolean|WebProfile
-     */
-    protected function buildWebProfile()
-    {
-        $webProfile = new WebProfile();
-        if ($this->scopeConfig->getValue('iways_paypalplus/dev/web_profile_id',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-        ) {
-            $webProfile->setId($this->scopeConfig->getValue('iways_paypalplus/dev/web_profile_id',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE));
-            return $webProfile;
-        }
-        try {
-            $webProfile->setName('magento_' . microtime());
-            $webProfile->setPresentation($this->buildWebProfilePresentation());
-            $inputFields = new InputFields();
-            $inputFields->setAddressOverride(1);
-            $webProfile->setInputFields($inputFields);
-            $response = $webProfile->create($this->_apiContext);
-            $this->saveWebProfileId($response->getId());
-            return $response;
-        } catch (PayPalConnectionException $ex) {
-            $this->payPalPlusHelper->handleException($ex);
-        }
-        return false;
-    }
-    /**
-     * Build presentation
-     *
-     * @return Presentation
-     */
-    protected function buildWebProfilePresentation()
-    {
-        $presentation = new Presentation();
-        $presentation->setBrandName($this->storeManager->getWebsite()->getName());
-        $presentation->setLogoImage($this->getHeaderImage());
-        $presentation->setLocaleCode(
-            substr(
-                $this->scopeConfig->getValue('general/locale/code', \Magento\Store\Model\ScopeInterface::SCOPE_STORE),
-                -2
-            )
-        );
-        return $presentation;
-    }
 
-    /**
-     * Reset web profile id
-     *
-     * @return type
-     */
-    public function resetWebProfileId()
-    {
-        return $this->payPalPlusHelper->resetWebProfileId();
-    }
-    /**
-     * Save WebProfileId
-     *
-     * @param string $id
-     * @return boolean
-     */
-    protected function saveWebProfileId($id)
-    {
-        return $this->payPalPlusHelper->saveStoreConfig('iways_paypalplus/dev/web_profile_id', $id);
-    }
     /**
      * Save WebhookId
      *
