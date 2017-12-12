@@ -25,7 +25,7 @@ define([
         defaults: {
             template: 'PayPalBR_PayPalPlus/payment/paypal-plus'
         },
-
+        breakError: false,
         errorProcessor: errorProcesor,
         customerInfo: quote.billingAddress._latestValue,
 
@@ -39,7 +39,7 @@ define([
             var iframeLoaded = setInterval(function () {
                 if ($('#ppplus').length) {
 
-                    if (breakError) {
+                    if (this.breakError) {
                         $('#iframe-warning').hide();
                         $('#iframe-error').show();
                         $('#continueButton').prop("disabled", true);
@@ -59,7 +59,7 @@ define([
             return storage.post(serviceUrl, '')
                 .done(function (response) {
                     var approvalUrl = '';
-                    var breakError = false;
+
                     for (var i = 0; i < response.links.length; i++) {
                         if (response.links[i].rel == 'approval_url') {
                             approvalUrl = response.links[i].href;
@@ -128,7 +128,7 @@ define([
                              */
                             onError: function (err) {
 
-                                breakError = true;
+                                this.breakError = true;
                                 var message = {
                                     message: JSON.stringify(err.cause)
                                 };

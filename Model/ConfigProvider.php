@@ -35,27 +35,27 @@ class ConfigProvider
     /**
      * Contains the client ID of PayPal Plus (Sandbox)
      */
-    const XML_PATH_CLIENT_ID_SBOX = 'payment/paypal_plus/client_id_sandbox';
+    const XML_PATH_CLIENT_ID_SBOX = 'payment/paypalbr_paypalplus/client_id_sandbox';
 
     /**
      * Contains the secret ID of PayPal Plus (Sandbox)
      */
-    const XML_PATH_SECRET_ID_SBOX = 'payment/paypal_plus/secret_id_sandbox';
+    const XML_PATH_SECRET_ID_SBOX = 'payment/paypalbr_paypalplus/secret_id_sandbox';
 
     /**
      * Contains the secret ID of PayPal Plus (Production)
      */
-    const XML_PATH_CLIENT_ID_PROD= 'payment/paypal_plus/client_id_production';
+    const XML_PATH_CLIENT_ID_PROD= 'payment/paypalbr_paypalplus/client_id_production';
 
     /**
      * Contains the secret ID of PayPal Plus (Production)
      */
-    const XML_PATH_SECRET_ID_PROD = 'payment/paypal_plus/secret_id_production';
+    const XML_PATH_SECRET_ID_PROD = 'payment/paypalbr_paypalplus/secret_id_production';
 
     /**
      * Contains the current mode, sandbox or production (live)
      */
-    const XML_PATH_MODE = 'payment/paypal_plus/mode';
+    const XML_PATH_MODE = 'payment/paypalbr_paypalplus/mode';
 
     /**
      * Contains the configuration path for showing customer tax show
