@@ -29,6 +29,32 @@ define([
         errorProcessor: errorProcesor,
         customerInfo: quote.billingAddress._latestValue,
 
+        initialize: function () {
+
+            fullScreenLoader.startLoader();
+
+            this._super();
+            this._render();
+            var self = this;
+            var iframeLoaded = setInterval(function ()
+            {
+                if ($('#ppplus').length )
+                {
+
+                    if (breakError) {
+                        $('#iframe-warning').hide();
+                        $('#iframe-error').show();
+                        $('#continueButton').prop("disabled", true);
+                        return false;
+                    }
+
+                    self.initializeIframe();
+                    fullScreenLoader.stopLoader();
+                    clearInterval(iframeLoaded);
+                }
+            }, 300);
+        },
+
         initializeIframe: function () {
             var self = this;
             var serviceUrl = urlBuilder.build('paypalplus/payment/index');
@@ -168,33 +194,6 @@ define([
             }
             return true;
         },
-
-        initialize: function () {
-
-            fullScreenLoader.startLoader();
-
-            this._super();
-            this._render();
-            var self = this;
-            var iframeLoaded = setInterval(function ()
-            {
-                if ($('#ppplus').length )
-                {
-
-                    if (breakError) {
-                        $('#iframe-warning').hide();
-                        $('#iframe-error').show();
-                        $('#continueButton').prop("disabled", true);
-                        return false;
-                    }
-
-                    self.initializeIframe();
-                    fullScreenLoader.stopLoader();
-                    clearInterval(iframeLoaded);
-                }
-            }, 300);
-        },
-
         _render:function(){
 
         }
