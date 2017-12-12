@@ -71,25 +71,31 @@ define([
                         /**
                          * Continue after payment is verifies (continueButton)
                          *
-                         * @param {string} rememberedCards
                          * @param {string} payerId
                          * @param {string} token
                          * @param {string} term
                          * @returns {}
                          */
-                        onContinue: function () {
+                        onContinue: function (payerId, token, term) {
                             $('#continueButton').hide();
                             $('#payNowButton').show();
+                            self.payerId = payerId;
+                            //Show Place Order button
 
                             var message = {
                                 message: $.mage.__('Payment has been authorized.')
                             };
                             self.messageContainer.addSuccessMessage(message);
+
+                            if (typeof term !== 'undefined') {
+                                self.term = term;
+                            }
                             $('#ppplus').hide();
 
                             //end aproved card and payment method, run placePendingOrder
                             self.placePendingOrder();
                         },
+
                         /**
                          * Handle iframe error (if payment fails for example)
                          *
