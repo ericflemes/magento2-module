@@ -163,11 +163,11 @@ class PaypalPlusApi
     {
         /** @var \Magento\Store\Model\Store $store */
         $store = $this->storeManager->getStore();
-        $base = $this->storeManager->getStore()->getBaseUrl();
+
         $redirectUrls = new \PayPal\Api\RedirectUrls();
         $redirectUrls
-            ->setReturnUrl($base .'V1/notifications/returnUrl')
-            ->setCancelUrl($base. 'V1/notifications/cancelUrl');
+            ->setReturnUrl($store->getUrl('checkout/cart'))
+            ->setCancelUrl($store->getUrl('checkout/cart'));
         return $redirectUrls;
     }
 
