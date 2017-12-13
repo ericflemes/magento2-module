@@ -119,6 +119,13 @@ class PaypalPlusApi
             ]
         );
 
+        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/paypalplus.log');
+        $logger = new \Zend\Log\Logger();
+        $logger->addWriter($writer);
+
+        $logger->info( "Auth Request::" .date("d/m/Y H:i:s ").">>");
+        $logger->debug(var_export($apiContext, true));
+
         return $apiContext;
     }
     /**
@@ -296,17 +303,19 @@ class PaypalPlusApi
         $payment = new \PayPal\Api\Payment();
         $payment->setIntent("Sale");
         $payment->setPayer($payer);
-
-        $payment->this->getAplicationContext();
-
         $payment->setRedirectUrls($redirectUrls);
         $payment->addTransaction($transaction);
-
 
         $result = [];
         try {
             /** @var \PayPal\Api\Payment $result */
             $paypalPayment = $payment->create($apiContext);
+
+            $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/paypalplus.log');
+            $logger = new \Zend\Log\Logger();
+            $logger->addWriter($writer);
+            $logger->info("Paypal Payment Response::" .date("d/m/Y H:i:s ").">>");
+            $logger->debug(var_export($paypalPayment, true));
 
             $result = [
                 'status' => 'success',
