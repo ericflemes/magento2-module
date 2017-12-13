@@ -111,11 +111,11 @@ class PaypalPlusApi
     protected function getApiContext()
     {
 
-        $this->$debug = $this->configProvider->isDebugEnabled();
+        $debug = $this->configProvider->isDebugEnabled();
         $this->configId = $this->configProvider->getClientId();
         $this->secretId = $this->configProvider->getSecretId();
 
-        if($this->$debug == 1){
+        if($debug == 1){
             $debug = true;
         }else{
             $debug = false;
@@ -340,6 +340,7 @@ class PaypalPlusApi
         $payment->addTransaction($transaction);
         $payment->addTransaction($notify);
 
+
         /** @var \PayPal\Api\Payment $paypalPayment */
         $paypalPayment = $payment->create($apiContext);
 
@@ -446,6 +447,7 @@ class PaypalPlusApi
             else {
                 $paypalPayment = $this->restoreAndGetPayment();
             }
+
 
             $result = [
                 'status' => 'success',
