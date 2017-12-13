@@ -75,8 +75,8 @@ define([
                     "payerTaxIdType": "BR_CPF",
                     "language": "pt_BR",
                     "country": "BR",
-                    enableContinue: "continueButton",
-                    disableContinue: "continueButton",
+                    "enableContinue": "continueButton",
+                    "disableContinue": "continueButton",
                     "iframeHeight": "500",
                     /**
                      * Do stuff after iframe is loaded
