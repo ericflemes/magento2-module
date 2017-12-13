@@ -16,15 +16,8 @@ interface WebHookManagementInterface
          * @param string $param
          * @return string
          */
-        public function returnUrl($params);
+        public function notificationUrl($params);
 
-
-        /**
-         * POST for WebHook api
-         * @param string $param
-         * @return string
-         */
-        public function cancelUrl($params);
 
 
 }

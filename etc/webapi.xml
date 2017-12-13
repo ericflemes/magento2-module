@@ -10,16 +10,8 @@
         </route>
 
 
-        <route method="POST" url="/V1/notifications/returnUrl">
-            <service class="PayPalBR\PayPalPlus\Api\WebHookManagementInterface" method="returnUrl"/>
-        <resources>
-            <resource ref="anonymous"/>
-        </resources>
-        </route>
-
-
-        <route method="POST" url="/V1/notifications/cancelUrl">
-            <service class="PayPalBR\PayPalPlus\Api\WebHookManagementInterface" method="cancelUrl"/>
+        <route method="POST" url="/V1/notifications/notificationUrl">
+            <service class="PayPalBR\PayPalPlus\Api\WebHookManagementInterface" method="notificationUrl"/>
         <resources>
             <resource ref="anonymous"/>
         </resources>
