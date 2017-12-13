@@ -32,7 +32,7 @@ class Root {
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-         View\Element\Template\Context $context
+        \Magento\Framework\View\Element\Template\Context $context
     ){
         $this->_request = $context->getRequest();
         $this->_scopeConfig = $context->getScopeConfig();

@@ -10,20 +10,22 @@
  */
 define([
     'Magento_Checkout/js/view/payment/default',
+    'Magento_Paypal/js/model/iframe',
     'jquery',
-    'ko',
-    'mage/url',
-    'mage/storage',
-    'Magento_Checkout/js/model/full-screen-loader',
-    'Magento_Checkout/js/model/error-processor',
     'Magento_Checkout/js/model/quote',
-    'Magento_Checkout/js/model/postcode-validator'
-], function (Component, $, ko, urlBuilder, storage,fullScreenLoader , errorProcesor , quote,  postcodeValidator) {
+    'mage/storage',
+    'Magento_Checkout/js/model/error-processor',
+    'Magento_Checkout/js/model/full-screen-loader',
+    'Magento_Checkout/js/model/postcode-validator',
+    'ko',
+    'mage/url'
+], function (Component, iframe, $, quote, storage, errorProcesor, fullScreenLoader, postcodeValidator, ko, urlBuilder) {
     'use strict';
 
     return Component.extend({
         defaults: {
-            template: 'PayPalBR_PayPalPlus/payment/paypal-plus'
+            template: 'PayPalBR_PayPalPlus/payment/paypal-plus',
+            paymentReady: true
         },
         breakError: false,
         errorProcessor: errorProcesor,
@@ -58,18 +60,88 @@ define([
             }, 300);
         },
 
+        runPayPal: function(approvalUrl) {
+            var customerData = window.checkoutConfig.customerData;
+            this.paypalObject = PAYPAL.apps.PPP(
+                {
+                    "approvalUrl": approvalUrl,
+                    "placeholder": "ppplus",
+                    "mode": "sandbox",
+                    "payerFirstName": customerData.firstname,
+                    "payerLastName": customerData.lastname,
+                    "payerPhone": "05511998548609",
+                    "payerEmail": customerData.email,
+                    "payerTaxId": customerData.taxvat,
+                    "payerTaxIdType": "BR_CPF",
+                    "language": "pt_BR",
+                    "country": "BR",
+                    enableContinue: "orderPP",
+                    disableContinue: "orderPPs",
+                    "iframeHeight": "500",
+                    /**
+                     * Do stuff after iframe is loaded
+                     * @returns {undefined}
+                     */
+                    onLoad: function () {
+                        console.log("Iframe successfully lo aded !");
+                    },
+                    /**
+                     * Continue after payment is verifies (continueButton)
+                     *
+                     * @param {string} payerId
+                     * @param {string} token
+                     * @param {string} term
+                     * @returns {}
+                     */
+                    onContinue: function (payerId, token, term) {
+                        $('#continueButton').hide();
+                        $('#payNowButton').show();
+                        self.payerId = payerId;
+                        //Show Place Order button
+
+                        var message = {
+                            message: $.mage.__('Payment has been authorized.')
+                        };
+                        self.messageContainer.addSuccessMessage(message);
+
+                        if (typeof term !== 'undefined') {
+                            self.term = term;
+                        }
+                        $('#ppplus').hide();
+                        self.placePendingOrder();
+                    },
+
+                    /**
+                     * Handle iframe error
+                     *
+                     * @param {type} err
+                     * @returns {undefined}
+                     */
+                    onError: function (err) {
+
+                        this.breakError = true;
+                        var message = {
+                            message: JSON.stringify(err.cause)
+                        };
+                        //Display response error
+                        that.messageContainer.addErrorMessage(message);
+                    }
+                });
+        },
+
         initializeIframe: function () {
             var self = this;
             var serviceUrl = urlBuilder.build('paypalplus/payment/index');
-            return storage.post(serviceUrl, '')
-                .done(function (response) {
-                    var approvalUrl = '';
-                    console.log(response);
-                    for (var i = 0; i < response.links.length; i++) {
-                        if (response.links[i].rel == 'approval_url') {
-                            approvalUrl = response.links[i].href;
-                        }
-                    }
+            var approvalUrl = '';
+            var self = this;
+
+            storage.post(serviceUrl, '')
+            .done(function (response) {
+                console.log(response);
+                for (var i = 0; i < response.links.length; i++) {
+                    if (response.links[i].rel == 'approval_url') {
+                        approvalUrl = response.links[i].href;
+
                     console.log("Approval URL: " + approvalUrl);
 
                     var customerData = window.checkoutConfig.customerData;
@@ -157,6 +229,7 @@ define([
                     $('#continueButton').prop("disabled", true);
                     fullScreenLoader.stopLoader();
                 });
+
         },
 
 
@@ -167,8 +240,6 @@ define([
                 document.addEventListener('click', iframe.stopEventPropagation, true);
             }
         },
-
-
 
         doContinue: function () {
             var self = this;
