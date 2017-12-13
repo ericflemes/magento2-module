@@ -11,8 +11,6 @@
  */
 namespace PayPalBR\PayPalPlus\Block\Checkout;
 
-use PayPalBR\PayPalPlus\Model\Payment;
-
 class Success extends \Magento\Checkout\Block\Onepage\Success
 {
     const SCOPE_STORE = 'store';
