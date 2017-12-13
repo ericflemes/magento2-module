@@ -64,6 +64,18 @@ class PaypalPlusApi
     protected $secretId;
 
     /**
+     * Contains checkout session
+     *
+     * @var \Magento\Checkout\Model\Session
+     */
+    protected $checkoutSession;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * PaypalPlusApi constructor.
      *
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -77,13 +89,17 @@ class PaypalPlusApi
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \PayPalBR\PayPalPlus\Model\ConfigProvider $configProvider,
-        \Magento\Payment\Model\Cart\SalesModel\Factory $cartSalesModelFactory
+        \Magento\Payment\Model\Cart\SalesModel\Factory $cartSalesModelFactory,
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->cart = $cart;
         $this->customerSession = $customerSession;
         $this->storeManager = $storeManager;
         $this->configProvider = $configProvider;
+        $this->checkoutSession = $checkoutSession;
+        $this->logger = $logger;
 
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $cart->getQuote();
@@ -97,7 +113,7 @@ class PaypalPlusApi
      */
     protected function getApiContext()
     {
-        $this->configId = $this->configProvider->getClientId();
+                $this->configId = $this->configProvider->getClientId();
         $this->secretId = $this->configProvider->getSecretId();
         $this->debug = $this->configProvider->getDebug();
         if($this->debug == 1){
@@ -123,9 +139,6 @@ class PaypalPlusApi
                 ''
             ]
         );
-
-
-        return $apiContext;
     }
     /**
      * Returns the payer
@@ -150,11 +163,11 @@ class PaypalPlusApi
     {
         /** @var \Magento\Store\Model\Store $store */
         $store = $this->storeManager->getStore();
-
+        $base = $this->storeManager->getStore()->getBaseUrl();
         $redirectUrls = new \PayPal\Api\RedirectUrls();
         $redirectUrls
-            ->setReturnUrl($store->getUrl('checkout/cart'))
-            ->setCancelUrl($store->getUrl('checkout/cart'));
+            ->setReturnUrl($base .'V1/notifications/returnUrl')
+            ->setCancelUrl($base. 'V1/notifications/cancelUrl');
         return $redirectUrls;
     }
 
@@ -292,9 +305,12 @@ class PaypalPlusApi
         return $transaction;
     }
 
-
-
-    public function execute()
+    /**
+     * Creates and returns the payment object
+     *
+     * @return \PayPal\Api\Payment
+     */
+    protected function createAndGetPayment()
     {
         $apiContext = $this->getApiContext();
         $payer = $this->getPayer();
@@ -307,11 +323,110 @@ class PaypalPlusApi
         $payment->setRedirectUrls($redirectUrls);
         $payment->addTransaction($transaction);
 
+        /** @var \PayPal\Api\Payment $paypalPayment */
+        $paypalPayment = $payment->create($apiContext);
 
-        $result = [];
+        $quote = $this->checkoutSession->getQuote();
+        $paypalPaymentId = $paypalPayment->getId();
+        $quoteUpdatedAt = $quote->getUpdatedAt();
+        $this->checkoutSession->setPaypalPaymentId( $paypalPaymentId );
+        $this->checkoutSession->setQuoteUpdatedAt( $quoteUpdatedAt );
+
+        return $paypalPayment;
+    }
+
+    /**
+     * Checks if the payment has already been created and stored in the session
+     * before.
+     *
+     * @return bool
+     */
+    protected function isPaymentCreated()
+    {
+        $paypalPaymentId = $this->checkoutSession->getPaypalPaymentId();
+
+        return ! empty($paypalPaymentId);
+    }
+
+    /**
+     * The opposite of self::isPaymentCreated()
+     *
+     * @return bool
+     */
+    protected function isNotPaymentCreated()
+    {
+        return ! $this->isPaymentCreated();
+    }
+
+    /**
+     * Checks if the quote has been changed during this session
+     *
+     * @return bool
+     */
+    protected function isQuoteChanged()
+    {
+        $quote = $this->checkoutSession->getQuote();
+        $lastQuoteUpdatedAt = $quote->getUpdatedAt();
+        $sessionQuoteUpdatedAt = $this->checkoutSession->getQuoteUpdatedAt();
+        return new \DateTime($lastQuoteUpdatedAt) > new \DateTime($sessionQuoteUpdatedAt);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function patchAndGetPayment()
+    {
+        $apiContext = $this->getApiContext();
+        $paypalPayment = $this->restoreAndGetPayment();
+        $patchRequest = new \PayPal\Api\PatchRequest();
+
+        // Change item list
+        $itemListPatch = new \PayPal\Api\Patch();
+        $itemListPatch
+            ->setOp('replace')
+            ->setPath('/transactions/0/item_list')
+            ->setValue($this->getItemList());
+        $patchRequest->addPatch($itemListPatch);
+
+        // Change amount
+        $amountPatch = new \PayPal\Api\Patch();
+        $amountPatch
+            ->setOp('replace')
+            ->setPath('/transactions/0/amount')
+            ->setValue($this->getAmount());
+        $patchRequest->addPatch($amountPatch);
+        $paypalPayment->update($patchRequest, $apiContext);
+
+        // Load the payment after patch
+        $paypalPayment = $this->restoreAndGetPayment();
+        return $paypalPayment;
+    }
+
+    /**
+     * Restores the payment from session and returns it
+     *
+     * @return \PayPal\Api\Payment
+     */
+    protected function restoreAndGetPayment()
+    {
+        $paypalPaymentId = $this->checkoutSession->getPaypalPaymentId();
+        $apiContext = $this->getApiContext();
+        $paypalPayment = \PayPal\Api\Payment::get($paypalPaymentId, $apiContext);
+        return $paypalPayment;
+    }
+
+    public function execute()
+    {
         try {
-            /** @var \PayPal\Api\Payment $result */
-            $paypalPayment = $payment->create($apiContext);
+            if ($this->isNotPaymentCreated()) {
+                $paypalPayment = $this->createAndGetPayment();
+            }
+            else if ($this->isQuoteChanged()) {
+                $paypalPayment = $this->patchAndGetPayment();
+            }
+            else {
+                $paypalPayment = $this->restoreAndGetPayment();
+            }
 
             $result = [
                 'status' => 'success',
