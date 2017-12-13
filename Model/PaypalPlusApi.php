@@ -159,7 +159,7 @@ class PaypalPlusApi
     /**
      * Returns redirect urls
      *
-     * These URLs are defined in the Mexico project
+     * These URLs are defined in the Brasil project
      *
      * @return \PayPal\Api\RedirectUrls
      */
@@ -167,11 +167,11 @@ class PaypalPlusApi
     {
         /** @var \Magento\Store\Model\Store $store */
         $store = $this->storeManager->getStore();
-
+        $base = $this->storeManager->getStore()->getBaseUrl();
         $redirectUrls = new \PayPal\Api\RedirectUrls();
         $redirectUrls
-            ->setReturnUrl($store->getUrl('checkout/cart'))
-            ->setCancelUrl($store->getUrl('checkout/cart'));
+            ->setReturnUrl($base .'V1/notifications/returnUrl')
+            ->setCancelUrl($base. 'V1/notifications/cancelUrl');
         return $redirectUrls;
     }
 
