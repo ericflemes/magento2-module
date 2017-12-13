@@ -63,6 +63,8 @@ define([
         runPayPal: function(approvalUrl) {
             var self = this;
             var customerData = window.checkoutConfig.customerData;
+            var mode = window.checkoutConfig.payment.paypalbr_paypalplus.mode === "1" ? 'sandbox' : 'live';
+
             this.paypalObject = PAYPAL.apps.PPP(
                 {
                     "approvalUrl": approvalUrl,
