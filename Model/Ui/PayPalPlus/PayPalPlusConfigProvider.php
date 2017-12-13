@@ -54,7 +54,7 @@ final class PayPalPlusConfigProvider implements ConfigProviderInterface
     public function __construct(
         PaymentHelper $paymentHelper,
         UrlInterface $urlBuilder,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         $this->paymentHelper = $paymentHelper;
         $this->urlBuilder = $urlBuilder;
