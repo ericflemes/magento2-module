@@ -314,8 +314,10 @@ class PaypalPlusApi
      */
     protected function getMerchantPreferences()
     {
+        /** @var \Magento\Store\Model\Store $store */
+        $store = $this->storeManager->getStore();
         $merchant = new \PayPal\Api\MerchantPreferences();
-        $merchant->setNotifyUrl("http://www.uol.com.br");
+        $merchant->setNotifyUrl($store->getUrl('V1/notifications/notificationUrl'));
 
         return $merchant;
     }
@@ -341,8 +343,6 @@ class PaypalPlusApi
         $payment->addTransaction($transaction);
         $payment->addTransaction($notify);
 
-
-
         /** @var \PayPal\Api\Payment $paypalPayment */
         $paypalPayment = $payment->create($apiContext);
 
@@ -351,9 +351,6 @@ class PaypalPlusApi
         $quoteUpdatedAt = $quote->getUpdatedAt();
         $this->checkoutSession->setPaypalPaymentId( $paypalPaymentId );
         $this->checkoutSession->setQuoteUpdatedAt( $quoteUpdatedAt );
-
-        print_r($paypalPayment);
-        die;
 
         return $paypalPayment;
     }
