@@ -1,13 +1,3 @@
-/**
-
- * @author Dev <Dev@webjump.com.br>
- * @category PayPalBR
- * @package paypalbr\PayPalPlus\
- * @copyright   WebJump (http://www.webjump.com.br)
- *
- * © 2016 WEB JUMP SOLUTIONS
- *
- */
 define([
     'Magento_Checkout/js/view/payment/default',
     'Magento_Paypal/js/model/iframe',
@@ -19,7 +9,18 @@ define([
     'Magento_Checkout/js/model/postcode-validator',
     'ko',
     'mage/url'
-], function (Component, iframe, $, quote, storage, errorProcesor, fullScreenLoader, postcodeValidator, ko, urlBuilder) {
+], function (
+    Component, 
+    iframe, 
+    $, 
+    quote, 
+    storage, 
+    errorProcesor, 
+    fullScreenLoader, 
+    postcodeValidator, 
+    ko, 
+    urlBuilder
+    ) {
     'use strict';
 
     return Component.extend({
@@ -69,7 +70,7 @@ define([
                 {
                     "approvalUrl": approvalUrl,
                     "placeholder": "ppplus",
-                    "mode": "sandbox",
+                    "mode": mode,
                     "payerFirstName": customerData.firstname,
                     "payerLastName": customerData.lastname,
                     "payerPhone": "05511998548609",

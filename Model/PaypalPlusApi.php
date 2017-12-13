@@ -338,8 +338,7 @@ class PaypalPlusApi
         $payment->setPayer($payer);
         $payment->setRedirectUrls($redirectUrls);
         $payment->addTransaction($transaction);
-        $payment->addTransaction($notify);
-
+        // $payment->addTransaction($notify);
 
         /** @var \PayPal\Api\Payment $paypalPayment */
         $paypalPayment = $payment->create($apiContext);

@@ -21,9 +21,6 @@ class GeneralHandler extends AbstractHandler implements HandlerInterface
      */
     protected function _handle($payment, $response)
     {
-        $boletoUrl = 'https://sandbox.mundipaggone.com/Boleto/ViewBoleto.aspx?' . $response->charges[0]->lastTransaction->gatewayId;
-
-        $payment->setAdditionalInformation('billet_url', $boletoUrl);
         $payment->setTransactionId($response->id);
         $payment->setIsTransactionClosed(false);
 

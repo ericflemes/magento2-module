@@ -302,14 +302,6 @@ abstract class AbstractRequestDataProvider
      */
     protected function getBrandAdapter($brand)
     {
-        $fromTo = [
-            'VI' => \Gateway\One\DataContract\Enum\CreditCardBrandEnum::VISA,
-            'MC' => \Gateway\One\DataContract\Enum\CreditCardBrandEnum::MASTERCARD,
-            'AE' => \Gateway\One\DataContract\Enum\CreditCardBrandEnum::AMEX,
-            'DI' => \Gateway\One\DataContract\Enum\CreditCardBrandEnum::DISCOVER,
-            'DN' => \Gateway\One\DataContract\Enum\CreditCardBrandEnum::DINERS,
-        ];
-
         return (isset($fromTo[$brand])) ? $fromTo[$brand] : false;
     }
 

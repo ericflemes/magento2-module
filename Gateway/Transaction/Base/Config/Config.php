@@ -57,8 +57,4 @@ class Config extends AbstractConfig implements ConfigInterface
 
         return $this->getConfig(static::PATH_PRODUCTION_URL);
     }
-
-    public function getPaymentAction(){
-
-    }
 }

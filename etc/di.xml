@@ -1,8 +1,9 @@
 <?xml version="1.0" ?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\Logger\Handler\Debug" type="PayPalBR\PayPalPlus\Model\CustomLogger" />
-
     <preference for="PayPalBR\PayPalPlus\Api\WebHookManagementInterface" type="PayPalBR\PayPalPlus\Model\WebHookManagement"/>
+    <preference for="PayPalBR\PayPalPlus\Gateway\Transaction\Base\Config\ConfigInterface" type="PayPalBR\PayPalPlus\Gateway\Transaction\Base\Config\Config"/>
+    <preference for="PayPalBR\PayPalPlus\Api\CartItemRequestDataProviderInterface" type="PayPalBR\PayPalPlus\Gateway\Transaction\Base\ResourceGateway\Request\CartItemRequestDataProvider"/>
 
     <!-- PayPalPlus Adapter -->
 	<virtualType name="PayPalPlusRemoteMethodAdapter" type="Magento\Payment\Model\Method\Adapter">

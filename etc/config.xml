@@ -8,13 +8,27 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <payment>
-            <paypalbr_paypalplus>
-                <active>1</active>
-                <title>PayPal Plus</title>
-                <model>PayPalBR\PayPalPlus\Model\Payment\PayPalPlus</model>
-                <sort_order>0</sort_order>
-            </paypalbr_paypalplus>
-
+            <paypal_br>
+                <paypal_plus>
+                    <active>1</active>
+                    <exhibition_name>Paypal Plus</exhibition_name>
+                    <mode>1</mode>
+                    <client_id_sandbox></client_id_sandbox>
+                    <secret_id_sandbox></secret_id_sandbox>
+                    <client_id_production></client_id_production>
+                    <secret_id_production></secret_id_production>
+                    <new_order_status></new_order_status>
+                    <reject_order_status></reject_order_status>
+                    <review_order_status></review_order_status>
+                    <sort_order></sort_order>
+                    <depuration_mode></depuration_mode>
+                    <is_gateway>1</is_gateway>
+                    <can_initialize>1</can_initialize>
+                    <allow_multiple_address>0</allow_multiple_address>
+                    <can_authorize>1</can_authorize>
+                    <can_use_checkout>1</can_use_checkout>
+                </paypal_plus>
+            </paypal_br>
         </payment>
     </default>
 </config>
