@@ -34,7 +34,7 @@ define([
         getNamePay: function(){
             return "Pay Pal Plus " + window.checkoutConfig.payment.paypalbr_paypalplus.exibitionName;
         },
-
+        paypalObject: {},
         initialize: function () {
 
             fullScreenLoader.startLoader();
@@ -79,6 +79,8 @@ define([
                             "approvalUrl": approvalUrl,
                             "placeholder": "ppplus",
                             "mode": "sandbox",
+                            disableContinue: "continueButton",
+                            enableContinue: "continueButton",
                             "payerFirstName": customerData.firstname,
                             "payerLastName": customerData.lastname,
                             "payerPhone": "05511998548609",
@@ -87,9 +89,13 @@ define([
                             "payerTaxIdType": "BR_CPF",
                             "language": "pt_BR",
                             "country": "BR",
-                            enableContinue: "orderPP",
-                            disableContinue: "orderPPs",
+                            "useraction": "continue",
+                            "buttonLocation": "outside",
+                            "preselection": "none",
                             "iframeHeight": "500",
+
+                            // "enableContinue": "orderPP",
+                            //"disableContinue": "orderPPs",
                             /**
                              * Do stuff after iframe is loaded
                              * @returns {undefined}
@@ -142,14 +148,10 @@ define([
 
                 }).fail(function (response) {
                     var iframeErrorElem = '#iframe-error';
-                    if (reason) {
-                        if (reason === 'payment_not_ready') {
-                            iframeErrorElem = '#iframe-error-payment-not-ready';
-                        } else {
-                            $(iframeErrorElem).html('');
-                            $(iframeErrorElem).append('<div><span>' + reason + '</span></div>');
-                        }
-                    }
+
+                    $(iframeErrorElem).html('');
+                    $(iframeErrorElem).append('<div><span>Error to load iframe</span></div>');
+
                     $(iframeErrorElem).show();
                     $('#iframe-warning').hide();
                     $('#continueButton').prop("disabled", true);
