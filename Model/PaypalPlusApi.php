@@ -389,7 +389,7 @@ class PaypalPlusApi
         $itemListPatch
             ->setOp('replace')
             ->setPath('/transactions/0/item_list')
-            ->setValue($this->getItemList()->toJSON());
+            ->setValue($this->getItemList());
         $patchRequest->addPatch($itemListPatch);
 
         // Change amount
@@ -398,7 +398,7 @@ class PaypalPlusApi
             ->setOp('replace')
             ->setPath('/transactions/0/amount')
             ->setValue($this->getAmount());
-        $patchRequest->addPatch($amountPatch->toJSON());
+        $patchRequest->addPatch($amountPatch);
         $paypalPayment->update($patchRequest, $apiContext);
 
         // Load the payment after patch
