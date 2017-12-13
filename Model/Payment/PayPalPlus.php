@@ -7,6 +7,7 @@ namespace PayPalBR\PayPalPlus\Model\Payment;
 class PayPalPlus extends \Magento\Payment\Model\Method\AbstractMethod
 {
     const METHOD_NAME = 'paypalbr_paypalplus';
+
     /**
      * Payment code
      *

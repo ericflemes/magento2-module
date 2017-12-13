@@ -72,6 +72,8 @@ class clearPaymentDataAfterSaveOrder implements ObserverInterface
             $this->checkoutSession->setIframeUrl(false);
             $this->checkoutSession->setExecuteUrl(false);
             $this->checkoutSession->setPaymentIdExpires(false);
+            $this->checkoutSession->setPaypalPaymentId( null );
+            $this->checkoutSession->setQuoteUpdatedAt( null );
         }
     }
 }
