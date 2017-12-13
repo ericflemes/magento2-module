@@ -38,7 +38,6 @@ define([
         initialize: function () {
 
             fullScreenLoader.startLoader();
-            this.initPayment();
             this._super();
             this._render();
             var self = this;
