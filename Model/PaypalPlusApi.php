@@ -113,14 +113,9 @@ class PaypalPlusApi
      */
     protected function getApiContext()
     {
-                $this->configId = $this->configProvider->getClientId();
+        $debug = $this->configProvider->isDebugEnabled();
+        $this->configId = $this->configProvider->getClientId();
         $this->secretId = $this->configProvider->getSecretId();
-        $this->debug = $this->configProvider->getDebug();
-        if($this->debug == 1){
-            $debug = true;
-        }else{
-            $debug = false;
-        }
         $apiContext = new \PayPal\Rest\ApiContext(
             new \PayPal\Auth\OAuthTokenCredential(
                 $this->configId,
@@ -135,8 +130,7 @@ class PaypalPlusApi
                 'log.FileName' => BP . '/var/log/paypalplus.log',
                 'log.LogLevel' => 'DEBUG', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
                 'cache.enabled' => true,
-                'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2',
-                ''
+                'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2'
             ]
         );
     }
