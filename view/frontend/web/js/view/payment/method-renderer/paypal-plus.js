@@ -61,6 +61,7 @@ define([
         },
 
         runPayPal: function(approvalUrl) {
+            var self = this;
             var customerData = window.checkoutConfig.customerData;
             this.paypalObject = PAYPAL.apps.PPP(
                 {
@@ -78,6 +79,7 @@ define([
                     "enableContinue": "continueButton",
                     "disableContinue": "continueButton",
                     "iframeHeight": "500",
+
                     /**
                      * Do stuff after iframe is loaded
                      * @returns {undefined}
@@ -85,6 +87,7 @@ define([
                     onLoad: function () {
                         console.log("Iframe successfully lo aded !");
                     },
+
                     /**
                      * Continue after payment is verifies (continueButton)
                      *
@@ -133,7 +136,6 @@ define([
             var self = this;
             var serviceUrl = urlBuilder.build('paypalplus/payment/index');
             var approvalUrl = '';
-            var self = this;
 
             storage.post(serviceUrl, '')
             .done(function (response) {
