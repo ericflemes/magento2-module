@@ -19,21 +19,11 @@ class WebHookManagement
         return 'Hello API! POST return the $param ' . $param;
     }
 
-    /**
-    * {@inheritdoc}
-    */
-    public function returnUrl($param)
-    {
-        echo "<pre>";
-        print_r($param);
-        echo "</pre>";
-        die;
-    }
 
     /**
     * {@inheritdoc}
     */
-    public function cancelUrl($param)
+    public function notificationUrl($param)
     {
         echo "<pre>";
         print_r($param);

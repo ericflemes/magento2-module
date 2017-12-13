@@ -99,7 +99,12 @@ class PaypalPlusApi
     {
         $this->configId = $this->configProvider->getClientId();
         $this->secretId = $this->configProvider->getSecretId();
-
+        $this->debug = $this->configProvider->getDebug();
+        if($this->debug == 1){
+            $debug = true;
+        }else{
+            $debug = false;
+        }
         $apiContext = new \PayPal\Rest\ApiContext(
             new \PayPal\Auth\OAuthTokenCredential(
                 $this->configId,
@@ -110,7 +115,7 @@ class PaypalPlusApi
             [
                 'http.headers.PayPal-Partner-Attribution-Id' => 'MagentoBrazil_Ecom_PPPlus2',
                 'mode' => $this->configProvider->isModeSandbox() ? 'sandbox' : 'live',
-                'log.LogEnabled' => true,
+                'log.LogEnabled' => $debug,
                 'log.FileName' => BP . '/var/log/paypalplus.log',
                 'log.LogLevel' => 'DEBUG', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
                 'cache.enabled' => true,
@@ -119,12 +124,6 @@ class PaypalPlusApi
             ]
         );
 
-        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/paypalplus.log');
-        $logger = new \Zend\Log\Logger();
-        $logger->addWriter($writer);
-
-        $logger->info( "Auth Request::" .date("d/m/Y H:i:s ").">>");
-        $logger->debug(var_export($apiContext, true));
 
         return $apiContext;
     }
@@ -151,11 +150,11 @@ class PaypalPlusApi
     {
         /** @var \Magento\Store\Model\Store $store */
         $store = $this->storeManager->getStore();
-        $base = $this->storeManager->getStore()->getBaseUrl();
+
         $redirectUrls = new \PayPal\Api\RedirectUrls();
         $redirectUrls
-            ->setReturnUrl($base .'V1/notifications/returnUrl')
-            ->setCancelUrl($base. 'V1/notifications/cancelUrl');
+            ->setReturnUrl($store->getUrl('checkout/cart'))
+            ->setCancelUrl($store->getUrl('checkout/cart'));
         return $redirectUrls;
     }
 
@@ -308,16 +307,11 @@ class PaypalPlusApi
         $payment->setRedirectUrls($redirectUrls);
         $payment->addTransaction($transaction);
 
+
         $result = [];
         try {
             /** @var \PayPal\Api\Payment $result */
             $paypalPayment = $payment->create($apiContext);
-
-            $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/paypalplus.log');
-            $logger = new \Zend\Log\Logger();
-            $logger->addWriter($writer);
-            $logger->info("Paypal Payment Response::" .date("d/m/Y H:i:s ").">>");
-            $logger->debug(var_export($paypalPayment, true));
 
             $result = [
                 'status' => 'success',

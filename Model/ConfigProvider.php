@@ -67,6 +67,13 @@ class ConfigProvider
      */
     const XML_PATH_CURRENCY_OPTIONS_BASE = 'currency/options/base';
 
+
+    /**
+     * Contains the debug status
+     */
+    const XML_PATH_DEBUG_STATUS = 'payment/paypalbr_paypalplus/depuration_mode';
+
+
     /**
      * ConfigProvider constructor.
      *
@@ -80,6 +87,19 @@ class ConfigProvider
         $this->scopeConfig = $scopeConfig;
         $this->config = $config;
     }
+
+
+    /**
+     * Returns the current mode
+     *
+     * @return string
+     */
+    public function getDebug()
+    {
+        $debug = $this->scopeConfig->getValue(self::XML_PATH_DEBUG_STATUS, ScopeInterface::SCOPE_STORE);
+        return $debug;
+    }
+
 
     /**
      * Returns the current mode
