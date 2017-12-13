@@ -71,6 +71,11 @@ class PaypalPlusApi
     protected $checkoutSession;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * PaypalPlusApi constructor.
      *
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -85,7 +90,8 @@ class PaypalPlusApi
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \PayPalBR\PayPalPlus\Model\ConfigProvider $configProvider,
         \Magento\Payment\Model\Cart\SalesModel\Factory $cartSalesModelFactory,
-        \Magento\Checkout\Model\Session $checkoutSession
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->cart = $cart;
@@ -93,6 +99,7 @@ class PaypalPlusApi
         $this->storeManager = $storeManager;
         $this->configProvider = $configProvider;
         $this->checkoutSession = $checkoutSession;
+        $this->logger = $logger;
 
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $cart->getQuote();
@@ -430,7 +437,7 @@ class PaypalPlusApi
             $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/paypalplus.log');
             $logger = new \Zend\Log\Logger();
             $logger->addWriter($writer);
-            $logger->info("Paypal Payment Response::" .date("d/m/Y H:i:s ").">>");
+            $logger->info("Paypal Payment Response::" . date("d/m/Y H:i:s ") . ">>");
             $logger->debug(var_export($paypalPayment, true));
             // }}
 
