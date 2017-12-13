@@ -208,7 +208,6 @@ define([
                              * @returns {undefined}
                              */
                             onError: function (err) {
-
                                 this.breakError = true;
                                 var message = {
                                     message: JSON.stringify(err.cause)
