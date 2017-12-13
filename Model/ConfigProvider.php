@@ -67,12 +67,10 @@ class ConfigProvider
      */
     const XML_PATH_CURRENCY_OPTIONS_BASE = 'currency/options/base';
 
-
     /**
      * Contains the debug status
      */
     const XML_PATH_DEBUG_STATUS = 'payment/paypalbr_paypalplus/depuration_mode';
-
 
     /**
      * ConfigProvider constructor.
@@ -88,9 +86,8 @@ class ConfigProvider
         $this->config = $config;
     }
 
-
     /**
-     * Returns the current mode
+     * Returns the debug configuration
      *
      * @return string
      */
@@ -100,6 +97,17 @@ class ConfigProvider
         return $debug;
     }
 
+    /**
+     * Check if debug mode is enabled or not
+     *
+     * @return bool
+     */
+    public function isDebugEnabled()
+    {
+        $debug = $this->getDebug();
+
+        return $debug == 1;
+    }
 
     /**
      * Returns the current mode
