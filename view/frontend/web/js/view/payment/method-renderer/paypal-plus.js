@@ -141,94 +141,22 @@ define([
                 for (var i = 0; i < response.links.length; i++) {
                     if (response.links[i].rel == 'approval_url') {
                         approvalUrl = response.links[i].href;
+                    }
+                }
+                console.log("Approval URL: " + approvalUrl);
+                self.runPayPal(approvalUrl);
+            })
+            .fail(function (response) {
+                var iframeErrorElem = '#iframe-error';
 
-                    console.log("Approval URL: " + approvalUrl);
+                $(iframeErrorElem).html('');
+                $(iframeErrorElem).append('<div><span>Error to load iframe</span></div>');
 
-                    var customerData = window.checkoutConfig.customerData;
-
-                    this.paypalObject = PAYPAL.apps.PPP(
-                        {
-                            "approvalUrl": approvalUrl,
-                            "placeholder": "ppplus",
-                            "mode": "sandbox",
-                            disableContinue: "continueButton",
-                            enableContinue: "continueButton",
-                            "payerFirstName": customerData.firstname,
-                            "payerLastName": customerData.lastname,
-                            "payerPhone": "05511998548609",
-                            "payerEmail": customerData.email,
-                            "payerTaxId": customerData.taxvat,
-                            "payerTaxIdType": "BR_CPF",
-                            "language": "pt_BR",
-                            "country": "BR",
-                            "useraction": "continue",
-                            "buttonLocation": "outside",
-                            "preselection": "none",
-                            "iframeHeight": "500",
-
-                            // "enableContinue": "orderPP",
-                            //"disableContinue": "orderPPs",
-                            /**
-                             * Do stuff after iframe is loaded
-                             * @returns {undefined}
-                             */
-                            onLoad: function () {
-                                console.log("Iframe successfully lo aded !");
-                            },
-                            /**
-                             * Continue after payment is verifies (continueButton)
-                             *
-                             * @param {string} payerId
-                             * @param {string} token
-                             * @param {string} term
-                             * @returns {}
-                             */
-                            onContinue: function (payerId, token, term) {
-                                $('#continueButton').hide();
-                                $('#payNowButton').show();
-                                self.payerId = payerId;
-                                //Show Place Order button
-
-                                var message = {
-                                    message: $.mage.__('Payment has been authorized.')
-                                };
-                                self.messageContainer.addSuccessMessage(message);
-
-                                if (typeof term !== 'undefined') {
-                                    self.term = term;
-                                }
-                                $('#ppplus').hide();
-                                self.placePendingOrder();
-                            },
-
-                            /**
-                             * Handle iframe error
-                             *
-                             * @param {type} err
-                             * @returns {undefined}
-                             */
-                            onError: function (err) {
-                                this.breakError = true;
-                                var message = {
-                                    message: JSON.stringify(err.cause)
-                                };
-                                //Display response error
-                                that.messageContainer.addErrorMessage(message);
-                            }
-                        });
-
-                }).fail(function (response) {
-                    var iframeErrorElem = '#iframe-error';
-
-                    $(iframeErrorElem).html('');
-                    $(iframeErrorElem).append('<div><span>Error to load iframe</span></div>');
-
-                    $(iframeErrorElem).show();
-                    $('#iframe-warning').hide();
-                    $('#continueButton').prop("disabled", true);
-                    fullScreenLoader.stopLoader();
-                });
-
+                $(iframeErrorElem).show();
+                $('#iframe-warning').hide();
+                $('#continueButton').prop("disabled", true);
+                fullScreenLoader.stopLoader();
+            });
         },
 
 
