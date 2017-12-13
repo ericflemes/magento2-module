@@ -1,9 +1,6 @@
 <?php
 namespace PayPalBR\PayPalPlus\Model;
 
-use Magento\Framework\Exception\LocalizedException;
-use PayPalBR\PayPalPlus\Model\Config\Source\Mode;
-
 /**
  * Class PaypalPlusApi
  *
@@ -133,7 +130,9 @@ class PaypalPlusApi
                 'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2'
             ]
         );
+        return $apiContext;
     }
+
     /**
      * Returns the payer
      *
@@ -199,9 +198,6 @@ class PaypalPlusApi
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->cart->getQuote();
-
-        /** @var \Magento\Store\Model\Store $store */
-        $store = $this->storeManager->getStore();
 
         /** @var string $storeCurrency */
         $storeCurrency = $quote->getBaseCurrencyCode();
@@ -366,7 +362,9 @@ class PaypalPlusApi
     }
 
     /**
-     * @return bool
+     * Send a patch and returns the payment
+     *
+     * @return \PayPal\Api\Payment
      */
     protected function patchAndGetPayment()
     {
