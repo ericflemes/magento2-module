@@ -113,7 +113,7 @@ class PaypalPlusApi
      */
     protected function getApiContext()
     {
-                $this->configId = $this->configProvider->getClientId();
+        $this->configId = $this->configProvider->getClientId();
         $this->secretId = $this->configProvider->getSecretId();
         $this->debug = $this->configProvider->getDebug();
         if($this->debug == 1){
@@ -305,6 +305,21 @@ class PaypalPlusApi
         return $transaction;
     }
 
+
+
+        /**
+     * Return transaction object for PayPalPlus API
+     *
+     * @return \PayPal\Api\Transaction
+     */
+    protected function getMerchantPreferences()
+    {
+        $merchant = new \PayPal\Api\MerchantPreferences();
+        $merchant->setNotifyUrl("http://www.uol.com.br");
+
+        return $merchant;
+    }
+
     /**
      * Creates and returns the payment object
      *
@@ -317,11 +332,16 @@ class PaypalPlusApi
         $redirectUrls = $this->getRedirectUrls();
         $transaction = $this->getTransaction();
 
+        $notify = $this->getMerchantPreferences();
+
         $payment = new \PayPal\Api\Payment();
         $payment->setIntent("Sale");
         $payment->setPayer($payer);
         $payment->setRedirectUrls($redirectUrls);
         $payment->addTransaction($transaction);
+        $payment->addTransaction($notify);
+
+
 
         /** @var \PayPal\Api\Payment $paypalPayment */
         $paypalPayment = $payment->create($apiContext);
@@ -331,6 +351,9 @@ class PaypalPlusApi
         $quoteUpdatedAt = $quote->getUpdatedAt();
         $this->checkoutSession->setPaypalPaymentId( $paypalPaymentId );
         $this->checkoutSession->setQuoteUpdatedAt( $quoteUpdatedAt );
+
+        print_r($paypalPayment);
+        die;
 
         return $paypalPayment;
     }
