@@ -1,6 +1,6 @@
 /**
 
- * @author Diego Lisboa <diego@webjump.com.br>
+ * @author Dev <Dev@webjump.com.br>
  * @category PayPalBR
  * @package paypalbr\PayPalPlus\
  * @copyright   WebJump (http://www.webjump.com.br)
@@ -28,6 +28,8 @@ define([
         breakError: false,
         errorProcessor: errorProcesor,
         customerInfo: quote.billingAddress._latestValue,
+        paymentApiServiceUrl: 'paypalplus/payment',
+        isPaymentReady: false,
 
         getNamePay: function(){
             return "Pay Pal Plus " + window.checkoutConfig.payment.paypalbr_paypalplus.exibitionName;
@@ -36,7 +38,6 @@ define([
         initialize: function () {
 
             fullScreenLoader.startLoader();
-
             this._super();
             this._render();
             var self = this;
@@ -63,7 +64,7 @@ define([
             return storage.post(serviceUrl, '')
                 .done(function (response) {
                     var approvalUrl = '';
-
+                    console.log(response);
                     for (var i = 0; i < response.links.length; i++) {
                         if (response.links[i].rel == 'approval_url') {
                             approvalUrl = response.links[i].href;
@@ -86,8 +87,8 @@ define([
                             "payerTaxIdType": "BR_CPF",
                             "language": "pt_BR",
                             "country": "BR",
-                            "enableContinue": "orderPP",
-                            "disableContinue": "orderPPs",
+                            enableContinue: "orderPP",
+                            disableContinue: "orderPPs",
                             "iframeHeight": "500",
                             /**
                              * Do stuff after iframe is loaded
@@ -119,13 +120,11 @@ define([
                                     self.term = term;
                                 }
                                 $('#ppplus').hide();
-
-                                //end aproved card and payment method, run placePendingOrder
                                 self.placePendingOrder();
                             },
 
                             /**
-                             * Handle iframe error (if payment fails for example)
+                             * Handle iframe error
                              *
                              * @param {type} err
                              * @returns {undefined}
@@ -140,9 +139,21 @@ define([
                                 that.messageContainer.addErrorMessage(message);
                             }
                         });
-                    // console.log(response);
+
                 }).fail(function (response) {
-                    console.log(response);
+                    var iframeErrorElem = '#iframe-error';
+                    if (reason) {
+                        if (reason === 'payment_not_ready') {
+                            iframeErrorElem = '#iframe-error-payment-not-ready';
+                        } else {
+                            $(iframeErrorElem).html('');
+                            $(iframeErrorElem).append('<div><span>' + reason + '</span></div>');
+                        }
+                    }
+                    $(iframeErrorElem).show();
+                    $('#iframe-warning').hide();
+                    $('#continueButton').prop("disabled", true);
+                    fullScreenLoader.stopLoader();
                 });
         },
 
@@ -154,6 +165,8 @@ define([
                 document.addEventListener('click', iframe.stopEventPropagation, true);
             }
         },
+
+
 
         doContinue: function () {
             var self = this;
@@ -176,22 +189,23 @@ define([
 
             this.customerData = quote.billingAddress._latestValue;
 
-            if (typeof this.customerInfo.city === 'undefined' || this.customerInfo.city.length === 0) {
+            if (typeof this.customerData.city === 'undefined' || this.customerData.city.length === 0) {
                 return false;
             }
 
-            if (typeof this.customerInfo.countryId === 'undefined' || this.customerInfo.countryId.length === 0) {
+            if (typeof this.customerData.countryId === 'undefined' || this.customerData.countryId.length === 0) {
                 return false;
             }
+            console.log(this.customerData);
 
-            if (typeof this.customerInfo.postcode === 'undefined' || this.customerInfo.postcode.length === 0 || !postcodeValidator.validate(this.customerInfo.postcode, "BR")) {
-                return false;
-            }
+            //if (typeof this.customerData.postcode === 'undefined' || this.customerInfo.postcode.length === 0 || !postcodeValidator.validate(this.customerInfo.postcode, "BR")) {
+            //    return false;
+            //}
 
-            if (typeof this.customerInfo.street === 'undefined' || this.customerInfo.street[0].length === 0) {
+            if (typeof this.customerData.street === 'undefined' || this.customerData.street[0].length === 0) {
                 return false;
             }
-            if (typeof this.customerInfo.region === 'undefined' || this.customerInfo.region.length === 0) {
+            if (typeof this.customerData.region === 'undefined' || this.customerData.region.length === 0) {
                 return false;
             }
             return true;

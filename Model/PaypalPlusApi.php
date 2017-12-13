@@ -114,9 +114,17 @@ class PaypalPlusApi
                 'log.FileName' => '/var/log/paypalplus.log',
                 'log.LogLevel' => 'DEBUG', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
                 'cache.enabled' => true,
-                'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2'
+                'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2',
+                ''
             ]
         );
+
+        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/paypalplus.log');
+        $logger = new \Zend\Log\Logger();
+        $logger->addWriter($writer);
+
+        $logger->info( "Auth Request::" .date("d/m/Y H:i:s ").">>");
+        $logger->debug(var_export($apiContext, true));
 
         return $apiContext;
     }
@@ -302,6 +310,13 @@ class PaypalPlusApi
         try {
             /** @var \PayPal\Api\Payment $result */
             $paypalPayment = $payment->create($apiContext);
+
+            $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/paypalplus.log');
+            $logger = new \Zend\Log\Logger();
+            $logger->addWriter($writer);
+            $logger->info("Paypal Payment Response::" .date("d/m/Y H:i:s ").">>");
+            $logger->debug(var_export($paypalPayment, true));
+
             $result = [
                 'status' => 'success',
                 'message' => $paypalPayment->toArray()

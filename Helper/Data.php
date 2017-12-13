@@ -9,7 +9,7 @@ use Magento\Framework\View\LayoutFactory;
  *
  * @category   PayPalBR
  * @package    PayPalBR_PayPalPlus
- * @author Diego Lisboa
+ * @author Dev
  */
 class Data extends \Magento\Payment\Helper\Data
 {
@@ -72,9 +72,8 @@ class Data extends \Magento\Payment\Helper\Data
      */
     public function handleException(\Exception $e)
     {
-        if ($this->scopeConfig->getValue('iways_paypalplus/dev/debug', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
             $this->messageManager->addWarning($e->getData());
-        }
+
     }
     /**
      * Build webhook listener url
