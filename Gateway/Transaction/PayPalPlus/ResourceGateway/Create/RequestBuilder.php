@@ -10,6 +10,8 @@ use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Model\Order\Item;
 use Magento\Checkout\Model\Cart;
 use PayPalBR\PayPalPlus\Gateway\Transaction\Base\Config\Config;
+use PayPalBR\PayPalPlus\Api\PayPalPlusRequestDataProviderInterfaceFactory;
+use PayPalBR\PayPalPlus\Api\CartItemRequestDataProviderInterfaceFactory;
 
 class RequestBuilder implements BuilderInterface
 {
@@ -23,14 +25,19 @@ class RequestBuilder implements BuilderInterface
 
     /**
      * RequestBuilder constructor.
+     * @param PayPalPlusRequestDataProviderInterfaceFactory $requestDataProviderFactory
+     * @param CartItemRequestDataProviderInterfaceFactory $cartItemRequestDataProviderFactory
      * @param Cart $cart
      * @param Config $config
-     * @param ModuleHelper $moduleHelper
      */
     public function __construct(
+        PayPalPlusRequestDataProviderInterfaceFactory $requestDataProviderFactory,
+        CartItemRequestDataProviderInterfaceFactory $cartItemRequestDataProviderFactory,
         Cart $cart,
         Config $config
     ) {
+        $this->setRequestDataProviderFactory($requestDataProviderFactory);
+        $this->setCartItemRequestProviderFactory($cartItemRequestDataProviderFactory);
         $this->setCart($cart);
         $this->setConfig($config);
     }
@@ -96,12 +103,30 @@ class RequestBuilder implements BuilderInterface
     }
 
     /**
-     * @param CreditCardRequestDataProviderInterfaceFactory $requestDataProviderFactory
+     * @param PayPalPlusRequestDataProviderInterfaceFactory $requestDataProviderFactory
      * @return RequestBuilder
      */
-    protected function setRequestDataProviderFactory(CreditCardRequestDataProviderInterfaceFactory $requestDataProviderFactory)
+    protected function setRequestDataProviderFactory(PayPalPlusRequestDataProviderInterfaceFactory $requestDataProviderFactory)
     {
         $this->requestDataProviderFactory = $requestDataProviderFactory;
+        return $this;
+    }
+
+    /**
+     * @return CartItemRequestDataProviderInterfaceFactory
+     */
+    protected function getCartItemRequestProviderFactory()
+    {
+        return $this->cartItemRequestDataProviderFactory;
+    }
+
+    /**
+     * @param CartItemRequestDataProviderInterfaceFactory $cartItemRequestDataProviderFactory
+     * @return self
+     */
+    protected function setCartItemRequestProviderFactory(CartItemRequestDataProviderInterfaceFactory $cartItemRequestDataProviderFactory)
+    {
+        $this->cartItemRequestDataProviderFactory = $cartItemRequestDataProviderFactory;
         return $this;
     }
 
@@ -237,7 +262,7 @@ class RequestBuilder implements BuilderInterface
     protected function createNewRequest($requestDataProvider)
     {
 
-        $response->id = 123123123123;
+        $response = 123123123123;
 
         return $response;
 

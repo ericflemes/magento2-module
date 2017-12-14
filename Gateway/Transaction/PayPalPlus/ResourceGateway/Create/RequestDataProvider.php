@@ -1,13 +1,13 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Gateway\Transaction\CreditCard\ResourceGateway\Create;
+namespace PayPalBR\PayPalPlus\Gateway\Transaction\PayPalPlus\ResourceGateway\Create;
 
 
 use Magento\Checkout\Model\Session;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Model\InfoInterface;
 use PayPalBR\PayPalPlus\Api\PayPalPlusRequestDataProviderInterface;
-use PayPalBR\PayPalPlus\Gateway\Transaction\Base\ResourceGateway\AbstractRequestDataProvider;
+use PayPalBR\PayPalPlus\Gateway\Transaction\Base\ResourceGateway\Request\AbstractRequestDataProvider;
 use PayPalBR\PayPalPlus\Gateway\Transaction\Base\Config\ConfigInterface;
 
 class RequestDataProvider

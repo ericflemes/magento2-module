@@ -12,7 +12,7 @@ class GeneralHandler extends AbstractHandler implements HandlerInterface
      */
     protected function _handle($payment, $response)
     {
-        $payment->setTransactionId($response->id);
+        $payment->setTransactionId($response);
         $payment->setIsTransactionClosed(false);
 
         return $this;
