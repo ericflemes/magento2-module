@@ -299,6 +299,8 @@ class PaypalPlusApi
         $transaction->setAmount($amount);
         $transaction->setItemList($itemList);
         $transaction->setPaymentOptions($paymentOptions);
+        $transaction->setNotifyUrl($this->getMerchantPreferences());
+
         return $transaction;
     }
 
@@ -330,8 +332,6 @@ class PaypalPlusApi
         $payer = $this->getPayer();
         $redirectUrls = $this->getRedirectUrls();
         $transaction = $this->getTransaction();
-
-        $notify = $this->getMerchantPreferences();
 
         $payment = new \PayPal\Api\Payment();
         $payment->setIntent("Sale");

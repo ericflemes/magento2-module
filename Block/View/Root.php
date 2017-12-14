@@ -1,13 +1,4 @@
 <?php
-/**
-
- * @author Dev <Dev@webjump.com.br>
- * @category PayPalBR
- * @package paypalbr\PayPalPlus\
- *
- * © 2016 WEB JUMP SOLUTIONS
- *
- */
 
 namespace PayPalBR\PayPalPlus\Block\View;
 use Magento\Framework\View;
