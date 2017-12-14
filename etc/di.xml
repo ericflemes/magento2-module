@@ -4,6 +4,7 @@
     <preference for="PayPalBR\PayPalPlus\Api\WebHookManagementInterface" type="PayPalBR\PayPalPlus\Model\WebHookManagement"/>
     <preference for="PayPalBR\PayPalPlus\Gateway\Transaction\Base\Config\ConfigInterface" type="PayPalBR\PayPalPlus\Gateway\Transaction\Base\Config\Config"/>
     <preference for="PayPalBR\PayPalPlus\Api\CartItemRequestDataProviderInterface" type="PayPalBR\PayPalPlus\Gateway\Transaction\Base\ResourceGateway\Request\CartItemRequestDataProvider"/>
+    <preference for="PayPalBR\PayPalPlus\Api\PayPalPlusRequestDataProviderInterface" type="PayPalBR\PayPalPlus\Gateway\Transaction\PayPalPlus\ResourceGateway\Create\RequestDataProvider"/>
 
     <!-- PayPalPlus Adapter -->
 	<virtualType name="PayPalPlusRemoteMethodAdapter" type="Magento\Payment\Model\Method\Adapter">

@@ -1,6 +1,6 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Gateway\Transaction\Base\ResourceGateway;
+namespace PayPalBR\PayPalPlus\Gateway\Transaction\Base\ResourceGateway\Request;
 
 use Magento\Checkout\Model\Session;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;

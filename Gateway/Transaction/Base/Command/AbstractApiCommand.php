@@ -40,7 +40,6 @@ abstract class AbstractApiCommand implements CommandInterface
     public function execute(array $commandSubject)
     {
         $request = $this->getRequestBuilder()->build($commandSubject);
-        $mundiAPIClient = $this->getMundiAPIClient();
 
         $response = $this->sendRequest($request);
 
