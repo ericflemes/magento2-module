@@ -10,15 +10,15 @@ define([
     'ko',
     'mage/url'
 ], function (
-    Component, 
-    iframe, 
-    $, 
-    quote, 
-    storage, 
-    errorProcesor, 
-    fullScreenLoader, 
-    postcodeValidator, 
-    ko, 
+    Component,
+    iframe,
+    $,
+    quote,
+    storage,
+    errorProcesor,
+    fullScreenLoader,
+    postcodeValidator,
+    ko,
     urlBuilder
     ) {
     'use strict';
@@ -103,12 +103,12 @@ define([
                      * @param {string} term
                      * @returns {}
                      */
-                    onContinue: function (payerId, token, term) {
+
+                    onContinue: function (rememberedCardsToken, payerId, token, term) {
                         $('#continueButton').hide();
                         $('#payNowButton').show();
+
                         self.payerId = payerId;
-                        //Show Place Order button
-                        
 
                         var message = {
                             message: $.mage.__('Payment has been authorized.')
