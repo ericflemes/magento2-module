@@ -27,12 +27,6 @@ class RequestDataProvider
         $this->setConfig($config);
     }
 
-    $info->setAdditionalInformation('pay_id', $dataAdditional['payId']);
-    $info->setAdditionalInformation('remebered_card', $dataAdditional['rememberedCardsToken']);
-    $info->setAdditionalInformation('payer_id', $dataAdditional['payerId']);
-    $info->setAdditionalInformation('token', $dataAdditional['token']);
-    $info->setAdditionalInformation('term', $dataAdditional['term']);
-
     /**
      * {@inheritdoc}
      */
