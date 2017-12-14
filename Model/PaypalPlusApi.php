@@ -119,12 +119,23 @@ class PaypalPlusApi
         }else{
             $debug = false;
         }
+        $sdkConfig = array(
+            "mode" => $this->configProvider->isModeSandbox() ? 'sandbox' : 'live',
+        );
+        $cred = new \PayPal\Auth\OAuthTokenCredential(
+            $this->configId,
+             $this->secretId
+        );
+
+        $this->checkoutSession->setAccessTokenBearer($cred->getAccessToken($sdkConfig));
+
         $apiContext = new \PayPal\Rest\ApiContext(
             new \PayPal\Auth\OAuthTokenCredential(
                 $this->configId,
                 $this->secretId
             )
         );
+
         $apiContext->setConfig(
             [
                 'http.headers.PayPal-Partner-Attribution-Id' => 'MagentoBrazil_Ecom_PPPlus2',
@@ -136,6 +147,7 @@ class PaypalPlusApi
                 'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2'
             ]
         );
+
         return $apiContext;
     }
 
@@ -363,6 +375,7 @@ class PaypalPlusApi
         $this->checkoutSession->setPaypalPaymentId( $paypalPaymentId );
         $this->checkoutSession->setQuoteUpdatedAt( $quoteUpdatedAt );
 
+
         return $paypalPayment;
     }
 
@@ -460,7 +473,6 @@ class PaypalPlusApi
             else {
                 $paypalPayment = $this->restoreAndGetPayment();
             }
-
 
             $result = [
                 'status' => 'success',
