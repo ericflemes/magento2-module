@@ -331,9 +331,9 @@ class RequestBuilder implements BuilderInterface
 
         $description = new \PayPal\Api\Patch();
         $description
-            ->setOp('replace')
+            ->setOp('add')
             ->setPath('/transactions/0/description')
-            ->setValue($this->getAmount());
+            ->setValue('description');
         $patchRequest->addPatch($description);
 
         $paypalPayment->update($patchRequest, $apiContext);
