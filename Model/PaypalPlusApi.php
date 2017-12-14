@@ -299,7 +299,7 @@ class PaypalPlusApi
         $transaction->setAmount($amount);
         $transaction->setItemList($itemList);
         $transaction->setPaymentOptions($paymentOptions);
-        $transaction->setNotifyUrl($this->getMerchantPreferences());
+        // $transaction->setNotifyUrl($this->getMerchantPreferences());
 
         return $transaction;
     }

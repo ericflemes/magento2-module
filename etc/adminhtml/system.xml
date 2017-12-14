@@ -9,8 +9,7 @@
     <system>
         <section id="payment">
             <group id="paypalbr" sortOrder="6" showInDefault="0" showInWebsite="0" showInStore="0">
-            	<group id="paypalplus" translate="label comment" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-
+            	<group id="paypalbr_paypalplus" translate="label comment" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>PayPal Plus</label>
                     <comment>The experience of a transparent checkout processed with a PayPal security. The user makes the payment directly on your site, without a need to create an account, use only the credit card.</comment>
                     <fieldset_css>complex paypalbr-section</fieldset_css>
@@ -95,12 +94,6 @@
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <comment>The logs will be saved at: var/log/paypalbr/</comment>
                         <tooltip>Enable this mode to debug the application in homologation or errors case.</tooltip>
-                    </field>
-                    <field id="payment_action" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="40" translate="label" type="select">
-                        <label>Payment Action</label>
-                        <comment />
-                        <source_model>PayPalBR\PayPalPlus\Model\Source\PaymentAction</source_model>
-                        <config_path>payment/paypalbr_paypalplus/payment_action</config_path>
                     </field>
             	</group>
             </group>

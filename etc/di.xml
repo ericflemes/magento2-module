@@ -52,14 +52,14 @@
         <arguments>
             <argument name="requestBuilder" xsi:type="object">PayPalBR\PayPalPlus\Gateway\Transaction\PayPalPlus\ResourceGateway\Create\RequestBuilder</argument>
             <argument name="responseHandler" xsi:type="object">PayPalPlusAuthorizeCommandResponseHandlerPool</argument>
-            <argument name="validator" xsi:type="object">PayPalBR\PayPalPlus\Gateway\Transaction\PayPalPlus\Resource\Create\Response\Validator</argument>
+            <argument name="validator" xsi:type="object">PayPalBR\PayPalPlus\Gateway\Transaction\PayPalPlus\ResourceGateway\Create\Response\Validator</argument>
         </arguments>
     </virtualType>
 
     <virtualType name="PayPalPlusAuthorizeCommandResponseHandlerPool" type="Magento\Payment\Gateway\Response\HandlerChain">
         <arguments>
             <argument name="handlers" xsi:type="array">
-                <item name="general" xsi:type="string">PayPalBR\PayPalPlus\Gateway\Transaction\PayPalPlus\Resource\Create\Response\GeneralHandler</item>
+                <item name="general" xsi:type="string">PayPalBR\PayPalPlus\Gateway\Transaction\PayPalPlus\ResourceGateway\Create\Response\GeneralHandler</item>
             </argument>
         </arguments>
     </virtualType>
