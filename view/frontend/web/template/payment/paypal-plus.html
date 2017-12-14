@@ -38,6 +38,15 @@
             <span class="error-msg"><!-- ko i18n: 'Paymen has been rejected, please try again with a different card.' --><!-- /ko --></span>
         </div>
         <div style="width: 100%;" id="ppplus"></div>
+        <div style="width: 100%;" id="ppplus-information">
+            <input type="hidden"
+                   name="payment[paypalPayerId]"
+                   class="input-text"
+                   value=""
+                   data-bind="attr: {id: getCode() + '_paypalPayerId', 'data-container': getCode() + '-paypalPayerId'},
+                   value: paypalPayerId
+                   ">
+        </div>
         <div class="actions-toolbar" data-bind="visible: true">
             <div class="primary">
                 <button
@@ -47,11 +56,6 @@
                     class="action primary checkout">
                     <span data-bind="i18n: 'Place Order'"></span>
                 </button>
-            </div>
-        </div>
-        <div>
-            <div id="iframe-warning" class="message notice">
-                <div><!-- ko i18n: 'Please do not refresh the page until you complete payment.' --><!-- /ko --></div>
             </div>
         </div>
     </div>
