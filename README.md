@@ -11,7 +11,7 @@ Add the following lines into your composer.json
 ...
 "require":{
     ...
-    "br-paypaldev/magento2-module":"~0.1.9"
+    "br-paypaldev/magento2-module":"~0.2.0"
  }
 ```
 or simply digit 
