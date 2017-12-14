@@ -33,4 +33,52 @@ class PayPalPlus extends \Magento\Payment\Model\Method\AbstractMethod
      * @var string
      */
     protected $_infoBlockType = \PayPalBR\PayPalPlus\Block\Info\PayPalPlus::class;
+
+    /**
+     * @var ConfigProvider
+     */
+    protected $configProvider;
+
+    public function __construct(
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
+        \Magento\Payment\Helper\Data $paymentData,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Payment\Model\Method\Logger $logger,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = [],
+        \PayPalBR\PayPalPlus\Model\ConfigProvider $configProvider
+    )
+    {
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $paymentData,
+            $scopeConfig,
+            $logger,
+            $resource,
+            $resourceCollection,
+            $data
+        );
+        $this->configProvider = $configProvider;
+    }
+
+    /**
+     * Check if it is available
+     *
+     * @param \Magento\Quote\Api\Data\CartInterface|null $quote
+     * @return bool
+     */
+    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
+    {
+        if ( ! $this->configProvider->isActive() ) {
+            return false;
+        }
+        return parent::isAvailable($quote);
+    }
 }

@@ -1,32 +1,10 @@
 <?php
-/**
 
- * @author Diego Lisboa <diego@webjump.com.br>
- * @category PayPalBR
- * @package paypalbr\PayPalPlus\
- * @copyright   WebJump (http://www.webjump.com.br)
- *
- * © 2016 WEB JUMP SOLUTIONS
- *
- */
 namespace PayPalBR\PayPalPlus\Block\View;
 use Magento\Framework\View;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
-/**
- * This class was created to include PayPal Plus Script Library before the RequireJS Library.
- * This is because PayPlus Library (ppplusdcc.min.js) Conflicts with RequireJS Library
- * as both are defined as AMD libraries.
- *
- * The template root.phtml is overriden in di.xml on this module, since Magento hard-codes the order
- * of loaded scripts as follows:
- * 1. RequireJS
- * 2. Head Scripts defined in layout
- * 3. Additional head elements
- *
- * TODO: Adapt or modify PayPal Plus Library to get it work with RequireJS
- *
- */
+
 class Root {
 
     protected $_requestPath = array();
@@ -35,7 +13,9 @@ class Root {
 
     const PPPLUS_SCRIPT_SOURCE = 'https://www.paypalobjects.com/webstatic/ppplusdcc/ppplusdcc.min.js';
     const CHECKOUT_ROUTE       = 'checkout/index/index';
+
     const XML_PATH_IS_ACTIVE   = 'payment/paypalbr_paypalplus/active';
+
 
     /**
      *
@@ -43,7 +23,7 @@ class Root {
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-         View\Element\Template\Context $context
+        \Magento\Framework\View\Element\Template\Context $context
     ){
         $this->_request = $context->getRequest();
         $this->_scopeConfig = $context->getScopeConfig();

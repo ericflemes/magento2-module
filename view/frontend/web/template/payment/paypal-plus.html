@@ -6,7 +6,7 @@
                class="radio"
                data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"/>
 
-        <label data-bind="attr: {'for': getCode()}" class="label"><span data-bind="text: getTitle()"></span></label>
+        <label data-bind="attr: {'for': getCode()}" class="label"><span data-bind="text: getNamePay()"></span></label>
     </div>
     <div id="iframe-error" data-bind="visible: false" class="message notice">
         <div><!-- ko i18n: "We cannot process PayPal Payments at this time. Please try again later" --><!-- /ko --></div>

@@ -1,14 +1,5 @@
 <?php
-/**
 
- * @author Diego Lisboa <diego@webjump.com.br>
- * @category PayPalBR
- * @package paypalbr\PayPalPlus\
- * @copyright   WebJump (http://www.webjump.com.br)
- *
- * © 2016 WEB JUMP SOLUTIONS
- *
- */
 namespace PayPalBR\PayPalPlus\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
@@ -21,18 +12,18 @@ use PayPalBR\PayPalPlus\Model\Http\Api;
 class clearPaymentDataAfterSaveOrder implements ObserverInterface
 {
     /**
+     * Contains the checkout session
+     *
+     * @var \Magento\Checkout\Model\Session
+     */
+    protected $checkoutSession;
+
+    /**
+     * Contains the logger
+     *
      * @var \Psr\Log\LoggerInterface
      */
-    protected $_logger;
-    /**
-     *
-     * @var PayPalBR\PayPalPlus\Model\Http\Api
-     */
-    protected $_api;
-    /**
-     * @var string
-     */
-    const METHOD_CODE = 'paylpalbr_paypalplus';
+    protected $logger;
 
     /**
      * Constructor
@@ -41,11 +32,11 @@ class clearPaymentDataAfterSaveOrder implements ObserverInterface
      * @param Api $api
      */
     public function __construct(
-        \Psr\Log\LoggerInterface $logger,
-        Api $api
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Psr\Log\LoggerInterface $logger
     ) {
-        $this->_logger = $logger;
-        $this->_api = $api;
+        $this->checkoutSession = $checkoutSession;
+        $this->logger = $logger;
     }
 
     /**
@@ -59,11 +50,21 @@ class clearPaymentDataAfterSaveOrder implements ObserverInterface
     public function execute(EventObserver $observer)
     {
         $event = $observer->getEvent();
-        /* @var $order \Magento\Sales\Model\Order */
+
+        /** @var $order \Magento\Sales\Model\Order */
         $order = $event->getOrder();
 
-        if ($order && $order->getId() && $order->getPayment()->getMethod() == self::METHOD_CODE) {
-            $this->_api->clearPaymentData();
+        if (
+            $order &&
+            $order->getId() &&
+            $order->getPayment()->getMethod() == \PayPalBR\PayPalPlus\Model\Payment\PayPalPlus::METHOD_NAME
+        ) {
+            $this->checkoutSession->setPaymentId(false);
+            $this->checkoutSession->setIframeUrl(false);
+            $this->checkoutSession->setExecuteUrl(false);
+            $this->checkoutSession->setPaymentIdExpires(false);
+            $this->checkoutSession->setPaypalPaymentId( null );
+            $this->checkoutSession->setQuoteUpdatedAt( null );
         }
     }
 }

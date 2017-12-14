@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2016 WebJump. All rights reserved.
+ * Copyright © 2016 qbo. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace PayPalBR\PayPalPlus\Model\Customer;

@@ -9,8 +9,7 @@
     <system>
         <section id="payment">
             <group id="paypalbr" sortOrder="6" showInDefault="0" showInWebsite="0" showInStore="0">
-            	<group id="paypalplus" translate="label comment" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
-
+            	<group id="paypalbr_paypalplus" translate="label comment" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>PayPal Plus</label>
                     <comment>The experience of a transparent checkout processed with a PayPal security. The user makes the payment directly on your site, without a need to create an account, use only the credit card.</comment>
                     <fieldset_css>complex paypalbr-section</fieldset_css>
@@ -96,22 +95,6 @@
                         <comment>The logs will be saved at: var/log/paypalbr/</comment>
                         <tooltip>Enable this mode to debug the application in homologation or errors case.</tooltip>
                     </field>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             	</group>
             </group>
         </section>

@@ -7,90 +7,64 @@ use Magento\Framework\App\ObjectManager;
 
 class DataAssign implements ObserverInterface
 {
+    /**
+     * Contains the config provider for Paypal Plus
+     *
+     * @var \PayPalBR\PayPalPlus\Model\ConfigProvider
+     */
+    protected $configProvider;
 
-    protected $_scopeConfig;
-
-    protected $_configInterface;
-
-    const XML_PATH_CLIENT_ID_SANDBOX = 'payment/paypalbr_paypalplus/client_id_sandbox';
-    const XML_PATH_SECRET_ID_SANDBOX = 'payment/paypalbr_paypalplus/secret_id_sandbox';
-    const XML_PATH_CLIENT_ID_PROD = 'payment/paypalbr_paypalplus/client_id_production';
-    const XML_PATH_SECRET_ID_PROD = 'payment/paypalbr_paypalplus/secret_id_production';
-    const XML_PATH_MODE = 'payment/paypalbr_paypalplus/mode';
-    const XML_PATH_ACTIVE = 'payment/paypalbr_paypalplus/active';
-    const XML_PATH_TAX = 'customer/address/taxvat_show';
-
-
-
-
-    public function __construct(\Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\App\Config\ConfigResource\ConfigInterface $configInterface,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Message\ManagerInterface $messageManager)
+    public function __construct(
+        \PayPalBR\PayPalPlus\Model\ConfigProvider $configProvider,
+        \Magento\Framework\Message\ManagerInterface $messageManager
+    )
     {
-        $this->_logger = $logger;
-        $this->_scopeConfig = $scopeConfig;
-        $this->_configInterface = $configInterface;
+        $this->configProvider = $configProvider;
         $this->messageManager = $messageManager;
     }
+
     /**
-     *
      * @param \Magento\Framework\Event\Observer $observer
-     * @return void
+     * @return \Magento\Framework\Message\ManagerInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-
-        $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
-
-        $active = $this->_scopeConfig->getValue(self::XML_PATH_ACTIVE, $storeScope);
-        $mode = $this->_scopeConfig->getValue(self::XML_PATH_MODE, $storeScope);
-        $tax = $this->_scopeConfig->getValue(self::XML_PATH_TAX, $storeScope);
-        $mode = ($mode == 1) ? 'sandbox' : 'live';
-
-
-        if($tax != "req"){
-           $this->_configInterface->saveConfig('payment/paypalbr_paypalplus/active', 0, 'default', 0);
-           return  $this->messageManager->addErrorMessage(__('Identificamos que a sua loja não possui suporte para CPF/CNPJ (TAXVAT). Para adicionar o suporte, acesse <<hyperlink>> e vÃ¡ em â€œLojas->ConfiguraÃ§Ãµes->Clientes->OpÃ§Ãµes de nome e endereÃ§o->Mostrar nÃºmero TAX/VAT.'));
+        $disableModule = false;
+        $disableMessage = "";
+        if (! $this->configProvider->isCustomerTaxRequired()) {
+            $disableModule = true;
+            $disableMessage = __('Identificamos que a sua loja não possui suporte para CPF/CNPJ (TAXVAT). Para adicionar o suporte, acesse <<hyperlink>> e vÃ¡ em â€œLojas->ConfiguraÃ§Ãµes->Clientes->OpÃ§Ãµes de nome e endereÃ§o->Mostrar nÃºmero TAX/VAT.');
         }
 
-        if($mode == "sandbox"){
-            $uri = "https://api.sandbox.paypal.com/v1/oauth2/token";
-            $clientId = $this->_scopeConfig->getValue(self::XML_PATH_CLIENT_ID_SANDBOX, $storeScope);
-            $secret = $this->_scopeConfig->getValue(self::XML_PATH_SECRET_ID_SANDBOX, $storeScope);
-        }else{
-
-            $uri = "https://api.paypal.com/v1/oauth2/token";
-            $clientId = $this->_scopeConfig->getValue(self::XML_PATH_CLIENT_ID_PROD, $storeScope);
-            $secret = $this->_scopeConfig->getValue(self::XML_PATH_SECRET_ID_PROD, $storeScope);
+        if (! $this->configProvider->isCurrencyBaseBRL()) {
+            $disableModule = true;
+            $disableMessage = __("Your base currency has to be BRL in order to activate this module.");
         }
 
-        try{
+        try {
+            $clientId = $this->configProvider->getClientId();
+            $secretId = $this->configProvider->getSecretId();
 
-        $client = new \GuzzleHttp\Client();
-        $response = $client->request('POST', $uri, [
-                'headers' =>
-                    [
-                        'Accept' => 'application/json',
-                        'Accept-Language' => 'en_US',
-                       'Content-Type' => 'application/x-www-form-urlencoded',
-                    ],
-                'body' => 'grant_type=client_credentials',
+            $paypalConfig = [
+                'http.headers.PayPal-Partner-Attribution-Id' => 'MagentoBrazil_Ecom_PPPlus2',
+                'mode' => $this->configProvider->isModeSandbox() ? 'sandbox' : 'live',
+                'log.LogEnabled' => true,
+                'log.FileName' => BP . '/var/log/paypalplus.log',
+                'log.LogLevel' => 'DEBUG', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
+                'cache.enabled' => true,
+                'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2'
+            ];
+            $oauth = new \PayPal\Auth\OAuthTokenCredential($clientId, $secretId);
+            $oauth->getAccessToken($paypalConfig);
+        } catch (\Exception $e) {
 
-                'auth' => [$clientId, $secret, 'basic']
-            ]
-        );
-
-        $data = json_decode($response->getBody(), true);
-        $access_token = $data['access_token'];
-        $this->_configInterface->saveConfig('payment/paypalbr_paypalplus/active', $active, 'default', 0);
-
-        }catch (\Exception $ex) {
-
-           $this->_configInterface->saveConfig('payment/paypalbr_paypalplus/active', 0, 'default', 0);
-           return  $this->messageManager->addErrorMessage(__('Credenciais de API incorretas, favor revisar.'));
-
+            $disableModule = true;
+            $disableMessage = __('Credenciais de API incorretas, favor revisar.');
         }
 
+        if ($disableModule) {
+            $this->configProvider->deactivateModule();
+            return $this->messageManager->addErrorMessage($disableMessage);
+        }
     }
 }

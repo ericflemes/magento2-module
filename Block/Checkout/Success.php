@@ -1,17 +1,6 @@
 <?php
-/**
 
- * @author Diego Lisboa <diego@webjump.com.br>
- * @category PayPalBR
- * @package paypalbr\PayPalPlus\
- * @copyright   WebJump (http://www.webjump.com.br)
- *
- * © 2016 WEB JUMP SOLUTIONS
- *
- */
 namespace PayPalBR\PayPalPlus\Block\Checkout;
-
-use PayPalBR\PayPalPlus\Model\Payment;
 
 class Success extends \Magento\Checkout\Block\Onepage\Success
 {
@@ -25,16 +14,19 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     private $_scopeconfig;
+
     /**
      *
      * @var \Magento\Sales\Model\OrderFactory
      */
     private $_orderFactory;
+
     /**
      *
      * @var \Magento\Sales\Model\Order
      */
     private $_order = false;
+
     /**
      * Constructor method
      *
@@ -56,6 +48,22 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
         $this->_scopeconfig = $context->getScopeConfig();
         $this->_orderFactory = $orderFactory;
     }
+
+    /**
+     * Returns if the payment is made by PayPal Plus
+     * @return bool
+     */
+    protected function isPaymentPaypal()
+    {
+        $result = false;
+        $payment = $this->_order->getPayment();
+        if ($payment) {
+            $code = $payment->getMethod();
+            $result = ($code == \PayPalBR\PayPalPlus\Model\Payment\PayPalPlus::METHOD_NAME);
+        }
+        return $result;
+    }
+
     /**
      * Get if method is active
      *
@@ -63,13 +71,12 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
      */
     public function getIsMethodActive()
     {
-        $code = $this->_order->getPayment()->getMethod();
-
-        if($this->_order->getPayment() && $code == Payment::CODE) {
+        if($this->isPaymentPaypal()) {
             return $this->getConfigValue(self::XML_PATH_IS_METHOD_ACTIVE);
         }
         return false;
     }
+
     /**
      * Load current Order
      *
@@ -80,6 +87,7 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
         /** @var \Magento\Sales\Model\Order $order */
         $this->_order = $this->_orderFactory->create()->loadByIncrementId($this->getOrderId());
     }
+
     /**
      * Check if order has pending payment status
      *
@@ -92,6 +100,7 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
         }
         return false;
     }
+
     /**
      * Get if payment has pending status
      *
@@ -104,6 +113,7 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
         }
         return '';
     }
+
     /**
      * Get Paypal logo for success page
      *
@@ -111,13 +121,11 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
      */
     public function getPayPalLogo()
     {
-        if(!$this->_order->getPayment()){
-            return;
-        }
-        if($this->_order->getPayment()->getMethod() == \PayPalBR\PayPalPlus\Model\Payment::CODE) {
+        if($this->isPaymentPaypal()) {
            return self::PAYPAL_LOGO;
         }
     }
+
    /**
      * Get payment store config
      *

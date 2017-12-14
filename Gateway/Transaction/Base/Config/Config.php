@@ -1,13 +1,4 @@
 <?php
-/**
- * Class Config
- *
- * @author      Webjump Core Team <dev@webjump.com>
- * @copyright   2016 Webjump (http://www.webjump.com.br)
- * @license     http://www.webjump.com.br Copyright
- *
- * @link        http://www.webjump.com.br
- */
 
 namespace PayPalBR\PayPalPlus\Gateway\Transaction\Base\Config;
 
@@ -56,9 +47,5 @@ class Config extends AbstractConfig implements ConfigInterface
         }
 
         return $this->getConfig(static::PATH_PRODUCTION_URL);
-    }
-
-    public function getPaymentAction(){
-
     }
 }

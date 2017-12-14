@@ -1,14 +1,4 @@
 <?php
-/**
-
- * @author Diego Lisboa <diego@webjump.com.br>
- * @category PayPalBR
- * @package paypalbr\PayPalPlus\
- * @copyright   WebJump (http://www.webjump.com.br)
- *
- * © 2016 WEB JUMP SOLUTIONS
- *
- */
 
 namespace PayPalBR\PayPalPlus\Controller\Payment;
 

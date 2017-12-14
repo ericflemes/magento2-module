@@ -2,42 +2,33 @@
 namespace PayPalBR\PayPalPlus\Model;
 
 use oauth;
-use \PayPal\Api\VerifyWebhookSignature;
-use \PayPal\Api\WebhookEvent;
-
 
 class WebHookManagement
 {
 
+
     /**
-     * {@inheritdoc}
-     */
-    public function postWebHook($params)
+    * {@inheritdoc}
+    */
+    public function postWebHook($param)
     {
-        $webhook = new \PayPal\Api\Webhook();
-        $webhook->setUrl("https://requestb.in/10ujt3c1?uniqid=" . uniqid());
-
-
-        $webhookEventTypes = array();
-        $webhookEventTypes[] = new \PayPal\Api\WebhookEventType(
-            '{
-                "name":"PAYMENT.AUTHORIZATION.CREATED"
-            }'
-        );
-        $webhookEventTypes[] = new \PayPal\Api\WebhookEventType(
-            '{
-                "name":"PAYMENT.AUTHORIZATION.VOIDED"
-            }'
-        );
-        $webhook->setEventTypes($webhookEventTypes);
-
-
-         ResultPrinter::printResult("Created Webhook", "Webhook", $output->getId(), $request, $output);
-
-        return $output;
-
+        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/paypalplus.log');
+        $logger = new \Zend\Log\Logger();
+        $logger->addWriter($writer);
+        $logger->info('Your text message');
+        return 'Hello API! POST return the $param ' . $param;
     }
 
 
+    /**
+    * {@inheritdoc}
+    */
+    public function notificationUrl($param)
+    {
+        echo "<pre>";
+        print_r($param);
+        echo "</pre>";
+        die;
+    }
 
 }

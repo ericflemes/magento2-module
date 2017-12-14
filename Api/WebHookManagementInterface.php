@@ -9,10 +9,15 @@ interface WebHookManagementInterface
          * @return string
          */
         public function postWebHook($params);
-            /**
-         * GET for WebHook api
+
+
+        /**
+         * POST for WebHook api
          * @param string $param
          * @return string
          */
+        public function notificationUrl($params);
+
+
 
 }

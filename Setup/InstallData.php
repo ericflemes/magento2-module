@@ -1,89 +1,44 @@
 <?php
-/**
-
- * @author Diego Lisboa <diego@webjump.com.br>
- * @category PayPalBR
- * @package paypalbr\PayPalPlus\
- * @copyright   WebJump (http://www.webjump.com.br)
- *
- * © 2016 WEB JUMP SOLUTIONS
- *
- */
 
 namespace PayPalBR\PayPalPlus\Setup;
 
-use Magento\Customer\Setup\CustomerSetupFactory;
-use Magento\Customer\Model\Customer;
-use Magento\Eav\Model\Entity\Attribute\Set as AttributeSet;
-use Magento\Eav\Model\Entity\Attribute\SetFactory as AttributeSetFactory;
+use Magento\Eav\Setup\EavSetup;
+use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Eav\Model\Config;
 
-/**
- * @codeCoverageIgnore
- */
 class InstallData implements InstallDataInterface
 {
-    /**
-     * @var CustomerSetupFactory
-     */
-    protected $customerSetupFactory;
+    private $eavSetupFactory;
 
-    /**
-     * @var AttributeSetFactory
-     */
-    private $attributeSetFactory;
-
-    /**
-     * @param CustomerSetupFactory $customerSetupFactory
-     * @param AttributeSetFactory $attributeSetFactory
-     */
-    public function __construct(
-        CustomerSetupFactory $customerSetupFactory,
-        AttributeSetFactory $attributeSetFactory
-    ) {
-        $this->customerSetupFactory = $customerSetupFactory;
-        $this->attributeSetFactory = $attributeSetFactory;
+    public function __construct(EavSetupFactory $eavSetupFactory, Config $eavConfig)
+    {
+        $this->eavSetupFactory = $eavSetupFactory;
+        $this->eavConfig = $eavConfig;
     }
-    /**
-     * {@inheritdoc}
-     */
+
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
+        $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
+        $eavSetup->addAttribute(
+            \Magento\Customer\Model\Customer::ENTITY,
+            'customer_token',
+            [
+                'label'         => 'Token Access PayPal',
+                'type'          => 'static',
+                'input'         => 'text',
+                'required'      => false,
+                'default'       => '',
 
-        /** @var CustomerSetup $customerSetup */
-        $customerSetup = $this->customerSetupFactory->create(['setup' => $setup]);
-
-        $customerEntity = $customerSetup->getEavConfig()->getEntityType('customer');
-        $attributeSetId = $customerEntity->getDefaultAttributeSetId();
-
-        /** @var $attributeSet AttributeSet */
-        $attributeSet = $this->attributeSetFactory->create();
-        $attributeGroupId = $attributeSet->getDefaultGroupId($attributeSetId);
-
-        $customerSetup->addAttribute(Customer::ENTITY, 'card_token_id', [
-            'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            'label' => 'PayPalPlusBR Card Token ID',
-            'input' => 'text',
-            'backend' => 'PayPalBR\PayPalPlus\Model\Customer\Token',
-            'required' => false,
-            'visible' => false,
-            'user_defined' => false,
-            'sort_order' => 1000,
-            'visible_on_front' => false,
-            'position' => 1000,
-            'system' => 0,
-        ]);
-
-        $attribute = $customerSetup->getEavConfig()->getAttribute(Customer::ENTITY, 'card_token_id')
-        ->addData([
-            'attribute_set_id' => $attributeSetId,
-            'attribute_group_id' => $attributeGroupId
-        ]);
-
-        $attribute->save();
-
-
+            ]
+        );
+        $sampleAttribute = $this->eavConfig->getAttribute(\Magento\Customer\Model\Customer::ENTITY, 'customer_token');
+        $sampleAttribute->setData(
+            'used_in_forms',
+            ['adminhtml_customer_address', 'customer_address_edit', 'customer_register_address']
+        );
+        $sampleAttribute->save();
     }
 }

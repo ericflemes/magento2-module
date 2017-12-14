@@ -1,15 +1,6 @@
 <?php
-/**
- * Class AbstractRequestDataProvider
- *
- * @author      Webjump Core Team <dev@webjump.com>
- * @copyright   2016 Webjump (http://www.webjump.com.br)
- * @license     http://www.webjump.com.br Copyright
- *
- * @link        http://www.webjump.com.br
- */
 
-namespace PayPalBR\PayPalPlus\Gateway\Transaction\Base\ResourceGateway;
+namespace PayPalBR\PayPalPlus\Gateway\Transaction\Base\ResourceGateway\Request;
 
 use Magento\Checkout\Model\Session;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
@@ -302,14 +293,6 @@ abstract class AbstractRequestDataProvider
      */
     protected function getBrandAdapter($brand)
     {
-        $fromTo = [
-            'VI' => \Gateway\One\DataContract\Enum\CreditCardBrandEnum::VISA,
-            'MC' => \Gateway\One\DataContract\Enum\CreditCardBrandEnum::MASTERCARD,
-            'AE' => \Gateway\One\DataContract\Enum\CreditCardBrandEnum::AMEX,
-            'DI' => \Gateway\One\DataContract\Enum\CreditCardBrandEnum::DISCOVER,
-            'DN' => \Gateway\One\DataContract\Enum\CreditCardBrandEnum::DINERS,
-        ];
-
         return (isset($fromTo[$brand])) ? $fromTo[$brand] : false;
     }
 
