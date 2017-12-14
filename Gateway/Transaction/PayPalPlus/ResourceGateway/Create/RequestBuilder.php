@@ -316,9 +316,8 @@ class RequestBuilder implements BuilderInterface
     /**
      * @return mixed
      */
-    protected function createPatch()
+    protected function createPatch($apiContext)
     {
-        $apiContext = $this->getApiContext();
         $paypalPayment = $this->restoreAndGetPayment();
         $patchRequest = new \PayPal\Api\PatchRequest();
 
@@ -344,10 +343,8 @@ class RequestBuilder implements BuilderInterface
     /**
      * @return mixed
      */
-    protected function createPayment($payer_id)
+    protected function createPaymentExecution($paypalPayment, $payer_id)
     {
-        $apiContext = $this->getApiContext();
-        $paypalPayment = $this->restoreAndGetPayment();
         $paymentExecution = new \PayPal\Api\PaymentExecution();
         $paymentExecution->setPayerId($payer_id);
 
@@ -362,8 +359,9 @@ class RequestBuilder implements BuilderInterface
      */
     protected function createNewRequest($requestDataProvider)
     {
-        $paypalPayment = $this->createPatch();
-        $paypalPaymentExecution = $this->createPayment($requestDataProvider->getToken());
+        $apiContext = $this->getApiContext();
+        $paypalPayment = $this->createPatch($apiContext);
+        $paypalPaymentExecution = $this->createPaymentExecution($paypalPayment, $apiContext, $requestDataProvider->getToken());
 
         $response = 7899787897998;
 
