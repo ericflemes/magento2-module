@@ -88,6 +88,24 @@ class RequestBuilder implements BuilderInterface
     }
 
     /**
+     * @return RequestDataProviderFactory
+     */
+    protected function getRequestDataProviderFactory()
+    {
+        return $this->requestDataProviderFactory;
+    }
+
+    /**
+     * @param CreditCardRequestDataProviderInterfaceFactory $requestDataProviderFactory
+     * @return RequestBuilder
+     */
+    protected function setRequestDataProviderFactory(CreditCardRequestDataProviderInterfaceFactory $requestDataProviderFactory)
+    {
+        $this->requestDataProviderFactory = $requestDataProviderFactory;
+        return $this;
+    }
+
+    /**
      * @param Item $item
      * @return CartItemRequestDataProviderInterface
      */
