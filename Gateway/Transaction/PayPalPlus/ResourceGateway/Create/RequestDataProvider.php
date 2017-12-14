@@ -30,9 +30,33 @@ class RequestDataProvider
     /**
      * {@inheritdoc}
      */
-    public function getSaveCard()
+    public function getPaypalPayerId()
     {
-        return $this->getPaymentData()->getAdditionalInformation('save_card');
+        return $this->getPaymentData()->getAdditionalInformation('paypalPayerId');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPayerIdCustomer()
+    {
+        return $this->getPaymentData()->getAdditionalInformation('payerIdCustomer');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getToken()
+    {
+        return $this->getPaymentData()->getAdditionalInformation('token');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTerm()
+    {
+        return $this->getPaymentData()->getAdditionalInformation('term');
     }
 
     /**

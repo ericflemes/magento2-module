@@ -209,26 +209,7 @@ class Api
 
         return $apiContext;
     }
-    /**
-     * Get ApprovalLink for curretn Quote
-     *
-     * @return string
-     */
-    public function getPaymentExperience()
-    {
-        $paymentExperience = $this->registry->registry('payment_experience');
-        if ($paymentExperience === null) {
-            $webProfile = $this->buildWebProfile();
-            if ($webProfile) {
-                $payment = $this->createPayment($webProfile, $this->getQuote());
-                $paymentExperience = $payment ? $payment->getApprovalLink() : false;
-            } else {
-                $paymentExperience = false;
-            }
-            $this->registry->register('payment_experience', $paymentExperience);
-        }
-        return $paymentExperience;
-    }
+
     /**
      * Get a payment
      *
@@ -696,7 +677,7 @@ class Api
      */
     protected function saveWebhookId($id)
     {
-        return $this->payPalPlusHelper->saveStoreConfig('iways_paypalplus/dev/webhook_id', $id);
+        return $this->payPalPlusHelper->saveStoreConfig('paypalbr_paypalplus/dev/webhook_id', $id);
     }
     /**
      * Get current quote

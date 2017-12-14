@@ -97,7 +97,6 @@ class PaypalPlusApi
         $this->configProvider = $configProvider;
         $this->checkoutSession = $checkoutSession;
         $this->logger = $logger;
-
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $cart->getQuote();
         $this->cartSalesModelQuote = $cartSalesModelFactory->create($quote);
@@ -120,12 +119,23 @@ class PaypalPlusApi
         }else{
             $debug = false;
         }
+        $sdkConfig = array(
+            "mode" => $this->configProvider->isModeSandbox() ? 'sandbox' : 'live',
+        );
+        $cred = new \PayPal\Auth\OAuthTokenCredential(
+            $this->configId,
+             $this->secretId
+        );
+
+        $this->checkoutSession->setAccessTokenBearer($cred->getAccessToken($sdkConfig));
+
         $apiContext = new \PayPal\Rest\ApiContext(
             new \PayPal\Auth\OAuthTokenCredential(
                 $this->configId,
                 $this->secretId
             )
         );
+
         $apiContext->setConfig(
             [
                 'http.headers.PayPal-Partner-Attribution-Id' => 'MagentoBrazil_Ecom_PPPlus2',
@@ -137,6 +147,7 @@ class PaypalPlusApi
                 'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2'
             ]
         );
+
         return $apiContext;
     }
 
@@ -183,8 +194,22 @@ class PaypalPlusApi
         $cartShippingAddress = $quote->getShippingAddress();
         $customer = $this->customerSession->getCustomer();
 
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $billingID =  $this->customerSession->getCustomer()->getDefaultBilling();
+        $billing = $objectManager->create('Magento\Customer\Model\Address')->load($billingID);
         $shippingAddress = new \PayPal\Api\ShippingAddress();
-        $shippingAddress
+        if ($quote->isVirtual() == true) {
+               $shippingAddress
+            ->setRecipientName($customer->getName())
+            ->setLine1($billing->getStreetLine(1))
+            ->setLine2($billing->getStreetLine(2))
+            ->setCity($billing->getCity())
+            ->setCountryCode($billing->getCountryId())
+            ->setPostalCode($billing->getPostcode())
+            ->setPhone($billing->getTelephone())
+            ->setState($billing->getRegion());
+        }else{
+            $shippingAddress
             ->setRecipientName($customer->getName())
             ->setLine1($cartShippingAddress->getStreetLine(1))
             ->setLine2($cartShippingAddress->getStreetLine(2))
@@ -193,7 +218,10 @@ class PaypalPlusApi
             ->setPostalCode($cartShippingAddress->getPostcode())
             ->setPhone($cartShippingAddress->getTelephone())
             ->setState($cartShippingAddress->getRegion());
-        return $shippingAddress;
+        }
+
+
+         return $shippingAddress;
     }
 
     /**
@@ -338,16 +366,15 @@ class PaypalPlusApi
         $payment->setPayer($payer);
         $payment->setRedirectUrls($redirectUrls);
         $payment->addTransaction($transaction);
-        // $payment->addTransaction($notify);
 
         /** @var \PayPal\Api\Payment $paypalPayment */
         $paypalPayment = $payment->create($apiContext);
-
         $quote = $this->checkoutSession->getQuote();
         $paypalPaymentId = $paypalPayment->getId();
         $quoteUpdatedAt = $quote->getUpdatedAt();
         $this->checkoutSession->setPaypalPaymentId( $paypalPaymentId );
         $this->checkoutSession->setQuoteUpdatedAt( $quoteUpdatedAt );
+
 
         return $paypalPayment;
     }
@@ -446,7 +473,6 @@ class PaypalPlusApi
             else {
                 $paypalPayment = $this->restoreAndGetPayment();
             }
-
 
             $result = [
                 'status' => 'success',
