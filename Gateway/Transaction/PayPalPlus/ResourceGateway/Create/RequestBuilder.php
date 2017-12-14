@@ -305,11 +305,11 @@ class RequestBuilder implements BuilderInterface
      *
      * @return \PayPal\Api\Payment
      */
-    protected function restoreAndGetPayment()
+    protected function restoreAndGetPayment($apiContext)
     {
         $paypalPaymentId = $this->getCheckoutSession()->getPaypalPaymentId();
-        $apiContext = $this->getApiContext();
         $paypalPayment = \PayPal\Api\Payment::get($paypalPaymentId, $apiContext);
+
         return $paypalPayment;
     }
 
@@ -318,7 +318,7 @@ class RequestBuilder implements BuilderInterface
      */
     protected function createPatch($apiContext)
     {
-        $paypalPayment = $this->restoreAndGetPayment();
+        $paypalPayment = $this->restoreAndGetPayment($apiContext);
         $patchRequest = new \PayPal\Api\PatchRequest();
 
         $itemListPatch = new \PayPal\Api\Patch();
@@ -343,10 +343,10 @@ class RequestBuilder implements BuilderInterface
     /**
      * @return mixed
      */
-    protected function createPaymentExecution($paypalPayment, $payer_id)
+    protected function createPaymentExecution($paypalPayment, $apiContext, $payerId)
     {
         $paymentExecution = new \PayPal\Api\PaymentExecution();
-        $paymentExecution->setPayerId($payer_id);
+        $paymentExecution->setPayerId($payerId);
 
         $paypalPayment->execute($paymentExecution, $apiContext);
 
@@ -361,7 +361,7 @@ class RequestBuilder implements BuilderInterface
     {
         $apiContext = $this->getApiContext();
         $paypalPayment = $this->createPatch($apiContext);
-        $paypalPaymentExecution = $this->createPaymentExecution($paypalPayment, $apiContext, $requestDataProvider->getToken());
+        $paypalPaymentExecution = $this->createPaymentExecution($paypalPayment, $apiContext, $requestDataProvider->getPayerId());
 
         $response = 7899787897998;
 

@@ -40,18 +40,25 @@
         <div style="width: 100%;" id="ppplus"></div>
         <div style="width: 100%;" id="ppplus-information">
             <input type="hidden"
-                name="payment[paypalPayerId]"
+                name="payment[payId]"
                 class="input-text"
                 value=""
-                data-bind="attr: {id: getCode() + '_paypalPayerId', 'data-container': getCode() + '-paypalPayerId'},
-                value: paypalPayerId
+                data-bind="attr: {id: getCode() + '_payId', 'data-container': getCode() + '-payId'},
+                value: payId
                 ">
             <input type="hidden"
-                name="payment[payerIdCustomer]"
+                name="payment[rememberedCardsToken]"
                 class="input-text"
                 value=""
-                data-bind="attr: {id: getCode() + '_payerIdCustomer', 'data-container': getCode() + '-payerIdCustomer'},
-                value: payerIdCustomer
+                data-bind="attr: {id: getCode() + '_rememberedCardsToken', 'data-container': getCode() + '-rememberedCardsToken'},
+                value: rememberedCardsToken
+                ">
+            <input type="hidden"
+                name="payment[payerId]"
+                class="input-text"
+                value=""
+                data-bind="attr: {id: getCode() + '_payerId', 'data-container': getCode() + '-payerId'},
+                value: payerId
                 ">
             <input type="hidden"
                 name="payment[token]"

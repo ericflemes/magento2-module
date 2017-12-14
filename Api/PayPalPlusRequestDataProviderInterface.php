@@ -5,16 +5,20 @@ namespace PayPalBR\PayPalPlus\Api;
 
 interface PayPalPlusRequestDataProviderInterface extends BaseRequestDataProviderInterface
 {
+    /**
+     * @return mixed
+     */
+    public function getPayId();
 
     /**
      * @return mixed
      */
-    public function getPaypalPayerId();
+    public function getRemeberedCard();
 
     /**
      * @return mixed
      */
-    public function getPayerIdCustomer();
+    public function getPayerId();
 
     /**
      * @return mixed

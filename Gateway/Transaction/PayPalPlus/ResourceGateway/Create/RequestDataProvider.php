@@ -27,20 +27,34 @@ class RequestDataProvider
         $this->setConfig($config);
     }
 
+    $info->setAdditionalInformation('pay_id', $dataAdditional['payId']);
+    $info->setAdditionalInformation('remebered_card', $dataAdditional['rememberedCardsToken']);
+    $info->setAdditionalInformation('payer_id', $dataAdditional['payerId']);
+    $info->setAdditionalInformation('token', $dataAdditional['token']);
+    $info->setAdditionalInformation('term', $dataAdditional['term']);
+
     /**
      * {@inheritdoc}
      */
-    public function getPaypalPayerId()
+    public function getPayId()
     {
-        return $this->getPaymentData()->getAdditionalInformation('paypalPayerId');
+        return $this->getPaymentData()->getAdditionalInformation('pay_id');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getPayerIdCustomer()
+    public function getRemeberedCard()
     {
-        return $this->getPaymentData()->getAdditionalInformation('payerIdCustomer');
+        return $this->getPaymentData()->getAdditionalInformation('remebered_card');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPayerId()
+    {
+        return $this->getPaymentData()->getAdditionalInformation('payer_id');
     }
 
     /**
