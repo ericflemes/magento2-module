@@ -26,7 +26,11 @@ define([
     return Component.extend({
         defaults: {
             template: 'PayPalBR_PayPalPlus/payment/paypal-plus',
-            paymentReady: true
+            paymentReady: true,
+            paypalPayerId: '',
+            payerIdCustomer: '',
+            token: '',
+            term: ''
         },
         breakError: false,
         errorProcessor: errorProcesor,
@@ -104,6 +108,7 @@ define([
                         $('#payNowButton').show();
                         self.payerId = payerId;
                         //Show Place Order button
+                        
 
                         var message = {
                             message: $.mage.__('Payment has been authorized.')
@@ -113,6 +118,10 @@ define([
                         if (typeof term !== 'undefined') {
                             self.term = term;
                         }
+                        $('#paypalbr_paypalplus_payerIdCustomer').val(payerId);
+                        $('#paypalbr_paypalplus_token').val(token);
+                        $('#paypalbr_paypalplus_term').val(term);
+
                         $('#ppplus').hide();
                         self.placePendingOrder();
                     },
@@ -139,27 +148,30 @@ define([
             var self = this;
             var serviceUrl = urlBuilder.build('paypalplus/payment/index');
             var approvalUrl = '';
-
+            fullScreenLoader.startLoader();
             storage.post(serviceUrl, '')
             .done(function (response) {
-                console.log(response);
+                //console.log(response);
+                $('#paypalbr_paypalplus_paypalPayerId').val(response.id);
                 for (var i = 0; i < response.links.length; i++) {
                     if (response.links[i].rel == 'approval_url') {
                         approvalUrl = response.links[i].href;
                     }
                 }
-                console.log("Approval URL: " + approvalUrl);
+                //console.log("Approval URL: " + approvalUrl);
                 self.runPayPal(approvalUrl);
             })
             .fail(function (response) {
                 var iframeErrorElem = '#iframe-error';
 
                 $(iframeErrorElem).html('');
-                $(iframeErrorElem).append('<div><span>Error to load iframe</span></div>');
+                $(iframeErrorElem).append($.mage.__('<div><span>Error to load iframe</span></div>'));
 
                 $(iframeErrorElem).show();
                 $('#iframe-warning').hide();
                 $('#continueButton').prop("disabled", true);
+            })
+            .always(function () {
                 fullScreenLoader.stopLoader();
             });
         },
@@ -184,6 +196,30 @@ define([
                 self.messageContainer.addErrorMessage(message);
             }
         },
+
+        getData: function () {
+            return {
+                'method': this.item.method,
+                'additional_data': {
+                    'paypalPayerId': $('#paypalbr_paypalplus_paypalPayerId').val(),
+                    'payerIdCustomer': $('#paypalbr_paypalplus_payerIdCustomer').val(),
+                    'token': $('#paypalbr_paypalplus_token').val(),
+                    'term': $('#paypalbr_paypalplus_term').val(),
+                }
+            };
+        },
+
+        initObservable: function () {
+                this._super()
+                    .observe([
+                        'paypalPayerId',
+                        'payerIdCustomer',
+                        'token',
+                        'term',
+                    ]);
+
+                return this;
+            },
 
         /**
          * Validate shipping address.

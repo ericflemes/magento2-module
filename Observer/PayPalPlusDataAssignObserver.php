@@ -22,7 +22,11 @@ class PayPalPlusDataAssignObserver extends AbstractDataAssignObserver
             $additionalData = new DataObject($additionalData ?: []);
         }
 
-        $info->setAdditionalInformation('save_card', 'test');
+        $dataAdditional = $additionalData->getData();
+        $info->setAdditionalInformation('paypalPayerId', $dataAdditional['paypalPayerId']);
+        $info->setAdditionalInformation('payerIdCustomer', $dataAdditional['payerIdCustomer']);
+        $info->setAdditionalInformation('token', $dataAdditional['token']);
+        $info->setAdditionalInformation('term', $dataAdditional['term']);
 
         return $this;
     }
