@@ -27,7 +27,10 @@ define([
         defaults: {
             template: 'PayPalBR_PayPalPlus/payment/paypal-plus',
             paymentReady: true,
-            paypalPayerId: ''
+            paypalPayerId: '',
+            payerIdCustomer: '',
+            token: '',
+            term: ''
         },
         breakError: false,
         errorProcessor: errorProcesor,
@@ -115,10 +118,9 @@ define([
                         if (typeof term !== 'undefined') {
                             self.term = term;
                         }
-
-                        console.log(payerId);
-                        console.log(token);
-                        console.log(term);
+                        $('#paypalbr_paypalplus_payerIdCustomer').val(payerId);
+                        $('#paypalbr_paypalplus_token').val(token);
+                        $('#paypalbr_paypalplus_term').val(term);
 
                         $('#ppplus').hide();
                         self.placePendingOrder();
@@ -151,7 +153,6 @@ define([
             .done(function (response) {
                 //console.log(response);
                 $('#paypalbr_paypalplus_paypalPayerId').val(response.id);
-                //$('#ppplus-information').append('<input type="hidden" name="payment[paypalPayerId]" id="paypalPayerId" value="'+ response.id +'" />');
                 for (var i = 0; i < response.links.length; i++) {
                     if (response.links[i].rel == 'approval_url') {
                         approvalUrl = response.links[i].href;
@@ -201,6 +202,9 @@ define([
                 'method': this.item.method,
                 'additional_data': {
                     'paypalPayerId': $('#paypalbr_paypalplus_paypalPayerId').val(),
+                    'payerIdCustomer': $('#paypalbr_paypalplus_payerIdCustomer').val(),
+                    'token': $('#paypalbr_paypalplus_token').val(),
+                    'term': $('#paypalbr_paypalplus_term').val(),
                 }
             };
         },
@@ -209,6 +213,9 @@ define([
                 this._super()
                     .observe([
                         'paypalPayerId',
+                        'payerIdCustomer',
+                        'token',
+                        'term',
                     ]);
 
                 return this;
