@@ -84,7 +84,7 @@ class DataAssign implements ObserverInterface
         try {
         $output = \PayPal\Api\Webhook::getAll($apiContext);
         } catch (Exception $e) {
-            print_r("Specific error was: {$e->getMessage()}");
+            print_r("Error in list webhooks was: {$e->getMessage()}");
             die;
         }
 
@@ -93,7 +93,7 @@ class DataAssign implements ObserverInterface
             $baseUrl = $this->_storeManager->getStore()->getBaseUrl() .'/rest/V1/notifications/webhooks';
 
             $webhook = new \PayPal\Api\Webhook();
-            $webhook->setUrl('https://requestb.in/xb3u52xb');
+            $webhook->setUrl($baseUrl);
 
             $webhookEventTypes = array();
             $webhookEventTypes[] = new \PayPal\Api\WebhookEventType(
@@ -130,13 +130,13 @@ class DataAssign implements ObserverInterface
             $webhook->setEventTypes($webhookEventTypes);
 
             try {
-              $output = $webhook->create($apiContext);
+                $output = $webhook->create($apiContext);
             } catch (\PayPal\Exception\PayPalConnectionException $ex) {
-              echo $ex->getCode();
-              echo $ex->getData();
-              die($ex);
+                echo $ex->getCode();
+                echo $ex->getData();
+                die($ex);
             } catch (Exception $ex) {
-              die($ex);
+                die($ex);
             }
 
         }
