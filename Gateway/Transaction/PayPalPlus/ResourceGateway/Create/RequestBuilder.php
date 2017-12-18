@@ -363,9 +363,7 @@ class RequestBuilder implements BuilderInterface
         $paypalPayment = $this->createPatch($apiContext);
         $paypalPaymentExecution = $this->createPaymentExecution($paypalPayment, $apiContext, $requestDataProvider->getPayerId());
 
-        $response = 123456789123;
-
-        return $response;
+        return $paypalPaymentExecution;
 
     }
 
