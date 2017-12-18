@@ -12,6 +12,11 @@ class WebHookManagement
     */
     public function postWebHook($param)
     {
+
+        if (! $param) {
+            return false;
+        }
+
         $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/paypalplus.log');
         $logger = new \Zend\Log\Logger();
         $logger->addWriter($writer);
