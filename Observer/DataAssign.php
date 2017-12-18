@@ -90,7 +90,7 @@ class DataAssign implements ObserverInterface
 
         if(empty($output->webhooks)){
 
-            $baseUrl = $this->_storeManager->getStore()->getBaseUrl() .'/rest/V1/notifications/webhooks';
+            $baseUrl = $this->_storeManager->getStore()->getBaseUrl() .'rest/default/V1/notifications/webhooks';
 
             $webhook = new \PayPal\Api\Webhook();
             $webhook->setUrl($baseUrl);
