@@ -20,15 +20,4 @@ class WebHookManagement
     }
 
 
-    /**
-    * {@inheritdoc}
-    */
-    public function notificationUrl($param)
-    {
-        echo "<pre>";
-        print_r($param);
-        echo "</pre>";
-        die;
-    }
-
 }
