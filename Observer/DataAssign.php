@@ -7,18 +7,26 @@ use Magento\Framework\App\ObjectManager;
 
 class DataAssign implements ObserverInterface
 {
+     const WEBHOOK_URL_ALREADY_EXISTS = 'WEBHOOK_URL_ALREADY_EXISTS';
     /**
      * Contains the config provider for Paypal Plus
      *
      * @var \PayPalBR\PayPalPlus\Model\ConfigProvider
      */
     protected $configProvider;
+    /**
+     *
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
 
     public function __construct(
         \PayPalBR\PayPalPlus\Model\ConfigProvider $configProvider,
-        \Magento\Framework\Message\ManagerInterface $messageManager
+        \Magento\Framework\Message\ManagerInterface $messageManager,
+         \Magento\Store\Model\StoreManagerInterface $storeManager
     )
     {
+        $this->_storeManager = $storeManager;
         $this->configProvider = $configProvider;
         $this->messageManager = $messageManager;
     }
@@ -66,5 +74,78 @@ class DataAssign implements ObserverInterface
             $this->configProvider->deactivateModule();
             return $this->messageManager->addErrorMessage($disableMessage);
         }
+
+        $apiContext = new \PayPal\Rest\ApiContext(
+            new \PayPal\Auth\OAuthTokenCredential(
+                $clientId,
+               $secretId
+            )
+        );
+
+        try {
+        $output = \PayPal\Api\Webhook::getAll($apiContext);
+        } catch (Exception $e) {
+            print_r("Error in list webhooks was: {$e->getMessage()}");
+            die;
+        }
+
+        if(empty($output->webhooks)){
+
+            $baseUrl = $this->_storeManager->getStore()->getBaseUrl() .'rest/default/V1/notifications/webhooks';
+
+            $webhook = new \PayPal\Api\Webhook();
+            $webhook->setUrl($baseUrl);
+
+            $webhookEventTypes = array();
+            $webhookEventTypes[] = new \PayPal\Api\WebhookEventType(
+                '{
+                     "name": "PAYMENT.SALE.COMPLETED"
+                }'
+            );
+            $webhookEventTypes[] = new \PayPal\Api\WebhookEventType(
+                '{
+                    "name": "PAYMENT.SALE.DENIED"
+                }'
+            );
+            $webhookEventTypes[] = new \PayPal\Api\WebhookEventType(
+                '{
+                    "name": "PAYMENT.SALE.PENDING"
+                }'
+            );
+            $webhookEventTypes[] = new \PayPal\Api\WebhookEventType(
+                '{
+                    "name": "PAYMENT.SALE.REFUNDED"
+                }'
+            );
+            $webhookEventTypes[] = new \PayPal\Api\WebhookEventType(
+                '{
+                    "name": "RISK.DISPUTE.CREATED"
+                }'
+            );
+            $webhookEventTypes[] = new \PayPal\Api\WebhookEventType(
+                '{
+                    "name": "CUSTOMER.DISPUTE.CREATED"
+                }'
+            );
+
+            $webhook->setEventTypes($webhookEventTypes);
+
+            try {
+                $output = $webhook->create($apiContext);
+            } catch (\PayPal\Exception\PayPalConnectionException $ex) {
+                if ($ex->getData()) {
+                    $data = json_decode($ex->getData(), true);
+                    if (isset($data['name']) && $data['name'] == self::WEBHOOK_URL_ALREADY_EXISTS) {
+                        return true;
+                    }
+                }
+                $this->payPalPlusHelper->handleException($ex);
+                return false;
+            } catch (Exception $ex) {
+                die($ex);
+            }
+
+        }
+
     }
 }

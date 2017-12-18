@@ -12,6 +12,11 @@ class WebHookManagement
     */
     public function postWebHook($param)
     {
+
+        if (! $param) {
+            return false;
+        }
+
         $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/paypalplus.log');
         $logger = new \Zend\Log\Logger();
         $logger->addWriter($writer);
@@ -19,16 +24,5 @@ class WebHookManagement
         return 'Hello API! POST return the $param ' . $param;
     }
 
-
-    /**
-    * {@inheritdoc}
-    */
-    public function notificationUrl($param)
-    {
-        echo "<pre>";
-        print_r($param);
-        echo "</pre>";
-        die;
-    }
 
 }

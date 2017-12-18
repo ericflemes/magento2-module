@@ -9,4 +9,7 @@
     <event name="payment_method_assign_data_paypalbr_paypalplus">
         <observer name="paypalbr_payment_method_assign_data_paypalbr_paypalplus" instance="PayPalBR\PayPalPlus\Observer\PayPalPlusDataAssignObserver" />
     </event>
+    <event name="sales_order_place_after">
+       <observer name="paypalbr_payment_method_paypalbr_paypalplus_after_place_order" instance="PayPalBR\PayPalPlus\Observer\SalesOrderPlaceAfter" />
+   </event>
 </config>
