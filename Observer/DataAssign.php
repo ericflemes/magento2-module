@@ -7,6 +7,7 @@ use Magento\Framework\App\ObjectManager;
 
 class DataAssign implements ObserverInterface
 {
+     const WEBHOOK_URL_ALREADY_EXISTS = 'WEBHOOK_URL_ALREADY_EXISTS';
     /**
      * Contains the config provider for Paypal Plus
      *
@@ -132,9 +133,14 @@ class DataAssign implements ObserverInterface
             try {
                 $output = $webhook->create($apiContext);
             } catch (\PayPal\Exception\PayPalConnectionException $ex) {
-                echo $ex->getCode();
-                echo $ex->getData();
-                die($ex);
+                if ($ex->getData()) {
+                    $data = json_decode($ex->getData(), true);
+                    if (isset($data['name']) && $data['name'] == self::WEBHOOK_URL_ALREADY_EXISTS) {
+                        return true;
+                    }
+                }
+                $this->payPalPlusHelper->handleException($ex);
+                return false;
             } catch (Exception $ex) {
                 die($ex);
             }
