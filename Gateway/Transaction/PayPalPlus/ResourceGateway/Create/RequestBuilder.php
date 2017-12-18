@@ -305,21 +305,20 @@ class RequestBuilder implements BuilderInterface
      *
      * @return \PayPal\Api\Payment
      */
-    protected function restoreAndGetPayment()
+    protected function restoreAndGetPayment($apiContext)
     {
         $paypalPaymentId = $this->getCheckoutSession()->getPaypalPaymentId();
-        $apiContext = $this->getApiContext();
         $paypalPayment = \PayPal\Api\Payment::get($paypalPaymentId, $apiContext);
+
         return $paypalPayment;
     }
 
     /**
      * @return mixed
      */
-    protected function createPatch()
+    protected function createPatch($apiContext)
     {
-        $apiContext = $this->getApiContext();
-        $paypalPayment = $this->restoreAndGetPayment();
+        $paypalPayment = $this->restoreAndGetPayment($apiContext);
         $patchRequest = new \PayPal\Api\PatchRequest();
 
         $itemListPatch = new \PayPal\Api\Patch();
@@ -344,12 +343,10 @@ class RequestBuilder implements BuilderInterface
     /**
      * @return mixed
      */
-    protected function createPayment($payer_id)
+    protected function createPaymentExecution($paypalPayment, $apiContext, $payerId)
     {
-        $apiContext = $this->getApiContext();
-        $paypalPayment = $this->restoreAndGetPayment();
         $paymentExecution = new \PayPal\Api\PaymentExecution();
-        $paymentExecution->setPayerId($payer_id);
+        $paymentExecution->setPayerId($payerId);
 
         $paypalPayment->execute($paymentExecution, $apiContext);
 
@@ -362,8 +359,9 @@ class RequestBuilder implements BuilderInterface
      */
     protected function createNewRequest($requestDataProvider)
     {
-        $paypalPayment = $this->createPatch();
-        $paypalPaymentExecution = $this->createPayment($requestDataProvider->getToken());
+        $apiContext = $this->getApiContext();
+        $paypalPayment = $this->createPatch($apiContext);
+        $paypalPaymentExecution = $this->createPaymentExecution($paypalPayment, $apiContext, $requestDataProvider->getPayerId());
 
         $response = 7899787897998;
 

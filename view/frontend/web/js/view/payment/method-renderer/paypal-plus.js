@@ -10,15 +10,15 @@ define([
     'ko',
     'mage/url'
 ], function (
-    Component, 
-    iframe, 
-    $, 
-    quote, 
-    storage, 
-    errorProcesor, 
-    fullScreenLoader, 
-    postcodeValidator, 
-    ko, 
+    Component,
+    iframe,
+    $,
+    quote,
+    storage,
+    errorProcesor,
+    fullScreenLoader,
+    postcodeValidator,
+    ko,
     urlBuilder
     ) {
     'use strict';
@@ -41,7 +41,9 @@ define([
         getNamePay: function(){
             return "Pay Pal Plus " + window.checkoutConfig.payment.paypalbr_paypalplus.exibitionName;
         },
+
         paypalObject: {},
+        
         initialize: function () {
 
             fullScreenLoader.startLoader();
@@ -103,12 +105,12 @@ define([
                      * @param {string} term
                      * @returns {}
                      */
-                    onContinue: function (payerId, token, term) {
+
+                    onContinue: function (rememberedCardsToken, payerId, token, term) {
                         $('#continueButton').hide();
                         $('#payNowButton').show();
+
                         self.payerId = payerId;
-                        //Show Place Order button
-                        
 
                         var message = {
                             message: $.mage.__('Payment has been authorized.')
@@ -118,7 +120,8 @@ define([
                         if (typeof term !== 'undefined') {
                             self.term = term;
                         }
-                        $('#paypalbr_paypalplus_payerIdCustomer').val(payerId);
+                        $('#paypalbr_paypalplus_rememberedCardsToken').val(rememberedCardsToken);
+                        $('#paypalbr_paypalplus_payerId').val(payerId);
                         $('#paypalbr_paypalplus_token').val(token);
                         $('#paypalbr_paypalplus_term').val(term);
 
@@ -141,7 +144,8 @@ define([
                         //Display response error
                         that.messageContainer.addErrorMessage(message);
                     }
-                });
+                }
+            );
         },
 
         initializeIframe: function () {
@@ -152,7 +156,7 @@ define([
             storage.post(serviceUrl, '')
             .done(function (response) {
                 //console.log(response);
-                $('#paypalbr_paypalplus_paypalPayerId').val(response.id);
+                $('#paypalbr_paypalplus_payId').val(response.id);
                 for (var i = 0; i < response.links.length; i++) {
                     if (response.links[i].rel == 'approval_url') {
                         approvalUrl = response.links[i].href;
@@ -201,8 +205,9 @@ define([
             return {
                 'method': this.item.method,
                 'additional_data': {
-                    'paypalPayerId': $('#paypalbr_paypalplus_paypalPayerId').val(),
-                    'payerIdCustomer': $('#paypalbr_paypalplus_payerIdCustomer').val(),
+                    'payId': $('#paypalbr_paypalplus_payId').val(),
+                    'rememberedCardsToken': $('#paypalbr_paypalplus_rememberedCardsToken').val(),
+                    'payerId': $('#paypalbr_paypalplus_payerId').val(),
                     'token': $('#paypalbr_paypalplus_token').val(),
                     'term': $('#paypalbr_paypalplus_term').val(),
                 }
@@ -212,8 +217,9 @@ define([
         initObservable: function () {
                 this._super()
                     .observe([
-                        'paypalPayerId',
-                        'payerIdCustomer',
+                        'payId',
+                        'rememberedCardsToken',
+                        'payerId',
                         'token',
                         'term',
                     ]);

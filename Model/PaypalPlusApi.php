@@ -120,7 +120,13 @@ class PaypalPlusApi
             $debug = false;
         }
         $sdkConfig = array(
-            "mode" => $this->configProvider->isModeSandbox() ? 'sandbox' : 'live',
+                'http.headers.PayPal-Partner-Attribution-Id' => 'MagentoBrazil_Ecom_PPPlus2',
+                'mode' => $this->configProvider->isModeSandbox() ? 'sandbox' : 'live',
+                'log.LogEnabled' => $debug,
+                'log.FileName' => BP . '/var/log/paypalplus.log',
+                'log.LogLevel' => 'DEBUG', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
+                'cache.enabled' => true,
+                'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2'
         );
         $cred = new \PayPal\Auth\OAuthTokenCredential(
             $this->configId,
@@ -136,17 +142,7 @@ class PaypalPlusApi
             )
         );
 
-        $apiContext->setConfig(
-            [
-                'http.headers.PayPal-Partner-Attribution-Id' => 'MagentoBrazil_Ecom_PPPlus2',
-                'mode' => $this->configProvider->isModeSandbox() ? 'sandbox' : 'live',
-                'log.LogEnabled' => $debug,
-                'log.FileName' => BP . '/var/log/paypalplus.log',
-                'log.LogLevel' => 'DEBUG', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
-                'cache.enabled' => true,
-                'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2'
-            ]
-        );
+        $apiContext->setConfig($sdkConfig);
 
         return $apiContext;
     }
