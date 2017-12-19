@@ -7,9 +7,6 @@ use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Checkout\Model\Session;
 use Psr\Log\LoggerInterface;
 use Magento\Sales\Model\Service\OrderService;
-use Magento\Sales\Model\Service\InvoiceService;
-use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
-use Magento\Framework\DB\Transaction;
 
 class SalesOrderPlaceAfter implements ObserverInterface
 {
@@ -29,21 +26,6 @@ class SalesOrderPlaceAfter implements ObserverInterface
     protected $orderService;
 
     /**
-     * \Magento\Sales\Model\Service\InvoiceService
-     */
-    protected $invoiceService;
-
-    /**
-     * \Magento\Framework\DB\Transaction
-     */
-    protected $transaction;
-
-    /**
-     * \Magento\Sales\Model\Order\Email\Sender\InvoiceSender
-     */
-    protected $invoiceSender;
-
-    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Psr\Log\LoggerInterface $logger
      * @param Api $api
@@ -51,17 +33,11 @@ class SalesOrderPlaceAfter implements ObserverInterface
     public function __construct(
         Session $checkoutSession,
         LoggerInterface $logger,
-        OrderService $orderService,
-        InvoiceService $invoiceService,
-        Transaction $transaction,
-        InvoiceSender $invoiceSender
+        OrderService $orderService
     ) {
         $this->setCheckoutSession($checkoutSession);
         $this->setLogger($logger);
         $this->setOrderService($orderService);
-        $this->setTransaction($transaction);
-        $this->setInvoiceService($invoiceService);
-        $this->setInvoiceSender($invoiceSender);
     }
 
     /**
@@ -80,11 +56,6 @@ class SalesOrderPlaceAfter implements ObserverInterface
             $result = $this->cancelOrder($order);
             $this->logger($result);
         }
-
-        if ($order->canInvoice() && $status == 'approved') {
-            $result = $this->createInvoice($order);
-            $this->logger($result);
-        }
     }
 
     /**
@@ -96,36 +67,6 @@ class SalesOrderPlaceAfter implements ObserverInterface
         $cancel = $this->getOrderService()->cancel($order->getId());
 
         return $cancel;
-    }
-
-    /**
-     * @param Order $order
-     * @return $invoice
-     */
-    protected function createInvoice($order)
-    {
-        $invoice = $this->getInvoiceService()->prepareInvoice($order);
-        $invoice->setRequestedCaptureCase(\Magento\Sales\Model\Order\Invoice::CAPTURE_OFFLINE);
-        $invoice->register();
-        $invoice->save();
-        $transactionSave = $this->getTransaction()->addObject(
-            $invoice
-        )->addObject(
-            $invoice->getOrder()
-        );
-        $transactionSave->save();
-        $this->getInvoiceSender()->send($invoice);
-
-        $order->addStatusHistoryComment(
-            __('Notified customer about invoice #%1.', $invoice->getIncrementId())
-        )
-        ->setIsCustomerNotified(true)
-        ->save();
-
-        $order->setState('processing')->setStatus('processing');
-        $order->save();
-
-        return $invoice->getData();
     }
 
     /**
@@ -197,66 +138,6 @@ class SalesOrderPlaceAfter implements ObserverInterface
     public function setOrderService($orderService)
     {
         $this->orderService = $orderService;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getInvoiceService()
-    {
-        return $this->invoiceService;
-    }
-
-    /**
-     * @param mixed $invoiceService
-     *
-     * @return self
-     */
-    public function setInvoiceService($invoiceService)
-    {
-        $this->invoiceService = $invoiceService;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTransaction()
-    {
-        return $this->transaction;
-    }
-
-    /**
-     * @param mixed $transaction
-     *
-     * @return self
-     */
-    public function setTransaction($transaction)
-    {
-        $this->transaction = $transaction;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getInvoiceSender()
-    {
-        return $this->invoiceSender;
-    }
-
-    /**
-     * @param mixed $invoiceSender
-     *
-     * @return self
-     */
-    public function setInvoiceSender($invoiceSender)
-    {
-        $this->invoiceSender = $invoiceSender;
 
         return $this;
     }

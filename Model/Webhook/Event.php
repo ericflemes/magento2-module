@@ -73,6 +73,7 @@ class Event
             $this->{$this->eventTypeToHandler($webhookEvent->getEventType())}($webhookEvent);
         }
     }
+
     /**
      * Get supported webhook events
      *
@@ -88,6 +89,7 @@ class Event
             self::RISK_DISPUTE_CREATED
         );
     }
+
     /**
      * Parse event type to handler function
      *
@@ -106,6 +108,7 @@ class Event
         }
         return implode('', $eventParts);
     }
+
     /**
      * Mark transaction as completed
      *
@@ -138,6 +141,7 @@ class Event
                 ->save();
         }
     }
+
     /**
      * Mark transaction as refunded
      *
@@ -157,8 +161,15 @@ class Event
             ->setParentTransactionId($parentTransactionId)
             ->setIsTransactionClosed(1)
             ->registerRefundNotification($amount);
-        $this->_order->save();
-        $creditmemo = $payment->getCreatedCreditmemo();
+        try {
+            $payment->save();
+            $creditmemo = $payment->getCreatedCreditmemo();
+            var_dump($creditmemo);
+            exit;
+        } catch (\Exception $e) {
+            var_dump($e->getMessage());
+        }
+        
         if ($creditmemo) {
             $creditmemo->sendEmail();
             $this->_order
@@ -171,6 +182,7 @@ class Event
                 ->save();
         }
     }
+
     /**
      * Mark transaction as pending
      *
@@ -186,6 +198,7 @@ class Event
             ->registerPaymentReviewAction(\Magento\Sales\Model\Order\Payment::REVIEW_ACTION_UPDATE, false);
         $this->_order->save();
     }
+
     /**
      * Mark transaction as reversed
      *
@@ -202,6 +215,7 @@ class Event
             )->setIsCustomerNotified(false)
             ->save();
     }
+
     /**
      * Add risk dispute to order comment
      *
@@ -214,6 +228,7 @@ class Event
             ->setIsCustomerNotified(false)
             ->save();
     }
+
     /**
      * Load and validate order, instantiate proper configuration
      *
