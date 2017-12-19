@@ -8,7 +8,11 @@ namespace PayPalBR\PayPalPlus\Model\Webhook;
  * @package    PayPalBR_PayPalPlus
  * @author Dev
  */
-class Event
+use PayPalBR\PayPalPlus\Api\EventsInterface;
+use Magento\Sales\Model\Order\CreditmemoFactory;
+use Magento\Sales\Model\Service\CreditmemoService;
+
+class Event implements EventsInterface
 {
     /**
      * Payment sale completed event type code
@@ -36,6 +40,11 @@ class Event
     const RISK_DISPUTE_CREATED = 'RISK.DISPUTE.CREATED';
 
     /**
+     * Risk dispute created event type code
+     */
+    const CUSTOMER_DISPUTE_CREATED = 'CUSTOMER.DISPUTE.CREATED';
+
+    /**
      * Store order instance
      *
      * @var \Magento\Sales\Model\Order
@@ -52,12 +61,26 @@ class Event
      */
     protected $salesOrderFactory;
 
+    /**
+     * \Magento\Sales\Model\Order\CreditmemoFactory
+     */
+    protected $creditmemoFactory;
+
+    /**
+     * \Magento\Sales\Model\Service\CreditmemoService
+     */
+    protected $creditmemoService;
+
     public function __construct(
         \Magento\Sales\Model\Order\Payment\TransactionFactory $salesOrderPaymentTransactionFactory,
-        \Magento\Sales\Model\OrderFactory $salesOrderFactory
+        \Magento\Sales\Model\OrderFactory $salesOrderFactory,
+        CreditmemoFactory $creditmemoFactory,
+        CreditmemoService $creditmemoService
     ) {
         $this->salesOrderPaymentTransactionFactory = $salesOrderPaymentTransactionFactory;
         $this->salesOrderFactory = $salesOrderFactory;
+        $this->creditmemoFactory = $creditmemoFactory;
+        $this->creditmemoService = $creditmemoService;
     }
     /**
      * Process the given $webhookEvent
@@ -72,6 +95,8 @@ class Event
             $this->getOrder($webhookEvent);
             $this->{$this->eventTypeToHandler($webhookEvent->getEventType())}($webhookEvent);
         }
+
+        return $this;
     }
 
     /**
@@ -86,7 +111,8 @@ class Event
             self::PAYMENT_SALE_PENDING,
             self::PAYMENT_SALE_REFUNDED,
             self::PAYMENT_SALE_REVERSED,
-            self::RISK_DISPUTE_CREATED
+            self::RISK_DISPUTE_CREATED,
+            self::CUSTOMER_DISPUTE_CREATED
         );
     }
 
@@ -156,31 +182,17 @@ class Event
         $payment = $this->_order->getPayment();
         $amount = $paymentResource['amount']['total'];
         $transactionId = $paymentResource['id'];
-        $payment->setPreparedMessage('')
-            ->setTransactionId($transactionId)
-            ->setParentTransactionId($parentTransactionId)
-            ->setIsTransactionClosed(1)
-            ->registerRefundNotification($amount);
-        try {
-            $payment->save();
-            $creditmemo = $payment->getCreatedCreditmemo();
-            var_dump($creditmemo);
-            exit;
-        } catch (\Exception $e) {
-            var_dump($e->getMessage());
-        }
+
+        $creditmemo = $this->creditmemoFactory->createByOrder($this->_order);
+
+        $creditmemoServiceRefund = $this->creditmemoService->refund($creditmemo, true);
+    }
+
+    protected function createCreditMemo($order)
+    {
         
-        if ($creditmemo) {
-            $creditmemo->sendEmail();
-            $this->_order
-                ->addStatusHistoryComment(
-                    __(
-                        'Notified customer about creditmemo #%1.',
-                        $creditmemo->getIncrementId()
-                    )
-                )->setIsCustomerNotified(true)
-                ->save();
-        }
+
+        return $creditmemoServiceRefund->getData();
     }
 
     /**
@@ -223,12 +235,33 @@ class Event
      */
     protected function riskDisputeCreated(\PayPal\Api\WebhookEvent $webhookEvent)
     {
-        //Add IPN comment about registered dispute
-        $this->_order->addStatusHistoryComment($webhookEvent->getSummary())
-            ->setIsCustomerNotified(false)
+        $this->_order->setStatus(\Magento\Paypal\Model\Info::ORDER_STATUS_REVERSED);
+        $this->_order->save();
+        $this->_order
+            ->addStatusHistoryComment(
+                $webhookEvent->getSummary(),
+                \Magento\Paypal\Model\Info::ORDER_STATUS_REVERSED
+            )->setIsCustomerNotified(false)
             ->save();
     }
 
+    /**
+     * Add risk dispute to order comment
+     *
+     * @param \PayPal\Api\WebhookEvent $webhookEvent
+     */
+    protected function customerDisputeCreated(\PayPal\Api\WebhookEvent $webhookEvent)
+    {
+        $this->_order->setStatus(\Magento\Paypal\Model\Info::ORDER_STATUS_REVERSED);
+        $this->_order->save();
+        $this->_order
+            ->addStatusHistoryComment(
+                $webhookEvent->getSummary(),
+                \Magento\Paypal\Model\Info::ORDER_STATUS_REVERSED
+            )->setIsCustomerNotified(false)
+            ->save();
+    }
+    
     /**
      * Load and validate order, instantiate proper configuration
      *
@@ -243,7 +276,15 @@ class Event
             if (!$resource) {
                 throw new \Exception('Event resource not found.');
             }
-            $transactionId = $resource['id'];
+            $type = $webhookEvent->getEventType();
+            if ($type == 'CUSTOMER.DISPUTE.CREATED') {
+                $transactionId = $resource['disputed_transactions'][0]['seller_transaction_id'];
+            }elseif ($type == 'RISK.DISPUTE.CREATED') {
+                $transactionId = $resource['seller_payment_id'];
+            }else{
+                $transactionId = $resource['id'];
+            }
+            
             $transaction = $this->salesOrderPaymentTransactionFactory->create()->load($transactionId, 'txn_id');
             $this->_order = $this->salesOrderFactory->create()->load($transaction->getOrderId());
             if (!$this->_order->getId()) {

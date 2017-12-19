@@ -254,7 +254,7 @@ class ConfigProvider
      *
      * This functions sets the active configuration to 0 (zero), which will disable the module.
      */
-    public function deactivateModule()
+    public function desactivateModule()
     {
         $this->config->saveConfig(self::XML_PATH_ACTIVE, 0, 'default', 0);
     }

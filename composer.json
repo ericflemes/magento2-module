@@ -1,7 +1,7 @@
 {
     "name": "br-paypaldev/magento2-module",
     "license": "Copyright",
-    "version": "0.2.6",
+    "version": "0.2.7",
     "type": "magento2-module",
     "description": "Magento 2 Module PayPalBR",
     "repositories": [

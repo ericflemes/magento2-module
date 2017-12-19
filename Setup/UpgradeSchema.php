@@ -33,24 +33,32 @@ class UpgradeData implements UpgradeDataInterface
     {
         $dbVersion = $context->getVersion();
 
-//        if (version_compare($dbVersion, '0.0.13', '<')) {
-//
-//            /** @var CustomerSetup $customerSetup */
-//            $customerSetup = $this->customerSetupFactory->create(['setup' => $setup]);
-//            $customerSetup->addAttribute(
-//            'customer_token',
-//                [
-//                    'label'         => 'Token Access PayPal',
-//                    'type'          => 'static',
-//                    'input'         => 'text',
-//                    'required'      => false,
-//                    'default'       => '',
-//
-//                ]
-//            );
-//            $customerSetup->getEavConfig()->getAttribute('customer', 'customer_token')
-//                ->setData('used_in_forms', ['adminhtml_customer'])
-//                ->save();
-//        }
+        if (version_compare($dbVersion, '0.2.7', '<')) {
+            $customerSetup = $this->customerSetupFactory->create(['setup' => $setup]);
+            $setup->startSetup();
+
+            $attributeCode = "remembered_card";
+
+            $customerSetup->removeAttribute(\Magento\Customer\Model\Customer::ENTITY, $attributeCode);
+
+
+            $customerSetup->addAttribute(
+                'customer',
+                'remembered_card', 
+                [
+                    'label' => 'Remembered Card',
+                    'type' => 'text',
+                    'frontend_input' => 'text',
+                    'required' => false,
+                    'visible' => false,
+                    'system'=> 0,
+                    'position' => 105,
+                ]
+            );
+
+            $loyaltyAttribute = $customerSetup->getEavConfig()->getAttribute('customer', 'remembered_card');
+            $loyaltyAttribute->setData('used_in_forms',['adminhtml_customer']);
+            $loyaltyAttribute->save();
+        }
     }
 }

@@ -37,11 +37,18 @@ class DataAssign implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
+
         $disableModule = false;
         $disableMessage = "";
+
+        if($this->configProvider->isActive() == true && ! $this->configProvider->isCustomerTaxRequired() ){
+           $disableModule = true;
+            $disableMessage = __('Identificamos que a sua loja não possui suporte para CPF/CNPJ (TAXVAT). Para adicionar o suporte, acesse <<hyperlink>> e vá em Loja->Configurações->Clientes->Opções de nome e  endereço->Mostrar número TAX/VAT.');
+        }
+
         if (! $this->configProvider->isCustomerTaxRequired()) {
             $disableModule = true;
-            $disableMessage = __('Identificamos que a sua loja não possui suporte para CPF/CNPJ (TAXVAT). Para adicionar o suporte, acesse <<hyperlink>> e vÃ¡ em â€œLojas->ConfiguraÃ§Ãµes->Clientes->OpÃ§Ãµes de nome e endereÃ§o->Mostrar nÃºmero TAX/VAT.');
+            $disableMessage = __('Identificamos que a sua loja não possui suporte para CPF/CNPJ (TAXVAT). Para adicionar o suporte, acesse <<hyperlink>> e vá em Loja->Configurações->Clientes->Opções de nome e  endereço->Mostrar número TAX/VAT.');
         }
 
         if (! $this->configProvider->isCurrencyBaseBRL()) {
@@ -71,7 +78,7 @@ class DataAssign implements ObserverInterface
         }
 
         if ($disableModule) {
-            $this->configProvider->deactivateModule();
+            $this->configProvider->desactivateModule();
             return $this->messageManager->addErrorMessage($disableMessage);
         }
 

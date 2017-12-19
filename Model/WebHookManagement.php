@@ -2,7 +2,7 @@
 namespace PayPalBR\PayPalPlus\Model;
 
 use oauth;
-use PayPalBR\PayPalPlus\Model\Webhook\Event;
+use PayPalBR\PayPalPlus\Api\EventsInterface;
 use PayPalBR\PayPalPlus\Api\WebHookManagementInterface;
 
 class WebHookManagement implements WebHookManagementInterface
@@ -10,7 +10,7 @@ class WebHookManagement implements WebHookManagementInterface
     protected $eventWebhook;
 
     public function __construct(
-        Event $eventWebhook
+        EventsInterface $eventWebhook
     ) {
         $this->setEventWebhook($eventWebhook);
     }
@@ -35,27 +35,44 @@ class WebHookManagement implements WebHookManagementInterface
             ->setSummary($summary)
             ->setResource($resource)
             ->setLinks($links);
+        try {
+            $array = [
+                'id' => $id,
+                'create_time' => $create_time,
+                'resource_type' => $resource_type,
+                'event_type' => $event_type,
+                'summary' => $summary,
+                'resource' => $resource,
+                'links' => $links,
+                'event_version' => $event_version,
+            ];
+            $this->logger($array);
+            $this->getEventWebhook()->processWebhookRequest($webhookApi);
+            $return = [
+                [
+                    'status' => 200,
+                    'message' => $e->getMessage()
+                ]
+            ];
+        } catch (\Exception $e) {
+            $this->logger('initial debug');
+            $this->logger($e);
+            $this->logger('final debug');
 
-        $this->getEventWebhook()->processWebhookRequest($webhookApi);
+            $return = [
+                [
+                    'status' => 400,
+                    'message' => $e->getMessage()
+                ]
+            ];
+        }
 
-        $array = [
-            'id' => $id,
-            'create_time' => $create_time,
-            'resource_type' => $resource_type,
-            'event_type' => $event_type,
-            'summary' => $summary,
-            'resource' => $resource,
-            'links' => $links,
-            'event_version' => $event_version,
-        ];
-        $this->logger($array);
-
-        return $array;
+        return $return;
     }
 
     protected function logger($array)
     {
-        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/paypalplus.log');
+        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/paypalplus-webhook.log');
         $logger = new \Zend\Log\Logger();
         $logger->addWriter($writer);
         $logger->info($array);
