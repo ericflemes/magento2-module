@@ -177,7 +177,7 @@ class Event implements EventsInterface
         $amount = $paymentResource['amount']['total'];
         $transactionId = $paymentResource['id'];
 
-        $creditmemo = $this->creditmemoFactory->createByOrder($order);
+        $creditmemo = $this->creditmemoFactory->createByOrder($this->_order);
 
         $creditmemoServiceRefund = $this->creditmemoService->refund($creditmemo, true);
     }
