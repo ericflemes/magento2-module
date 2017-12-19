@@ -161,15 +161,8 @@ class Event
             ->setParentTransactionId($parentTransactionId)
             ->setIsTransactionClosed(1)
             ->registerRefundNotification($amount);
-        try {
-            $payment->save();
-            $creditmemo = $payment->getCreatedCreditmemo();
-            var_dump($creditmemo);
-            exit;
-        } catch (\Exception $e) {
-            var_dump($e->getMessage());
-        }
-        
+        $payment->save();
+        $creditmemo = $payment->getCreatedCreditmemo();
         if ($creditmemo) {
             $creditmemo->sendEmail();
             $this->_order
@@ -228,7 +221,7 @@ class Event
             ->setIsCustomerNotified(false)
             ->save();
     }
-
+    
     /**
      * Load and validate order, instantiate proper configuration
      *
