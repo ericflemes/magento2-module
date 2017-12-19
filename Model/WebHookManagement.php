@@ -50,7 +50,7 @@ class WebHookManagement implements WebHookManagementInterface
         ];
         $this->logger($array);
 
-        return $array;
+        return $summary;
     }
 
     protected function logger($array)
