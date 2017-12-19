@@ -3,6 +3,9 @@
     <event name="checkout_submit_all_after">
         <observer name="PayPalBR_PayPalPlus_Payment_Data" instance="PayPalBR\PayPalPlus\Observer\clearPaymentDataAfterSaveOrder"/>
     </event>
+    <event name="admin_system_config_changed_section_customer">
+        <observer name="PayPalBR_PayPalPlus_DataAssign" instance="PayPalBR\PayPalPlus\Observer\DataAssign" />
+    </event>
     <event name="admin_system_config_changed_section_payment">
         <observer name="PayPalBR_PayPalPlus_DataAssign" instance="PayPalBR\PayPalPlus\Observer\DataAssign" />
     </event>
