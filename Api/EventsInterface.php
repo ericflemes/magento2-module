@@ -8,15 +8,16 @@ namespace PayPalBR\PayPalPlus\Api;
  * @package    PayPalBR_PayPalPlus
  * @author Dev
  */
+use PayPal\Api\WebhookEvent;
 
-class EventsInterface
+interface EventsInterface
 {
     /**
      * Process the given $webhookEvent
      *
      * @param \PayPal\Api\WebhookEvent $webhookEvent
      */
-    public function processWebhookRequest(\PayPal\Api\WebhookEvent $webhookEvent);
+    public function processWebhookRequest(WebhookEvent $webhookEvent);
 
     /**
      * Get supported webhook events

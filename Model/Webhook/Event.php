@@ -9,6 +9,8 @@ namespace PayPalBR\PayPalPlus\Model\Webhook;
  * @author Dev
  */
 use PayPalBR\PayPalPlus\Api\EventsInterface;
+use Magento\Sales\Model\Order\CreditmemoFactory;
+use Magento\Sales\Model\Service\CreditmemoService;
 
 class Event implements EventsInterface
 {
@@ -54,12 +56,26 @@ class Event implements EventsInterface
      */
     protected $salesOrderFactory;
 
+    /**
+     * \Magento\Sales\Model\Order\CreditmemoFactory
+     */
+    protected $creditmemoFactory;
+
+    /**
+     * \Magento\Sales\Model\Service\CreditmemoService
+     */
+    protected $creditmemoService;
+
     public function __construct(
         \Magento\Sales\Model\Order\Payment\TransactionFactory $salesOrderPaymentTransactionFactory,
-        \Magento\Sales\Model\OrderFactory $salesOrderFactory
+        \Magento\Sales\Model\OrderFactory $salesOrderFactory,
+        CreditmemoFactory $creditmemoFactory,
+        CreditmemoService $creditmemoService
     ) {
         $this->salesOrderPaymentTransactionFactory = $salesOrderPaymentTransactionFactory;
         $this->salesOrderFactory = $salesOrderFactory;
+        $this->creditmemoFactory = $creditmemoFactory;
+        $this->creditmemoService = $creditmemoService;
     }
     /**
      * Process the given $webhookEvent
@@ -74,6 +90,8 @@ class Event implements EventsInterface
             $this->getOrder($webhookEvent);
             $this->{$this->eventTypeToHandler($webhookEvent->getEventType())}($webhookEvent);
         }
+
+        return $this;
     }
 
     /**
@@ -158,24 +176,17 @@ class Event implements EventsInterface
         $payment = $this->_order->getPayment();
         $amount = $paymentResource['amount']['total'];
         $transactionId = $paymentResource['id'];
-        $payment->setPreparedMessage('')
-            ->setTransactionId($transactionId)
-            ->setParentTransactionId($parentTransactionId)
-            ->setIsTransactionClosed(1)
-            ->registerRefundNotification($amount);
-        $payment->save();
-        $creditmemo = $payment->getCreatedCreditmemo();
-        if ($creditmemo) {
-            $creditmemo->sendEmail();
-            $this->_order
-                ->addStatusHistoryComment(
-                    __(
-                        'Notified customer about creditmemo #%1.',
-                        $creditmemo->getIncrementId()
-                    )
-                )->setIsCustomerNotified(true)
-                ->save();
-        }
+
+        $creditmemo = $this->creditmemoFactory->createByOrder($order);
+
+        $creditmemoServiceRefund = $this->creditmemoService->refund($creditmemo, true);
+    }
+
+    protected function createCreditMemo($order)
+    {
+        
+
+        return $creditmemoServiceRefund->getData();
     }
 
     /**
