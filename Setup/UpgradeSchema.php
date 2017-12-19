@@ -33,22 +33,22 @@ class UpgradeData implements UpgradeDataInterface
     {
         $dbVersion = $context->getVersion();
 
-       if (version_compare($dbVersion, '0.2.7', '<')) {
-
-           /** @var CustomerSetup $customerSetup */
-           $customerSetup = $this->customerSetupFactory->create(['setup' => $setup]);
-           $customerSetup->addAttribute(
-           'remembered_card',
-               [
-                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                    'label' => 'PayPalPlus Remembered Card',
+        if (version_compare($dbVersion, '0.2.7', '<')) {
+            $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
+            $eavSetup->addAttribute(
+                \Magento\Customer\Model\Customer::ENTITY,
+                'remembered_card',
+                [
+                    'type' => 'int',
+                    'label' => 'Remembered Card',
                     'input' => 'text',
-                    'backend' => 'PayPalBR\PayPalPlus\Model\Customer\Token'
-               ]
-           );
-           $customerSetup->getEavConfig()->getAttribute('customer', 'remembered_card')
-               ->setData('used_in_forms', ['adminhtml_customer'])
-               ->save();
-       }
+                    'required' => false,
+                    'default' => '0',
+                    'sort_order' => 100,
+                    'system' => false,
+                    'position' => 100
+                ]
+            );
+        }
     }
 }
