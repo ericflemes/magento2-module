@@ -2,7 +2,7 @@
 namespace PayPalBR\PayPalPlus\Model;
 
 use oauth;
-use PayPalBR\PayPalPlus\Model\Webhook\Event;
+use PayPalBR\PayPalPlus\Api\EventsInterface;
 use PayPalBR\PayPalPlus\Api\WebHookManagementInterface;
 
 class WebHookManagement implements WebHookManagementInterface
@@ -10,7 +10,7 @@ class WebHookManagement implements WebHookManagementInterface
     protected $eventWebhook;
 
     public function __construct(
-        Event $eventWebhook
+        EventsInterface $eventWebhook
     ) {
         $this->setEventWebhook($eventWebhook);
     }

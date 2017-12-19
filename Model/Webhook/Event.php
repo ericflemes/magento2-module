@@ -8,7 +8,9 @@ namespace PayPalBR\PayPalPlus\Model\Webhook;
  * @package    PayPalBR_PayPalPlus
  * @author Dev
  */
-class Event
+use PayPalBR\PayPalPlus\Api\EventsInterface;
+
+class Event implements EventsInterface
 {
     /**
      * Payment sale completed event type code
@@ -216,9 +218,13 @@ class Event
      */
     protected function riskDisputeCreated(\PayPal\Api\WebhookEvent $webhookEvent)
     {
-        //Add IPN comment about registered dispute
-        $this->_order->addStatusHistoryComment($webhookEvent->getSummary())
-            ->setIsCustomerNotified(false)
+        $this->_order->setStatus(\Magento\Paypal\Model\Info::ORDER_STATUS_REVERSED);
+        $this->_order->save();
+        $this->_order
+            ->addStatusHistoryComment(
+                $webhookEvent->getSummary(),
+                \Magento\Paypal\Model\Info::ORDER_STATUS_REVERSED
+            )->setIsCustomerNotified(false)
             ->save();
     }
     
