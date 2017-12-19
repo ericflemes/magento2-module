@@ -14,36 +14,44 @@ class Event
      * Payment sale completed event type code
      */
     const PAYMENT_SALE_COMPLETED = 'PAYMENT.SALE.COMPLETED';
+
     /**
      * Payment sale pending  event type code
      */
     const PAYMENT_SALE_PENDING = 'PAYMENT.SALE.PENDING';
+
     /**
      * Payment sale refunded event type
      */
     const PAYMENT_SALE_REFUNDED = 'PAYMENT.SALE.REFUNDED';
+
     /**
      * Payment sale reversed event type code
      */
     const PAYMENT_SALE_REVERSED = 'PAYMENT.SALE.REVERSED';
+
     /**
      * Risk dispute created event type code
      */
     const RISK_DISPUTE_CREATED = 'RISK.DISPUTE.CREATED';
+
     /**
      * Store order instance
      *
      * @var \Magento\Sales\Model\Order
      */
     protected $_order = null;
+
     /**
      * @var \Magento\Sales\Model\Order\Payment\TransactionFactory
      */
     protected $salesOrderPaymentTransactionFactory;
+
     /**
      * @var \Magento\Sales\Model\OrderFactory
      */
     protected $salesOrderFactory;
+
     public function __construct(
         \Magento\Sales\Model\Order\Payment\TransactionFactory $salesOrderPaymentTransactionFactory,
         \Magento\Sales\Model\OrderFactory $salesOrderFactory
@@ -106,14 +114,14 @@ class Event
     protected function paymentSaleCompleted(\PayPal\Api\WebhookEvent $webhookEvent)
     {
         $paymentResource = $webhookEvent->getResource();
-        $parentTransactionId = $paymentResource->parent_payment;
+        $parentTransactionId = $paymentResource['parent_payment'];
         $payment = $this->_order->getPayment();
-        $payment->setTransactionId($paymentResource->id)
-            ->setCurrencyCode($paymentResource->amount->currency)
+        $payment->setTransactionId($paymentResource['id'])
+            ->setCurrencyCode($paymentResource['amount']['currency'])
             ->setParentTransactionId($parentTransactionId)
             ->setIsTransactionClosed(true)
             ->registerCaptureNotification(
-                $paymentResource->amount->total,
+                $paymentResource['amount']['total'],
                 true
             );
         $this->_order->save();
@@ -139,11 +147,11 @@ class Event
     protected function paymentSaleRefunded(\PayPal\Api\WebhookEvent $webhookEvent)
     {
         $paymentResource = $webhookEvent->getResource();
-        $parentTransactionId = $paymentResource->parent_payment;
+        $parentTransactionId = $paymentResource['parent_payment'];
         /** @var \Magento\Sales\Model\Order\Payment $payment */
         $payment = $this->_order->getPayment();
-        $amount = $paymentResource->amount->total;
-        $transactionId = $paymentResource->id;
+        $amount = $paymentResource['amount']['total'];
+        $transactionId = $paymentResource['id'];
         $payment->setPreparedMessage('')
             ->setTransactionId($transactionId)
             ->setParentTransactionId($parentTransactionId)
@@ -173,7 +181,7 @@ class Event
         $paymentResource = $webhookEvent->getResource();
         $this->_order->getPayment()
             ->setPreparedMessage($webhookEvent->getSummary())
-            ->setTransactionId($paymentResource->id)
+            ->setTransactionId($paymentResource['id'])
             ->setIsTransactionClosed(0)
             ->registerPaymentReviewAction(\Magento\Sales\Model\Order\Payment::REVIEW_ACTION_UPDATE, false);
         $this->_order->save();
@@ -220,13 +228,14 @@ class Event
             if (!$resource) {
                 throw new \Exception('Event resource not found.');
             }
-            $transactionId = $resource->id;
+            $transactionId = $resource['id'];
             $transaction = $this->salesOrderPaymentTransactionFactory->create()->load($transactionId, 'txn_id');
             $this->_order = $this->salesOrderFactory->create()->load($transaction->getOrderId());
             if (!$this->_order->getId()) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Order not found.'));
             }
         }
+
         return $this->_order;
     }
 }

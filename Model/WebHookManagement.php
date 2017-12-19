@@ -2,9 +2,18 @@
 namespace PayPalBR\PayPalPlus\Model;
 
 use oauth;
+use PayPalBR\PayPalPlus\Model\Webhook\Event;
+use PayPalBR\PayPalPlus\Api\WebHookManagementInterface;
 
-class WebHookManagement
+class WebHookManagement implements WebHookManagementInterface
 {
+    protected $eventWebhook;
+
+    public function __construct(
+        Event $eventWebhook
+    ) {
+        $this->setEventWebhook($eventWebhook);
+    }
 
     /**
     * {@inheritdoc}
@@ -15,6 +24,19 @@ class WebHookManagement
         if (! $id) {
             return false;
         }
+
+        $webhookApi = new \PayPal\Api\WebhookEvent;
+
+        $webhookApi
+            ->setId($id)
+            ->setCreateTime($create_time)
+            ->setResourceType($resource_type)
+            ->setEventType($event_type)
+            ->setSummary($summary)
+            ->setResource($resource)
+            ->setLinks($links);
+
+        $this->getEventWebhook()->processWebhookRequest($webhookApi);
 
         $array = [
             'id' => $id,
@@ -37,5 +59,25 @@ class WebHookManagement
         $logger = new \Zend\Log\Logger();
         $logger->addWriter($writer);
         $logger->info($array);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEventWebhook()
+    {
+        return $this->eventWebhook;
+    }
+
+    /**
+     * @param mixed $eventWebhook
+     *
+     * @return self
+     */
+    public function setEventWebhook($eventWebhook)
+    {
+        $this->eventWebhook = $eventWebhook;
+
+        return $this;
     }
 }
