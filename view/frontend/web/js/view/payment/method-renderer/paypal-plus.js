@@ -39,11 +39,11 @@ define([
         isPaymentReady: false,
 
         getNamePay: function(){
-            return "Pay Pal Plus " + window.checkoutConfig.payment.paypalbr_paypalplus.exibitionName;
+            return "Cartão de Crédito " + window.checkoutConfig.payment.paypalbr_paypalplus.exibitionName;
         },
 
         paypalObject: {},
-        
+
         initialize: function () {
 
             fullScreenLoader.startLoader();
