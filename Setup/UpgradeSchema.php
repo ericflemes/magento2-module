@@ -34,21 +34,31 @@ class UpgradeData implements UpgradeDataInterface
         $dbVersion = $context->getVersion();
 
         if (version_compare($dbVersion, '0.2.7', '<')) {
-            $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
-            $eavSetup->addAttribute(
-                \Magento\Customer\Model\Customer::ENTITY,
-                'remembered_card',
+            $customerSetup = $this->customerSetupFactory->create(['setup' => $setup]);
+            $setup->startSetup();
+
+            $attributeCode = "remembered_card";
+
+            $customerSetup->removeAttribute(\Magento\Customer\Model\Customer::ENTITY, $attributeCode);
+
+
+            $customerSetup->addAttribute(
+                'customer',
+                'remembered_card', 
                 [
-                    'type' => 'int',
                     'label' => 'Remembered Card',
-                    'input' => 'text',
+                    'type' => 'text',
+                    'frontend_input' => 'text',
                     'required' => false,
-                    'default' => '0',
-                    'sort_order' => 100,
-                    'system' => false,
-                    'position' => 100
+                    'visible' => false,
+                    'system'=> 0,
+                    'position' => 105,
                 ]
             );
+
+            $loyaltyAttribute = $customerSetup->getEavConfig()->getAttribute('customer', 'remembered_card');
+            $loyaltyAttribute->setData('used_in_forms',['adminhtml_customer']);
+            $loyaltyAttribute->save();
         }
     }
 }
