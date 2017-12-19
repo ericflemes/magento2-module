@@ -40,6 +40,11 @@ class Event implements EventsInterface
     const RISK_DISPUTE_CREATED = 'RISK.DISPUTE.CREATED';
 
     /**
+     * Risk dispute created event type code
+     */
+    const RISK_DISPUTE_CREATED = 'CUSTOMER.DISPUTE.CREATED';
+
+    /**
      * Store order instance
      *
      * @var \Magento\Sales\Model\Order
@@ -106,6 +111,7 @@ class Event implements EventsInterface
             self::PAYMENT_SALE_PENDING,
             self::PAYMENT_SALE_REFUNDED,
             self::PAYMENT_SALE_REVERSED,
+            self::RISK_DISPUTE_CREATED,
             self::RISK_DISPUTE_CREATED
         );
     }
@@ -238,6 +244,23 @@ class Event implements EventsInterface
             )->setIsCustomerNotified(false)
             ->save();
     }
+
+    /**
+     * Add risk dispute to order comment
+     *
+     * @param \PayPal\Api\WebhookEvent $webhookEvent
+     */
+    protected function customerDisputeCreated(\PayPal\Api\WebhookEvent $webhookEvent)
+    {
+        $this->_order->setStatus(\Magento\Paypal\Model\Info::ORDER_STATUS_REVERSED);
+        $this->_order->save();
+        $this->_order
+            ->addStatusHistoryComment(
+                $webhookEvent->getSummary(),
+                \Magento\Paypal\Model\Info::ORDER_STATUS_REVERSED
+            )->setIsCustomerNotified(false)
+            ->save();
+    }
     
     /**
      * Load and validate order, instantiate proper configuration
@@ -253,7 +276,13 @@ class Event implements EventsInterface
             if (!$resource) {
                 throw new \Exception('Event resource not found.');
             }
-            $transactionId = $resource['id'];
+            $type = $webhookEvent->getEventType();
+            if ($type == 'payment') {
+                $transactionId = $resource['id'];
+            }elseif ($type == 'dispute') {
+                $transactionId = $resource['id'];
+            }
+            
             $transaction = $this->salesOrderPaymentTransactionFactory->create()->load($transactionId, 'txn_id');
             $this->_order = $this->salesOrderFactory->create()->load($transaction->getOrderId());
             if (!$this->_order->getId()) {
