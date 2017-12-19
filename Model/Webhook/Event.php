@@ -42,7 +42,7 @@ class Event implements EventsInterface
     /**
      * Risk dispute created event type code
      */
-    const RISK_DISPUTE_CREATED = 'CUSTOMER.DISPUTE.CREATED';
+    const CUSTOMER_DISPUTE_CREATED = 'CUSTOMER.DISPUTE.CREATED';
 
     /**
      * Store order instance
@@ -112,7 +112,7 @@ class Event implements EventsInterface
             self::PAYMENT_SALE_REFUNDED,
             self::PAYMENT_SALE_REVERSED,
             self::RISK_DISPUTE_CREATED,
-            self::RISK_DISPUTE_CREATED
+            self::CUSTOMER_DISPUTE_CREATED
         );
     }
 
@@ -277,9 +277,11 @@ class Event implements EventsInterface
                 throw new \Exception('Event resource not found.');
             }
             $type = $webhookEvent->getEventType();
-            if ($type == 'payment') {
-                $transactionId = $resource['id'];
-            }elseif ($type == 'dispute') {
+            if ($type == 'CUSTOMER.DISPUTE.CREATED') {
+                $transactionId = $resource['disputed_transactions'][0]['seller_transaction_id'];
+            }elseif ($type == 'RISK.DISPUTE.CREATED') {
+                $transactionId = $resource['seller_payment_id'];
+            }else{
                 $transactionId = $resource['id'];
             }
             
