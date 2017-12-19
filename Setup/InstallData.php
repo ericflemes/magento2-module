@@ -42,30 +42,7 @@ class InstallData implements InstallDataInterface
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
 
-        /** @var CustomerSetup $customerSetup */
-        $customerSetup = $this->customerSetupFactory->create(['setup' => $setup]);
 
-        $customerEntity = $customerSetup->getEavConfig()->getEntityType('customer');
-        $attributeSetId = $customerEntity->getDefaultAttributeSetId();
-
-        /** @var $attributeSet AttributeSet */
-        $attributeSet = $this->attributeSetFactory->create();
-        $attributeGroupId = $attributeSet->getDefaultGroupId($attributeSetId);
-
-        $customerSetup->addAttribute(Customer::ENTITY, 'remembered_card', [
-            'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            'label' => 'PayPalPlus Remembered Card',
-            'input' => 'text',
-            'backend' => 'PayPalBR\PayPalPlus\Model\Customer\Token'
-        ]);
-
-        $attribute = $customerSetup->getEavConfig()->getAttribute(Customer::ENTITY, 'remembered_card')
-        ->addData([
-            'attribute_set_id' => $attributeSetId,
-            'attribute_group_id' => $attributeGroupId
-        ]);
-
-        $attribute->save();
 
 
     }
