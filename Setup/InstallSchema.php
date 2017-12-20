@@ -28,10 +28,13 @@ class InstallSchema implements \Magento\Framework\Setup\InstallSchemaInterface
             $installer->getTable('customer_eav_attribute'),
             'remembered_card',
             [
-                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                'label' => 'PayPalPlus Remembered Card',
-                'input' => 'text',
-                'backend' => 'PayPalBR\PayPalPlus\Model\Customer\Token'
+                   'label' => 'Remembered Card',
+                    'type' => 'text',
+                    'frontend_input' => 'text',
+                    'required' => false,
+                    'visible' => false,
+                    'system'=> 0,
+                    'position' => 105,
             ]
         );
 

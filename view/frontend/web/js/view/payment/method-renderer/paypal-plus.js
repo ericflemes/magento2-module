@@ -142,9 +142,10 @@ define([
                         var message = {
                             message: JSON.stringify(err.cause)
                         };
-                        that.messageContainer.addErrorMessage(message);
                         alert("Ocorreu um erro no pagamento , tente novamente.");
-                        location.reload();
+                        that.messageContainer.addErrorMessage(message);
+
+
                     }
                 }
             );
