@@ -88,7 +88,7 @@ define([
                     "country": "BR",
                     "enableContinue": "continueButton",
                     "disableContinue": "continueButton",
-                    "iframeHeight": "400",
+                    "iframeHeight": "420",
 
                     /**
                      * Do stuff after iframe is loaded

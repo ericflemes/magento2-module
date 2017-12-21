@@ -18,7 +18,7 @@ class GeneralHandler extends AbstractHandler implements HandlerInterface
     	foreach ($transactions as $id => $transaction) {
     		foreach ($transaction->getRelatedResources() as $id => $relatedResources) {
     			$sale = $relatedResources->getSale();
-                if ($sale->getState() == 'approved') {
+                if ($sale->getState() == 'approved' || $sale->getState() == 'completed') {
                     $parentTransactionId = $payment->getAdditionalInformation('pay_id');
                     $payment
                         ->setTransactionId($sale->getId())
