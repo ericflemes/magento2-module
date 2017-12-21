@@ -353,6 +353,7 @@ class PaypalPlusApi
     protected function createAndGetPayment()
     {
         $apiContext = $this->getApiContext();
+
         $payer = $this->getPayer();
         $redirectUrls = $this->getRedirectUrls();
         $transaction = $this->getTransaction();
@@ -362,6 +363,9 @@ class PaypalPlusApi
         $payment->setPayer($payer);
         $payment->setRedirectUrls($redirectUrls);
         $payment->addTransaction($transaction);
+
+        //reset request ID
+        // $apiContext->resetRequestId();
 
         /** @var \PayPal\Api\Payment $paypalPayment */
         $paypalPayment = $payment->create($apiContext);
@@ -451,8 +455,12 @@ class PaypalPlusApi
      */
     protected function restoreAndGetPayment()
     {
+        $payment = new \PayPal\Api\Payment();
         $paypalPaymentId = $this->checkoutSession->getPaypalPaymentId();
         $apiContext = $this->getApiContext();
+
+        $teste = $apiContext->resetRequestId();
+
         $paypalPayment = \PayPal\Api\Payment::get($paypalPaymentId, $apiContext);
         return $paypalPayment;
     }

@@ -325,7 +325,7 @@ class RequestBuilder implements BuilderInterface
         $itemListPatch
             ->setOp('add')
             ->setPath('/transactions/0/invoice_number')
-            ->setValue('1');
+            ->setValue('12');
         $patchRequest->addPatch($itemListPatch);
 
         $description = new \PayPal\Api\Patch();

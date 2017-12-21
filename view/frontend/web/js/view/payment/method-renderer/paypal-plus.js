@@ -72,6 +72,7 @@ define([
             var customerData = window.checkoutConfig.customerData;
             var mode = window.checkoutConfig.payment.paypalbr_paypalplus.mode === "1" ? 'sandbox' : 'live';
 
+
             this.paypalObject = PAYPAL.apps.PPP(
                 {
                     "approvalUrl": approvalUrl,
@@ -79,7 +80,7 @@ define([
                     "mode": mode,
                     "payerFirstName": customerData.firstname,
                     "payerLastName": customerData.lastname,
-                    "payerPhone": "05511998548609",
+                    "payerPhone": "055"+customerData.addresses[0].telephone,
                     "payerEmail": customerData.email,
                     "payerTaxId": customerData.taxvat,
                     "payerTaxIdType": "BR_CPF",
@@ -87,7 +88,7 @@ define([
                     "country": "BR",
                     "enableContinue": "continueButton",
                     "disableContinue": "continueButton",
-                    "iframeHeight": "500",
+                    "iframeHeight": "400",
 
                     /**
                      * Do stuff after iframe is loaded
@@ -141,8 +142,9 @@ define([
                         var message = {
                             message: JSON.stringify(err.cause)
                         };
-                        //Display response error
                         that.messageContainer.addErrorMessage(message);
+                        alert("Ocorreu um erro no pagamento , tente novamente.");
+                        location.reload();
                     }
                 }
             );
@@ -155,7 +157,7 @@ define([
             fullScreenLoader.startLoader();
             storage.post(serviceUrl, '')
             .done(function (response) {
-                //console.log(response);
+                console.log(response);
                 $('#paypalbr_paypalplus_payId').val(response.id);
                 for (var i = 0; i < response.links.length; i++) {
                     if (response.links[i].rel == 'approval_url') {
