@@ -72,11 +72,21 @@ define([
             var telephone = '';
             var customerData = window.checkoutConfig.customerData;
             var mode = window.checkoutConfig.payment.paypalbr_paypalplus.mode === "1" ? 'sandbox' : 'live';
-            if (customerData.addresses.indexOf() == '-1' ) {
-                telephone = '0000000000';
-            }else{
+            if (typeof customerData.indexOf == 'undefined') {
                 telephone = customerData.addresses[0].telephone;
+            }else{
+               if (customerData.indexOf() == '-1') {
+                telephone = '0000000000';
+                }else{
+                    if (customerData.addresses.indexOf() == '-1' ) {
+                        telephone = '0000000000';
+                    }else{
+                        telephone = customerData.addresses[0].telephone;
+                    }
+                } 
             }
+            
+            
 
             this.paypalObject = PAYPAL.apps.PPP(
                 {
