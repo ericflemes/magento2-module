@@ -72,7 +72,7 @@ define([
             var telephone = '';
             var customerData = window.checkoutConfig.customerData;
             var mode = window.checkoutConfig.payment.paypalbr_paypalplus.mode === "1" ? 'sandbox' : 'live';
-            if (typeof customerData.addresses[0].telephone === 'undefined' ) {
+            if (typeof customerData.addresses.indexOf() === '-1' ) {
                 telephone = '0000000000';
             }else{
                 telephone = customerData.addresses[0].telephone;
