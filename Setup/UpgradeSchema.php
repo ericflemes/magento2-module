@@ -29,8 +29,10 @@ class UpgradeData implements UpgradeDataInterface
      * @param ModuleContextInterface $context
      * @return void
      */
-    public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
-    {
+    public function upgrade(
+        ModuleDataSetupInterface $setup, 
+        ModuleContextInterface $context
+    ){
         $dbVersion = $context->getVersion();
 
         if (version_compare($dbVersion, '0.2.7', '<')) {
@@ -60,5 +62,23 @@ class UpgradeData implements UpgradeDataInterface
             $loyaltyAttribute->setData('used_in_forms',['adminhtml_customer']);
             $loyaltyAttribute->save();
         }
+
+        if (version_compare($context->getVersion(), "0.2.10", "<")) {
+            $setup = $this->updateVersionZeroTwoTen($setup);
+        }
+    }
+
+    protected function updateVersionZeroTwoTen($setup)
+    {
+        $tableName = $setup->getTable('sales_order_status_state');
+
+        if ($setup->getConnection()->isTableExists($tableName) == true) {
+            $connection = $setup->getConnection();
+            $where = ['state = ?' => 'pending_payment'];
+            $data = ['visible_on_front' => 1];
+            $connection->update($tableName, $data, $where);
+        }
+
+        return $setup;
     }
 }
