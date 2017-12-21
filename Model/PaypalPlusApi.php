@@ -365,7 +365,7 @@ class PaypalPlusApi
         $payment->addTransaction($transaction);
 
         //reset request ID
-        $apiContext->resetRequestId();
+        // $apiContext->resetRequestId();
 
         /** @var \PayPal\Api\Payment $paypalPayment */
         $paypalPayment = $payment->create($apiContext);
@@ -459,9 +459,7 @@ class PaypalPlusApi
         $paypalPaymentId = $this->checkoutSession->getPaypalPaymentId();
         $apiContext = $this->getApiContext();
 
-
         $teste = $apiContext->resetRequestId();
-        die(print_r($teste));
 
         $paypalPayment = \PayPal\Api\Payment::get($paypalPaymentId, $apiContext);
         return $paypalPayment;
@@ -479,8 +477,6 @@ class PaypalPlusApi
             else {
                 $paypalPayment = $this->restoreAndGetPayment();
             }
-            //print_r($paypalPayment);
-            //die;
 
             $result = [
                 'status' => 'success',
