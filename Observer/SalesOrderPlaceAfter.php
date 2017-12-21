@@ -7,14 +7,21 @@ use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Checkout\Model\Session;
 use Psr\Log\LoggerInterface;
 use Magento\Sales\Model\Service\OrderService;
-use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\CustomerFactory;
+use Magento\Customer\Model\SessionFactory;
+
 
 
 class SalesOrderPlaceAfter implements ObserverInterface
 {
 
-    /** @var CustomerRepositoryInterface */
-    protected $customerRepository;
+
+
+    /** session factory */
+    protected $_session;
+
+    /** @var CustomerFactoryInterface */
+    protected $_customerFactory;
     /**
      * @var \Magento\Checkout\Model\Session
      */
@@ -39,12 +46,14 @@ class SalesOrderPlaceAfter implements ObserverInterface
         Session $checkoutSession,
         LoggerInterface $logger,
         OrderService $orderService,
-        CustomerRepositoryInterface $customerRepository
+        CustomerFactory $customerFactory,
+        SessionFactory $sessionFactory
     ) {
         $this->setCheckoutSession($checkoutSession);
         $this->setLogger($logger);
         $this->setOrderService($orderService);
-        $this->customerRepository = $customerRepository;
+        $this->_customerFactory = $customerFactory;
+        $this->sessionFactory = $sessionFactory;
     }
 
     /**
@@ -60,8 +69,15 @@ class SalesOrderPlaceAfter implements ObserverInterface
         $status = $payment->getAdditionalInformation('state_payPal');
         $r_card = $payment->getAdditionalInformation('remebered_card');
 
-        $customer->setCustomAttribute('remembered_card', $r_card);
-        $this->customerRepository->save($customer);
+        $customerSession = $this->sessionFactory->create();
+        if ($customerSession->isLoggedIn()) {
+
+                $customerData = $order->getCustomerId();
+                $customer = $this->_customerFactory->create()->load($customerData);
+                $customer->setCustomAttribute('remebered_card', $r_card);
+                //$customer->updateData($customerData);
+                $customer->save();
+        }
 
         if ($order->canCancel() && $status == 'failed') {
             $result = $this->cancelOrder($order);

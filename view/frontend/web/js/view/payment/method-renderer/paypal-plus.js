@@ -147,6 +147,7 @@ define([
                         var message = {
                             message: JSON.stringify(err.cause)
                         };
+                        console.log(message);
                         alert("Ocorreu um erro no pagamento , tente novamente.");
                         that.messageContainer.addErrorMessage(message);
 
