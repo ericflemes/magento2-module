@@ -264,7 +264,7 @@ class ConfigProvider
     {
         $telephone = $this->scopeConfig->getValue(self::XML_CUSTOMER_TEL, ScopeInterface::SCOPE_STORE);
 
-        return $customerTaxShow == 'req';
+        return $telephone == 'req';
     }
 
     /**
