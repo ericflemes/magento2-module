@@ -62,6 +62,12 @@ class ConfigProvider
      */
     const XML_CUSTOMER_TAX_SHOW = 'customer/address/taxvat_show';
 
+
+        /**
+     * Contains the configuration path for showing telephone
+     */
+    const XML_CUSTOMER_TEL = 'customer/address/telephone_show';
+
     /**
      * Contains the base currency of the store
      */
@@ -249,6 +255,18 @@ class ConfigProvider
         return $customerTaxShow == 'req';
     }
 
+        /**
+     * Checks if customer tax number is required or not.
+     *
+     * @return bool
+     */
+    public function isTelephoneSet()
+    {
+        $telephone = $this->scopeConfig->getValue(self::XML_CUSTOMER_TEL, ScopeInterface::SCOPE_STORE);
+
+        return $customerTaxShow == 'req';
+    }
+
     /**
      * Deactivates module
      *
@@ -280,4 +298,7 @@ class ConfigProvider
     {
         return $this->getCurrencyBase() == 'BRL';
     }
+
+
+
 }

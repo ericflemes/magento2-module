@@ -41,6 +41,13 @@ class DataAssign implements ObserverInterface
         $disableModule = false;
         $disableMessage = "";
 
+
+
+        if(! $this->configProvider->isTelephoneSet()){
+            $disableModule = true;
+            $disableMessage = __('Identificamos que a sua loja não possui um telefone ativo, favor habilitar para ativar o módulo');
+        }
+
         if($this->configProvider->isActive() == true && ! $this->configProvider->isCustomerTaxRequired() ){
            $disableModule = true;
             $disableMessage = __('Identificamos que a sua loja não possui suporte para CPF/CNPJ (TAXVAT). Para adicionar o suporte, acesse <<hyperlink>> e vá em Loja->Configurações->Clientes->Opções de nome e  endereço->Mostrar número TAX/VAT.');
