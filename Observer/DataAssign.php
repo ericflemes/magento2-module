@@ -42,7 +42,10 @@ class DataAssign implements ObserverInterface
         $disableMessage = "";
 
 
-
+        if($this->configProvider->isStoreFrontActive() == false){
+            $disableModule = true;
+            $disableMessage = __('Identificamos que a sua loja não possui está ativo (TAXVAT) para usuários GUEST. Para adicionar o suporte, acesse <<hyperlink>> ou vá em Clientes->Configurações de Clientes->Criar Nova Conta Para Clientes->Mostrar número VAT em frontend.');
+        }
         if(! $this->configProvider->isTelephoneSet()){
             $disableModule = true;
             $disableMessage = __('Identificamos que a sua loja não possui um telefone ativo, favor habilitar para ativar o módulo');

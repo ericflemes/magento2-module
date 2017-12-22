@@ -78,6 +78,14 @@ class ConfigProvider
      */
     const XML_PATH_DEBUG_STATUS = 'payment/paypalbr_paypalplus/depuration_mode';
 
+
+    /**
+     * Contains the view TAx in store front
+     */
+    const XML_PATH_TAX_VIEW = 'customer/create_account/vat_frontend_visibility';
+
+
+
     /**
      * ConfigProvider constructor.
      *
@@ -226,6 +234,21 @@ class ConfigProvider
             throw new \Exception("Could not determine which mode is used!");
         }
         return $secretId;
+    }
+
+        /**
+     * Returns if the store front is activate
+     *
+     * This configuration uses \Magento\Config\Model\Config\Source\Yesno as backend.
+     * 1 is for YES, and 0 is for NO.
+     *
+     * @return bool
+     */
+    public function isStoreFrontActive()
+    {
+        $active = $this->scopeConfig->getValue(self::XML_PATH_TAX_VIEW, ScopeInterface::SCOPE_STORE);
+
+        return $active == 1;
     }
 
     /**

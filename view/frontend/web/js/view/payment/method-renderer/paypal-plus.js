@@ -38,6 +38,7 @@ define([
         paymentApiServiceUrl: 'paypalplus/payment',
         isPaymentReady: false,
 
+
         getNamePay: function(){
             return "Cartão de Crédito " + window.checkoutConfig.payment.paypalbr_paypalplus.exibitionName;
         },
@@ -70,34 +71,39 @@ define([
         runPayPal: function(approvalUrl) {
             var self = this;
             var telephone = '';
+
             var customerData = window.checkoutConfig.customerData;
+
             var mode = window.checkoutConfig.payment.paypalbr_paypalplus.mode === "1" ? 'sandbox' : 'live';
-            if (typeof customerData.indexOf == 'undefined') {
-                telephone = customerData.addresses[0].telephone;
-            }else{
-               if (customerData.indexOf() == '-1') {
-                telephone = '0000000000';
-                }else{
-                    if (customerData.addresses.indexOf() == '-1' ) {
-                        telephone = '0000000000';
-                    }else{
-                        telephone = customerData.addresses[0].telephone;
-                    }
-                } 
+
+            var isEmpty = true;
+            for (var i in customerData) {
+                if(customerData.hasOwnProperty(i)) {
+                    isEmpty = false;
+                }
             }
-            
-            
+            if(isEmpty){
+                telephone =    quote.shippingAddress().telephone;
+            }else{
+                telephone =    customerData.addresses[0].telephone;
+            }
+
+            var firstName = customerData.firstname ? customerData.firstname : quote.shippingAddress().firstname;
+            var lastName = customerData.lastname ? customerData.lastname : quote.shippingAddress().lastname;
+            var email = customerData.email ? customerData.email : quote.guestEmail;
+            var taxVat = customerData.taxvat ? customerData.taxvat : quote.shippingAddress().vatId;
+
 
             this.paypalObject = PAYPAL.apps.PPP(
                 {
                     "approvalUrl": approvalUrl,
                     "placeholder": "ppplus",
                     "mode": mode,
-                    "payerFirstName": customerData.firstname,
-                    "payerLastName": customerData.lastname,
+                    "payerFirstName": firstName,
+                    "payerLastName": lastName,
                     "payerPhone": "055"+telephone,
-                    "payerEmail": customerData.email,
-                    "payerTaxId": customerData.taxvat,
+                    "payerEmail": email,
+                    "payerTaxId": taxVat,
                     "payerTaxIdType": "BR_CPF",
                     "language": "pt_BR",
                     "country": "BR",
