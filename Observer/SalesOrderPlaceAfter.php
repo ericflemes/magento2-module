@@ -9,8 +9,7 @@ use Psr\Log\LoggerInterface;
 use Magento\Sales\Model\Service\OrderService;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\SessionFactory;
-
-
+use Magento\Customer\Api\CustomerRepositoryInterface;
 
 class SalesOrderPlaceAfter implements ObserverInterface
 {
@@ -38,6 +37,11 @@ class SalesOrderPlaceAfter implements ObserverInterface
     protected $orderService;
 
     /**
+     * \Magento\Customer\Api\CustomerRepositoryInterface
+     */
+    protected $customerRepository;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Psr\Log\LoggerInterface $logger
      * @param Api $api
@@ -47,13 +51,15 @@ class SalesOrderPlaceAfter implements ObserverInterface
         LoggerInterface $logger,
         OrderService $orderService,
         CustomerFactory $customerFactory,
-        SessionFactory $sessionFactory
+        SessionFactory $sessionFactory,
+        CustomerRepositoryInterface $customerRepository
     ) {
         $this->setCheckoutSession($checkoutSession);
         $this->setLogger($logger);
         $this->setOrderService($orderService);
         $this->_customerFactory = $customerFactory;
         $this->sessionFactory = $sessionFactory;
+        $this->customerRepository = $customerRepository;
     }
 
     /**
@@ -70,13 +76,17 @@ class SalesOrderPlaceAfter implements ObserverInterface
         $r_card = $payment->getAdditionalInformation('remebered_card');
 
         $customerSession = $this->sessionFactory->create();
-        if ($customerSession->isLoggedIn()) {
-
-                $customerData = $order->getCustomerId();
-                $customer = $this->_customerFactory->create()->load($customerData);
-                $customer->setCustomAttribute('remebered_card', $r_card);
-                //$customer->updateData($customerData);
-                $customer->save();
+        if ($customerSession->isLoggedIn()) 
+        {
+            $customer = $customerSession->getCustomer();
+            $customer = $this->customerRepository->getById($customer->getId());
+            $customer->getCustomAttribute('remebered_card');
+            $customer->setCustomAttribute('remebered_card',$r_card);
+            try {                
+                $customer = $this->customerRepository->save($customer);
+            }catch (Exception $e) {
+                return $e->getMessage();
+            }
         }
 
         if ($order->canCancel() && $status == 'failed') {

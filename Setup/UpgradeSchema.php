@@ -35,36 +35,13 @@ class UpgradeData implements UpgradeDataInterface
     ){
         $dbVersion = $context->getVersion();
 
-        if (version_compare($dbVersion, '0.2.7', '<')) {
-            $customerSetup = $this->customerSetupFactory->create(['setup' => $setup]);
-            $setup->startSetup();
-
-            $attributeCode = "remembered_card";
-
-            $customerSetup->removeAttribute(\Magento\Customer\Model\Customer::ENTITY, $attributeCode);
-
-
-            $customerSetup->addAttribute(
-                'customer',
-                'remembered_card', 
-                [
-                    'label' => 'Remembered Card',
-                    'type' => 'text',
-                    'frontend_input' => 'text',
-                    'required' => false,
-                    'visible' => false,
-                    'system'=> 0,
-                    'position' => 105,
-                ]
-            );
-
-            $loyaltyAttribute = $customerSetup->getEavConfig()->getAttribute('customer', 'remembered_card');
-            $loyaltyAttribute->setData('used_in_forms',['adminhtml_customer']);
-            $loyaltyAttribute->save();
-        }
-
         if (version_compare($context->getVersion(), "0.2.10", "<")) {
             $setup = $this->updateVersionZeroTwoTen($setup);
+        }
+
+        if (version_compare($dbVersion, '0.3.3', '<')) {
+            $setup = $this->updateVersionZeroTreeTree($setup);
+            
         }
     }
 
@@ -78,6 +55,42 @@ class UpgradeData implements UpgradeDataInterface
             $data = ['visible_on_front' => 1];
             $connection->update($tableName, $data, $where);
         }
+
+        return $setup;
+    }
+
+    protected function updateVersionZeroTreeTree($setup)
+    {
+        $setup->startSetup();
+
+        $tableName = $setup->getTable('sales_order_status_state');
+        $customerSetup = $this->customerSetupFactory->create(['setup' => $setup]);
+        $attributeCode = 'remembered_card';
+        $customerSetup->removeAttribute(\Magento\Customer\Model\Customer::ENTITY, $attributeCode);
+        $customerSetup->addAttribute(
+            'customer',
+            'remembered_card', 
+            [
+                'label' => 'Remembered Card',
+                'type' => 'text',
+                'frontend_input' => 'text',
+                'required' => false,
+                'visible' => false,
+                'system'=> true,
+                'position' => 105,
+                'sort_order' => 100,
+                'user_defined' => true,
+            ]
+        );
+
+        $eavConfig = $customerSetup->getEavConfig()->getAttribute('customer', 'remembered_card');
+        $eavConfig->setData('used_in_forms',['adminhtml_customer']);
+        $eavConfig->addData([
+            'attribute_set_id' => 1,
+            'attribute_group_id' => 1
+        ]);
+        $eavConfig->save();
+        $setup->endSetup();
 
         return $setup;
     }

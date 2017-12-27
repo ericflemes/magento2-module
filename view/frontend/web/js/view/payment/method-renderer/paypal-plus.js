@@ -71,17 +71,15 @@ define([
         runPayPal: function(approvalUrl) {
             var self = this;
             var telephone = '';
-
             var customerData = window.checkoutConfig.customerData;
-
             var mode = window.checkoutConfig.payment.paypalbr_paypalplus.mode === "1" ? 'sandbox' : 'live';
-
             var isEmpty = true;
             for (var i in customerData) {
                 if(customerData.hasOwnProperty(i)) {
                     isEmpty = false;
                 }
             }
+
             if(isEmpty){
                 telephone =    quote.shippingAddress().telephone;
             }else{
@@ -92,7 +90,6 @@ define([
             var lastName = customerData.lastname ? customerData.lastname : quote.shippingAddress().lastname;
             var email = customerData.email ? customerData.email : quote.guestEmail;
             var taxVat = customerData.taxvat ? customerData.taxvat : quote.shippingAddress().vatId;
-
 
             this.paypalObject = PAYPAL.apps.PPP(
                 {
