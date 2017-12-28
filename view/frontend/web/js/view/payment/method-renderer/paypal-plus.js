@@ -46,7 +46,7 @@ define([
         paypalObject: {},
 
         initialize: function () {
-
+            
             fullScreenLoader.startLoader();
             this._super();
             this._render();
@@ -69,10 +69,20 @@ define([
         },
 
         runPayPal: function(approvalUrl) {
+
+            var storage;
             var self = this;
             var telephone = '';
+            var firstName = '';
+            var lastName = '';
+            var email = '';
+            var taxVat = '';
             var customerData = window.checkoutConfig.customerData;
             var mode = window.checkoutConfig.payment.paypalbr_paypalplus.mode === "1" ? 'sandbox' : 'live';
+            
+            storage = $.initNamespaceStorage('paypal-data');
+            storage = $.localStorage;
+
             var isEmpty = true;
             for (var i in customerData) {
                 if(customerData.hasOwnProperty(i)) {
@@ -81,15 +91,42 @@ define([
             }
 
             if(isEmpty){
-                telephone =    quote.shippingAddress().telephone;
+                telephone =  quote.shippingAddress().telephone ? quote.shippingAddress().telephone  : storage.get('telephone');
             }else{
-                telephone =    customerData.addresses[0].telephone;
+                telephone = customerData.addresses[0].telephone;
             }
 
-            var firstName = customerData.firstname ? customerData.firstname : quote.shippingAddress().firstname;
-            var lastName = customerData.lastname ? customerData.lastname : quote.shippingAddress().lastname;
-            var email = customerData.email ? customerData.email : quote.guestEmail;
-            var taxVat = customerData.taxvat ? customerData.taxvat : quote.shippingAddress().vatId;
+            if(isEmpty){
+                firstName =  quote.shippingAddress().firstname ? quote.shippingAddress().firstname : storage.get('firstName');
+            }else{
+                firstName = customerData.firstname;
+            }
+            
+            if(isEmpty){
+                lastName =  quote.shippingAddress().lastname ? quote.shippingAddress().lastname : storage.get('lastName');
+            }else{
+                lastName = customerData.lastname;
+            }
+            
+            if(isEmpty){
+                email =  quote.guestEmail ? quote.guestEmail : storage.get('email');
+            }else{
+                email = customerData.email;
+            }
+
+            if(isEmpty){
+                taxVat =  quote.shippingAddress().vatId ? quote.shippingAddress().vatId : storage.get('taxVat');
+            }else{
+                taxVat = customerData.taxva;
+            }
+                        
+
+            storage.set('paypal-data',{'firstName': firstName,
+                                'lastName': lastName,
+                                'email': email,
+                                'taxVat':taxVat,
+                                'telephone': telephone});
+
 
             this.paypalObject = PAYPAL.apps.PPP(
                 {
@@ -188,6 +225,7 @@ define([
                 self.runPayPal(approvalUrl);
             })
             .fail(function (response) {
+                console.log("ERRO" + response);
                 var iframeErrorElem = '#iframe-error';
 
                 $(iframeErrorElem).html('');

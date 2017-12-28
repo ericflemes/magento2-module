@@ -9,7 +9,7 @@
     <default>
         <payment>
             <paypalbr_paypalplus>
-                <active>1</active>
+                <active>0</active>
                 <model>PayPalPlusRemoteMethodAdapter</model>
                 <order_status>pending_payment</order_status>
                 <payment_action>authorize</payment_action>
