@@ -117,7 +117,7 @@ define([
             if(isEmpty){
                 taxVat =  quote.shippingAddress().vatId ? quote.shippingAddress().vatId : storage.get('taxVat');
             }else{
-                taxVat = customerData.taxva;
+                taxVat = customerData.taxvat;
             }
                         
 
