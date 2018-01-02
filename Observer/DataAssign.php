@@ -20,15 +20,22 @@ class DataAssign implements ObserverInterface
      */
     protected $_storeManager;
 
+        /**
+     * @var \Magento\Framework\UrlInterface
+     */
+    protected $_urlBuilder;
+
     public function __construct(
         \PayPalBR\PayPalPlus\Model\ConfigProvider $configProvider,
         \Magento\Framework\Message\ManagerInterface $messageManager,
-         \Magento\Store\Model\StoreManagerInterface $storeManager
+         \Magento\Store\Model\StoreManagerInterface $storeManager,
+         \Magento\Framework\UrlInterface $urlBuilder
     )
     {
         $this->_storeManager = $storeManager;
         $this->configProvider = $configProvider;
         $this->messageManager = $messageManager;
+        $this->_urlBuilder = $urlBuilder;
     }
 
     /**
@@ -42,26 +49,30 @@ class DataAssign implements ObserverInterface
         $disableMessage = "";
 
 
-        if($this->configProvider->isStoreFrontActive() == false){
+        if($this->configProvider->isStoreFrontActive() == false ){
             $disableModule = true;
-            $disableMessage = __('Identificamos que a sua loja não possui está ativo (TAXVAT) para usuários GUEST. Para adicionar o suporte, acesse <<hyperlink>> ou vá em Clientes->Configurações de Clientes->Criar Nova Conta Para Clientes->Mostrar número VAT em frontend.');
+
+            $url = $this->_urlBuilder->getUrl('adminhtml/system_config/edit/section/customer');
+
+            $disableMessage = __('Identificamos que a sua loja não possui está ativo (TAXVAT) para usuários GUEST. Para adicionar o suporte, acesse <a href="%1">Aqui</a> ou vá em Clientes->Configurações de Clientes->Criar Nova Conta Para Clientes->Mostrar número VAT em frontend.' , 
+                $url
+            );
         }
         if(! $this->configProvider->isTelephoneSet()){
             $disableModule = true;
             $disableMessage = __('Identificamos que a sua loja não possui um telefone ativo, favor habilitar para ativar o módulo');
         }
 
-        if($this->configProvider->isActive() == true && ! $this->configProvider->isCustomerTaxRequired() ){
-           $disableModule = true;
-            $disableMessage = __('Identificamos que a sua loja não possui suporte para CPF/CNPJ (TAXVAT). Para adicionar o suporte, acesse <<hyperlink>> e vá em Loja->Configurações->Clientes->Opções de nome e  endereço->Mostrar número TAX/VAT.');
-        }
-
-        if (! $this->configProvider->isCustomerTaxRequired()) {
+        if( ! $this->configProvider->isCustomerTaxRequired() ){
             $disableModule = true;
-            $disableMessage = __('Identificamos que a sua loja não possui suporte para CPF/CNPJ (TAXVAT). Para adicionar o suporte, acesse <<hyperlink>> e vá em Loja->Configurações->Clientes->Opções de nome e  endereço->Mostrar número TAX/VAT.');
+            $url = $this->_urlBuilder->getUrl('adminhtml/system_config/edit/section/customer');
+
+            $disableMessage = __('Identificamos que a sua loja não possui suporte para CPF/CNPJ (TAXVAT). Para adicionar o suporte, acesse <a href="%1"> Aqui</a> e vá em Loja->Configurações->Clientes->Opções de nome e  endereço->Mostrar número TAX/VAT.', 
+                $url
+            );
         }
 
-        if (! $this->configProvider->isCurrencyBaseBRL()) {
+        if (! $this->configProvider->isCurrencyBaseBRL() ) {
             $disableModule = true;
             $disableMessage = __("Your base currency has to be BRL in order to activate this module.");
         }
@@ -89,7 +100,7 @@ class DataAssign implements ObserverInterface
 
         if ($disableModule) {
             $this->configProvider->desactivateModule();
-            return $this->messageManager->addErrorMessage($disableMessage);
+            return $this->messageManager->addError($disableMessage);
         }
 
         $apiContext = new \PayPal\Rest\ApiContext(

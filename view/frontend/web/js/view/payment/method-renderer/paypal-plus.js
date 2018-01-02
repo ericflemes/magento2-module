@@ -225,7 +225,8 @@ define([
                 self.runPayPal(approvalUrl);
             })
             .fail(function (response) {
-                console.log("ERRO" + response);
+                console.log("ERRO");
+                console.log(response);
                 var iframeErrorElem = '#iframe-error';
 
                 $(iframeErrorElem).html('');
