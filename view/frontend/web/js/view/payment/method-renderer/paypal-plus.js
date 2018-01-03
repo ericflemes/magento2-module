@@ -89,11 +89,11 @@ define([
                     isEmpty = false;
                 }
             }
-
+ 
             if(isEmpty){
                 telephone =  quote.shippingAddress().telephone ? quote.shippingAddress().telephone  : storage.get('telephone');
             }else{
-                telephone = customerData.addresses[0].telephone;
+                telephone = quote.shippingAddress().telephone;
             }
 
             if(isEmpty){

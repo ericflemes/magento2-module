@@ -47,13 +47,10 @@ class DataAssign implements ObserverInterface
 
         $disableModule = false;
         $disableMessage = "";
-
+        $url = $this->_urlBuilder->getUrl('adminhtml/system_config/edit/section/customer');
 
         if($this->configProvider->isStoreFrontActive() == false ){
             $disableModule = true;
-
-            $url = $this->_urlBuilder->getUrl('adminhtml/system_config/edit/section/customer');
-
             $disableMessage = __('Identificamos que a sua loja não possui está ativo (TAXVAT) para usuários GUEST. Para adicionar o suporte, acesse <a href="%1">Aqui</a> ou vá em Clientes->Configurações de Clientes->Criar Nova Conta Para Clientes->Mostrar número VAT em frontend.' , 
                 $url
             );
@@ -65,8 +62,6 @@ class DataAssign implements ObserverInterface
 
         if( ! $this->configProvider->isCustomerTaxRequired() ){
             $disableModule = true;
-            $url = $this->_urlBuilder->getUrl('adminhtml/system_config/edit/section/customer');
-
             $disableMessage = __('Identificamos que a sua loja não possui suporte para CPF/CNPJ (TAXVAT). Para adicionar o suporte, acesse <a href="%1"> Aqui</a> e vá em Loja->Configurações->Clientes->Opções de nome e  endereço->Mostrar número TAX/VAT.', 
                 $url
             );
