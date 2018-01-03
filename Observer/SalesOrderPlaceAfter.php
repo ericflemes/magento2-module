@@ -20,7 +20,7 @@ class SalesOrderPlaceAfter implements ObserverInterface
     protected $_session;
 
     /** @var CustomerFactoryInterface */
-    protected $_customerFactory;
+    protected $customerFactory;
     /**
      * @var \Magento\Checkout\Model\Session
      */
@@ -57,7 +57,7 @@ class SalesOrderPlaceAfter implements ObserverInterface
         $this->setCheckoutSession($checkoutSession);
         $this->setLogger($logger);
         $this->setOrderService($orderService);
-        $this->_customerFactory = $customerFactory;
+        $this->customerFactory = $customerFactory;
         $this->sessionFactory = $sessionFactory;
         $this->customerRepository = $customerRepository;
     }
@@ -73,20 +73,16 @@ class SalesOrderPlaceAfter implements ObserverInterface
         $payment = $order->getPayment();
 
         $status = $payment->getAdditionalInformation('state_payPal');
-        $r_card = $payment->getAdditionalInformation('remebered_card');
+        
 
         $customerSession = $this->sessionFactory->create();
-        if ($customerSession->isLoggedIn()) 
-        {
+        if ($customerSession->isLoggedIn()){
+            $r_card = $payment->getAdditionalInformation('remembered_card');
             $customer = $customerSession->getCustomer();
             $customer = $this->customerRepository->getById($customer->getId());
-            $customer->getCustomAttribute('remebered_card');
-            $customer->setCustomAttribute('remebered_card',$r_card);
-            try {                
-                $customer = $this->customerRepository->save($customer);
-            }catch (Exception $e) {
-                return $e->getMessage();
-            }
+            $customer->getCustomAttribute('remembered_card');
+            $customer->setCustomAttribute('remembered_card', $r_card);
+            $customer = $this->customerRepository->save($customer);
         }
 
         if ($order->canCancel() && $status == 'failed') {

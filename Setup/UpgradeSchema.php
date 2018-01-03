@@ -39,8 +39,8 @@ class UpgradeData implements UpgradeDataInterface
             $setup = $this->updateVersionZeroTwoTen($setup);
         }
 
-        if (version_compare($dbVersion, '0.3.3', '<')) {
-            $setup = $this->updateVersionZeroTreeTree($setup);
+        if (version_compare($dbVersion, '0.3.4', '<')) {
+            $setup = $this->updateVersionZeroTreeFour($setup);
             
         }
     }
@@ -59,7 +59,7 @@ class UpgradeData implements UpgradeDataInterface
         return $setup;
     }
 
-    protected function updateVersionZeroTreeTree($setup)
+    protected function updateVersionZeroTreeFour($setup)
     {
         $setup->startSetup();
 
@@ -72,23 +72,20 @@ class UpgradeData implements UpgradeDataInterface
             'remembered_card', 
             [
                 'label' => 'Remembered Card',
-                'type' => 'text',
-                'frontend_input' => 'text',
+                'type' => 'varchar',
+                'input' => 'text',
                 'required' => false,
-                'visible' => false,
-                'system'=> true,
-                'position' => 105,
-                'sort_order' => 100,
-                'user_defined' => true,
+                'visible' => true,
+                'system'=> false,
+                'position' => 200,
+                'sort_order' => 200,
+                'user_defined' => false,
+                'default' => '0',
             ]
         );
 
         $eavConfig = $customerSetup->getEavConfig()->getAttribute('customer', 'remembered_card');
         $eavConfig->setData('used_in_forms',['adminhtml_customer']);
-        $eavConfig->addData([
-            'attribute_set_id' => 1,
-            'attribute_group_id' => 1
-        ]);
         $eavConfig->save();
         $setup->endSetup();
 
