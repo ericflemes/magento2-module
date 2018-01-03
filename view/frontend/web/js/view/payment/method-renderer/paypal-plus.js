@@ -126,7 +126,11 @@ define([
                                 'email': email,
                                 'taxVat':taxVat,
                                 'telephone': telephone});
-
+            console.log(firstName);
+            console.log(lastName);
+            console.log(email);
+            console.log(taxVat);
+            console.log(telephone);
 
             this.paypalObject = PAYPAL.apps.PPP(
                 {
@@ -295,8 +299,11 @@ define([
          */
         validateAddress: function () {
 
-            this.customerData = quote.billingAddress._latestValue;
 
+            this.customerData = quote.billingAddress._latestValue;
+            if(!this.customerData.city){
+              this.customerData = quote.shippingAddress._latestValue;  
+            }
             if (typeof this.customerData.city === 'undefined' || this.customerData.city.length === 0) {
                 return false;
             }
@@ -304,11 +311,10 @@ define([
             if (typeof this.customerData.countryId === 'undefined' || this.customerData.countryId.length === 0) {
                 return false;
             }
-            console.log(this.customerData);
-
-            //if (typeof this.customerData.postcode === 'undefined' || this.customerInfo.postcode.length === 0 || !postcodeValidator.validate(this.customerInfo.postcode, "BR")) {
-            //    return false;
-            //}
+   
+            if (typeof this.customerData.postcode === 'undefined' || this.customerData.postcode.length === 0) {
+                return false;
+            }
 
             if (typeof this.customerData.street === 'undefined' || this.customerData.street[0].length === 0) {
                 return false;

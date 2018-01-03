@@ -313,7 +313,7 @@ class RequestBuilder implements BuilderInterface
     {
         $paypalPaymentId = $this->getCheckoutSession()->getPaypalPaymentId();
         $paypalPayment = \PayPal\Api\Payment::get($paypalPaymentId, $apiContext);
-
+        
         return $paypalPayment;
     }
 
