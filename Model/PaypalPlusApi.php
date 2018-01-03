@@ -143,7 +143,6 @@ class PaypalPlusApi
         );
 
         $apiContext->setConfig($sdkConfig);
-
         return $apiContext;
     }
 
@@ -458,8 +457,6 @@ class PaypalPlusApi
         $payment = new \PayPal\Api\Payment();
         $paypalPaymentId = $this->checkoutSession->getPaypalPaymentId();
         $apiContext = $this->getApiContext();
-
-        $teste = $apiContext->resetRequestId();
 
         $paypalPayment = \PayPal\Api\Payment::get($paypalPaymentId, $apiContext);
         return $paypalPayment;

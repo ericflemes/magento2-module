@@ -7,9 +7,20 @@ use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Checkout\Model\Session;
 use Psr\Log\LoggerInterface;
 use Magento\Sales\Model\Service\OrderService;
+use Magento\Customer\Model\CustomerFactory;
+use Magento\Customer\Model\SessionFactory;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 
 class SalesOrderPlaceAfter implements ObserverInterface
 {
+
+
+
+    /** session factory */
+    protected $_session;
+
+    /** @var CustomerFactoryInterface */
+    protected $customerFactory;
     /**
      * @var \Magento\Checkout\Model\Session
      */
@@ -26,6 +37,11 @@ class SalesOrderPlaceAfter implements ObserverInterface
     protected $orderService;
 
     /**
+     * \Magento\Customer\Api\CustomerRepositoryInterface
+     */
+    protected $customerRepository;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Psr\Log\LoggerInterface $logger
      * @param Api $api
@@ -33,11 +49,17 @@ class SalesOrderPlaceAfter implements ObserverInterface
     public function __construct(
         Session $checkoutSession,
         LoggerInterface $logger,
-        OrderService $orderService
+        OrderService $orderService,
+        CustomerFactory $customerFactory,
+        SessionFactory $sessionFactory,
+        CustomerRepositoryInterface $customerRepository
     ) {
         $this->setCheckoutSession($checkoutSession);
         $this->setLogger($logger);
         $this->setOrderService($orderService);
+        $this->customerFactory = $customerFactory;
+        $this->sessionFactory = $sessionFactory;
+        $this->customerRepository = $customerRepository;
     }
 
     /**
@@ -51,6 +73,17 @@ class SalesOrderPlaceAfter implements ObserverInterface
         $payment = $order->getPayment();
 
         $status = $payment->getAdditionalInformation('state_payPal');
+        
+
+        $customerSession = $this->sessionFactory->create();
+        if ($customerSession->isLoggedIn()){
+            $r_card = $payment->getAdditionalInformation('remembered_card');
+            $customer = $customerSession->getCustomer();
+            $customer = $this->customerRepository->getById($customer->getId());
+            $customer->getCustomAttribute('remembered_card');
+            $customer->setCustomAttribute('remembered_card', $r_card);
+            $customer = $this->customerRepository->save($customer);
+        }
 
         if ($order->canCancel() && $status == 'failed') {
             $result = $this->cancelOrder($order);

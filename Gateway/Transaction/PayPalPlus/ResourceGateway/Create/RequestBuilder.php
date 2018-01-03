@@ -15,6 +15,7 @@ use PayPalBR\PayPalPlus\Api\PayPalPlusRequestDataProviderInterfaceFactory;
 use PayPalBR\PayPalPlus\Api\CartItemRequestDataProviderInterfaceFactory;
 use PayPalBR\PayPalPlus\Model\ConfigProvider;
 
+
 class RequestBuilder implements BuilderInterface
 {
     const MODULE_NAME = 'PayPalBR_PayPalPlus';
@@ -26,6 +27,7 @@ class RequestBuilder implements BuilderInterface
     protected $config;
     protected $checkoutSession;
     protected $configProvider;
+    protected $_checkoutSession;
 
     /**
      * RequestBuilder constructor.
@@ -48,6 +50,8 @@ class RequestBuilder implements BuilderInterface
         $this->setConfig($config);
         $this->setCheckoutSession($checkoutSession);
         $this->setConfigProvider($configProvider);
+        $this->_checkoutSession = $checkoutSession;
+
     }
 
     protected $paymentData;
@@ -321,11 +325,13 @@ class RequestBuilder implements BuilderInterface
         $paypalPayment = $this->restoreAndGetPayment($apiContext);
         $patchRequest = new \PayPal\Api\PatchRequest();
 
+        $order = $this->_checkoutSession->getLastRealOrder();
+
         $itemListPatch = new \PayPal\Api\Patch();
         $itemListPatch
             ->setOp('add')
             ->setPath('/transactions/0/invoice_number')
-            ->setValue(rand(200, 2000));
+            ->setValue($order->getIncrementId());
         $patchRequest->addPatch($itemListPatch);
 
         $description = new \PayPal\Api\Patch();

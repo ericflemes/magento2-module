@@ -62,6 +62,12 @@ class ConfigProvider
      */
     const XML_CUSTOMER_TAX_SHOW = 'customer/address/taxvat_show';
 
+
+        /**
+     * Contains the configuration path for showing telephone
+     */
+    const XML_CUSTOMER_TEL = 'customer/address/telephone_show';
+
     /**
      * Contains the base currency of the store
      */
@@ -71,6 +77,14 @@ class ConfigProvider
      * Contains the debug status
      */
     const XML_PATH_DEBUG_STATUS = 'payment/paypalbr_paypalplus/depuration_mode';
+
+
+    /**
+     * Contains the view TAx in store front
+     */
+    const XML_PATH_TAX_VIEW = 'customer/create_account/vat_frontend_visibility';
+
+
 
     /**
      * ConfigProvider constructor.
@@ -222,6 +236,21 @@ class ConfigProvider
         return $secretId;
     }
 
+        /**
+     * Returns if the store front is activate
+     *
+     * This configuration uses \Magento\Config\Model\Config\Source\Yesno as backend.
+     * 1 is for YES, and 0 is for NO.
+     *
+     * @return bool
+     */
+    public function isStoreFrontActive()
+    {
+        $active = $this->scopeConfig->getValue(self::XML_PATH_TAX_VIEW, ScopeInterface::SCOPE_STORE);
+
+        return $active == 1;
+    }
+
     /**
      * Returns if the module is activated
      *
@@ -247,6 +276,18 @@ class ConfigProvider
         $customerTaxShow = $this->scopeConfig->getValue(self::XML_CUSTOMER_TAX_SHOW, ScopeInterface::SCOPE_STORE);
 
         return $customerTaxShow == 'req';
+    }
+
+        /**
+     * Checks if customer tax number is required or not.
+     *
+     * @return bool
+     */
+    public function isTelephoneSet()
+    {
+        $telephone = $this->scopeConfig->getValue(self::XML_CUSTOMER_TEL, ScopeInterface::SCOPE_STORE);
+
+        return $telephone == 'req';
     }
 
     /**
@@ -280,4 +321,7 @@ class ConfigProvider
     {
         return $this->getCurrencyBase() == 'BRL';
     }
+
+
+
 }

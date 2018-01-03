@@ -38,6 +38,7 @@ define([
         paymentApiServiceUrl: 'paypalplus/payment',
         isPaymentReady: false,
 
+
         getNamePay: function(){
             return "Cartão de Crédito " + window.checkoutConfig.payment.paypalbr_paypalplus.exibitionName;
         },
@@ -45,7 +46,7 @@ define([
         paypalObject: {},
 
         initialize: function () {
-
+            
             fullScreenLoader.startLoader();
             this._super();
             this._render();
@@ -68,43 +69,82 @@ define([
         },
 
         runPayPal: function(approvalUrl) {
+
+            var storage;
             var self = this;
             var telephone = '';
+            var firstName = '';
+            var lastName = '';
+            var email = '';
+            var taxVat = '';
             var customerData = window.checkoutConfig.customerData;
             var mode = window.checkoutConfig.payment.paypalbr_paypalplus.mode === "1" ? 'sandbox' : 'live';
-            if (typeof customerData.indexOf == 'undefined') {
-                telephone = customerData.addresses[0].telephone;
+            
+            storage = $.initNamespaceStorage('paypal-data');
+            storage = $.localStorage;
+
+            var isEmpty = true;
+            for (var i in customerData) {
+                if(customerData.hasOwnProperty(i)) {
+                    isEmpty = false;
+                }
+            }
+ 
+            if(isEmpty){
+                telephone =  quote.shippingAddress().telephone ? quote.shippingAddress().telephone  : storage.get('telephone');
             }else{
-               if (customerData.indexOf() == '-1') {
-                telephone = '0000000000';
-                }else{
-                    if (customerData.addresses.indexOf() == '-1' ) {
-                        telephone = '0000000000';
-                    }else{
-                        telephone = customerData.addresses[0].telephone;
-                    }
-                } 
+                telephone = quote.shippingAddress().telephone;
+            }
+
+            if(isEmpty){
+                firstName =  quote.shippingAddress().firstname ? quote.shippingAddress().firstname : storage.get('firstName');
+            }else{
+                firstName = customerData.firstname;
             }
             
+            if(isEmpty){
+                lastName =  quote.shippingAddress().lastname ? quote.shippingAddress().lastname : storage.get('lastName');
+            }else{
+                lastName = customerData.lastname;
+            }
             
+            if(isEmpty){
+                email =  quote.guestEmail ? quote.guestEmail : storage.get('email');
+            }else{
+                email = customerData.email;
+            }
+
+            if(isEmpty){
+                taxVat =  quote.shippingAddress().vatId ? quote.shippingAddress().vatId : storage.get('taxVat');
+            }else{
+                taxVat = customerData.taxvat;
+            }
+                        
+
+            storage.set('paypal-data',{'firstName': firstName,
+                                'lastName': lastName,
+                                'email': email,
+                                'taxVat':taxVat,
+                                'telephone': telephone});
+
 
             this.paypalObject = PAYPAL.apps.PPP(
                 {
                     "approvalUrl": approvalUrl,
                     "placeholder": "ppplus",
                     "mode": mode,
-                    "payerFirstName": customerData.firstname,
-                    "payerLastName": customerData.lastname,
+                    "payerFirstName": firstName,
+                    "payerLastName": lastName,
                     "payerPhone": "055"+telephone,
-                    "payerEmail": customerData.email,
-                    "payerTaxId": customerData.taxvat,
+                    "payerEmail": email,
+                    "payerTaxId": taxVat,
                     "payerTaxIdType": "BR_CPF",
                     "language": "pt_BR",
                     "country": "BR",
                     "enableContinue": "continueButton",
                     "disableContinue": "continueButton",
                     "iframeHeight": "420",
-
+                    "rememberedCards": window.checkoutConfig.payment.paypalbr_paypalplus.rememberedCard,
                     /**
                      * Do stuff after iframe is loaded
                      * @returns {undefined}
@@ -157,9 +197,11 @@ define([
                         var message = {
                             message: JSON.stringify(err.cause)
                         };
-                        that.messageContainer.addErrorMessage(message);
+                        console.log(message);
                         alert("Ocorreu um erro no pagamento , tente novamente.");
-                        location.reload();
+                        that.messageContainer.addErrorMessage(message);
+
+
                     }
                 }
             );
@@ -183,6 +225,8 @@ define([
                 self.runPayPal(approvalUrl);
             })
             .fail(function (response) {
+                console.log("ERRO");
+                console.log(response);
                 var iframeErrorElem = '#iframe-error';
 
                 $(iframeErrorElem).html('');
