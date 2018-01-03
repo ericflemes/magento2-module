@@ -5,6 +5,7 @@ namespace PayPalBR\PayPalPlus\Model\Ui\PayPalPlus;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Payment\Helper\Data as PaymentHelper;
+use Magento\Customer\Model\SessionFactory;
 
 final class PayPalPlusConfigProvider implements ConfigProviderInterface
 {
@@ -40,13 +41,20 @@ final class PayPalPlusConfigProvider implements ConfigProviderInterface
     protected $_scopeConfig;
 
     /**
+    * @var \Magento\Customer\Model\SessionFactory
+    */
+    protected $sessionFactory;
+
+    /**
      * @param ConfigInterface $payPalPlusConfig
      */
     public function __construct(
         PaymentHelper $paymentHelper,
         UrlInterface $urlBuilder,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        SessionFactory $sessionFactory
     ) {
+        $this->sessionFactory = $sessionFactory;
         $this->paymentHelper = $paymentHelper;
         $this->urlBuilder = $urlBuilder;
         $this->_scopeConfig = $scopeConfig;
@@ -61,13 +69,26 @@ final class PayPalPlusConfigProvider implements ConfigProviderInterface
         if(empty($exibition)){
             $exibition = "";
         }
+        $customerSession = $this->sessionFactory->create();
+        $rememberedCard = '';
+
+        if ($customerSession->isLoggedIn()){
+            $customer = $customerSession->getCustomer();
+            $data = $customer->getData();
+
+            if (isset($data['remembered_card'])) {
+                $rememberedCard = $data['remembered_card'];
+            }
+        }
+
 
         return [
             'payment' => [
                 $this->methodCode => [
                     'text' => 'payment/paypalbr_paypalplus/text',
                     'exibitionName' => $exibition,
-                    'mode' => $mode
+                    'mode' => $mode,
+                    'rememberedCard' => $rememberedCard
                 ]
             ]
         ];

@@ -144,7 +144,7 @@ define([
                     "enableContinue": "continueButton",
                     "disableContinue": "continueButton",
                     "iframeHeight": "420",
-
+                    "rememberedCards": window.checkoutConfig.payment.paypalbr_paypalplus.rememberedCard,
                     /**
                      * Do stuff after iframe is loaded
                      * @returns {undefined}
