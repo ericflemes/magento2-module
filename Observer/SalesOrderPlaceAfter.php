@@ -89,6 +89,41 @@ class SalesOrderPlaceAfter implements ObserverInterface
             $result = $this->cancelOrder($order);
             $this->logger($result);
         }
+
+        if ($order->canInvoice() && $status == 'approved' || $order->canInvoice() && $status == 'completed') {
+            $result = $this->createInvoice($order);
+            $this->logger($result);
+        }
+    }
+
+    /**
+     * @param Order $order
+     * @return $invoice
+     */
+    protected function createInvoice($order)
+    {
+        $invoice = $this->getInvoiceService()->prepareInvoice($order);
+        $invoice->setRequestedCaptureCase(\Magento\Sales\Model\Order\Invoice::CAPTURE_OFFLINE);
+        $invoice->register();
+        $invoice->save();
+        $transactionSave = $this->getTransaction()->addObject(
+            $invoice
+        )->addObject(
+            $invoice->getOrder()
+        );
+        $transactionSave->save();
+        $this->getInvoiceSender()->send($invoice);
+
+        $order->addStatusHistoryComment(
+            __('Notified customer about invoice #%1.', $invoice->getIncrementId())
+        )
+        ->setIsCustomerNotified(true)
+        ->save();
+
+        $order->setState('processing')->setStatus('processing');
+        $order->save();
+
+        return $invoice->getData();
     }
 
     /**

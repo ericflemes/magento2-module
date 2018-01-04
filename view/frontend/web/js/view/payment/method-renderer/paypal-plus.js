@@ -181,7 +181,7 @@ define([
                         if (typeof term !== 'undefined') {
                             self.term = term;
                         }else{
-                            term = 1;
+                            term = '1';
                             self.term = term;
                         }
 
