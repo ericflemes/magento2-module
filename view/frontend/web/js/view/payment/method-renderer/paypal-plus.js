@@ -160,6 +160,7 @@ define([
                     /**
                      * Continue after payment is verifies (continueButton)
                      *
+                     * @param {string} rememberedCardsToken
                      * @param {string} payerId
                      * @param {string} token
                      * @param {string} term
@@ -179,7 +180,11 @@ define([
 
                         if (typeof term !== 'undefined') {
                             self.term = term;
+                        }else{
+                            term = 1;
+                            self.term = term;
                         }
+
                         $('#paypalbr_paypalplus_rememberedCardsToken').val(rememberedCardsToken);
                         $('#paypalbr_paypalplus_payerId').val(payerId);
                         $('#paypalbr_paypalplus_token').val(token);
