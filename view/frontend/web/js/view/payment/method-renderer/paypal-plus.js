@@ -174,14 +174,14 @@ define([
                         self.payerId = payerId;
 
                         var message = {
-                            message: $.mage.__('Payment has been authorized.')
+                            message: $.mage.__('Payment has been proccess.')
                         };
                         self.messageContainer.addSuccessMessage(message);
 
                         if (typeof term !== 'undefined') {
                             self.term = term;
                         }else{
-                            term = 1;
+                            term = '1';
                             self.term = term;
                         }
 

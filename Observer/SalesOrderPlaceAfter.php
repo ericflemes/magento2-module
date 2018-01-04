@@ -10,6 +10,9 @@ use Magento\Sales\Model\Service\OrderService;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\SessionFactory;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Sales\Model\Service\InvoiceService;
+use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
+use Magento\Framework\DB\Transaction;
 
 class SalesOrderPlaceAfter implements ObserverInterface
 {
@@ -42,6 +45,21 @@ class SalesOrderPlaceAfter implements ObserverInterface
     protected $customerRepository;
 
     /**
+     * \Magento\Sales\Model\Service\InvoiceService
+     */
+    protected $invoiceService;
+
+    /**
+     * \Magento\Framework\DB\Transaction
+     */
+    protected $transaction;
+
+    /**
+     * \Magento\Sales\Model\Order\Email\Sender\InvoiceSender
+     */
+    protected $invoiceSender;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Psr\Log\LoggerInterface $logger
      * @param Api $api
@@ -52,11 +70,17 @@ class SalesOrderPlaceAfter implements ObserverInterface
         OrderService $orderService,
         CustomerFactory $customerFactory,
         SessionFactory $sessionFactory,
-        CustomerRepositoryInterface $customerRepository
+        CustomerRepositoryInterface $customerRepository,
+        InvoiceService $invoiceService,
+        Transaction $transaction,
+        InvoiceSender $invoiceSender
     ) {
         $this->setCheckoutSession($checkoutSession);
         $this->setLogger($logger);
         $this->setOrderService($orderService);
+        $this->setTransaction($transaction);
+        $this->setInvoiceService($invoiceService);
+        $this->setInvoiceSender($invoiceSender);
         $this->customerFactory = $customerFactory;
         $this->sessionFactory = $sessionFactory;
         $this->customerRepository = $customerRepository;
@@ -89,6 +113,44 @@ class SalesOrderPlaceAfter implements ObserverInterface
             $result = $this->cancelOrder($order);
             $this->logger($result);
         }
+
+        if ($order->getPayment()->getLastTransId() && 
+            ( $order->canInvoice() && $status == 'approved' || $order->canInvoice() && $status == 'completed' ) 
+        ) {
+            $result = $this->createInvoice($order);
+            $this->logger($result);
+        }
+    }
+
+    /**
+     * @param Order $order
+     * @return $invoice
+     */
+    protected function createInvoice($order)
+    {
+        $payment = $order->getPayment();
+        $payment->setTransactionId($order->getPayment()->getLastTransId())
+            ->setCurrencyCode('BRL')
+            ->setParentTransactionId($order->getPayment()->getAdditionalInformation('pay_id'))
+            ->setIsTransactionClosed(true)
+            ->registerCaptureNotification(
+                $order->getGrandTotal(),
+                true
+            );
+        $order->save();
+        // notify customer
+        $invoice = $payment->getCreatedInvoice();
+        if ($invoice && !$order->getEmailSent()) {
+            $order->addStatusHistoryComment(
+                    __(
+                        'Notified customer about invoice #%1.',
+                        $invoice->getIncrementId()
+                    )
+                )->setIsCustomerNotified(true)
+                ->save();
+        }
+
+        return true;
     }
 
     /**
@@ -171,6 +233,66 @@ class SalesOrderPlaceAfter implements ObserverInterface
     public function setOrderService($orderService)
     {
         $this->orderService = $orderService;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInvoiceService()
+    {
+        return $this->invoiceService;
+    }
+
+    /**
+     * @param mixed $invoiceService
+     *
+     * @return self
+     */
+    public function setInvoiceService($invoiceService)
+    {
+        $this->invoiceService = $invoiceService;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTransaction()
+    {
+        return $this->transaction;
+    }
+
+    /**
+     * @param mixed $transaction
+     *
+     * @return self
+     */
+    public function setTransaction($transaction)
+    {
+        $this->transaction = $transaction;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInvoiceSender()
+    {
+        return $this->invoiceSender;
+    }
+
+    /**
+     * @param mixed $invoiceSender
+     *
+     * @return self
+     */
+    public function setInvoiceSender($invoiceSender)
+    {
+        $this->invoiceSender = $invoiceSender;
 
         return $this;
     }

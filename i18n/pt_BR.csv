@@ -53,3 +53,6 @@
 "In order to use this payment method, please select it and add a Billing Address.","Para usar este método de pagamento, selecione-o e adicione um endereço de cobrança."
 "Merchant Account E-Mail", "E-Mail Comercial"
 "Installments: ","Parcelas: "
+"Payer Id: ","Id da Transação: "
+"State PayPal: ","Status do Pagamento: "
+"Payment has been proccess.","Pagamento está sendo processado."

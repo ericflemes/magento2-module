@@ -30,6 +30,11 @@ class PayPalPlus extends Info
         return $this->getInfo()->getAdditionalInformation('payer_id');
     }
 
+    public function getLastTransId()
+    {
+        return $this->getInfo()->getLastTransId();
+    }
+
     public function getToken()
     {
         return $this->getInfo()->getAdditionalInformation('token');
@@ -37,11 +42,32 @@ class PayPalPlus extends Info
 
     public function getTerm()
     {
-        return $this->getInfo()->getAdditionalInformation('term');
+        $term = $this->getInfo()->getAdditionalInformation('term');
+        if ($term == '1') {
+            $term = $term . "x " . __("(À vista)");
+        }else{
+            $term = $term . "x";
+        }
+
+        return $term;
     }
 
     public function getStatePayPal()
     {
-        return $this->getInfo()->getAdditionalInformation('state_payPal');
+        $state = $this->getInfo()->getAdditionalInformation('state_payPal');
+
+        if ($state == 'completed' || $state == 'approved') {
+            $state = "<span style='color: #32dc13;'>" . __("APROVADO") . "</span>";
+        }
+
+        if ($state == 'pending') {
+            $state = "<span style='color: #efef0b;'>" . __("EM ANÀLISE") . "</span>";
+        }
+        
+        if ($state == 'denied') {
+            $state = "<span style='color: red;'>" . __("NÃO APROVADO") . "</span>";
+        }
+
+        return $state;
     }
 }
