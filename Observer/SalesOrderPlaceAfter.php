@@ -114,7 +114,9 @@ class SalesOrderPlaceAfter implements ObserverInterface
             $this->logger($result);
         }
 
-        if ($order->canInvoice() && $status == 'approved' || $order->canInvoice() && $status == 'completed') {
+        if ($order->getPayment()->getLastTransId() && 
+            ( $order->canInvoice() && $status == 'approved' || $order->canInvoice() && $status == 'completed' ) 
+        ) {
             $result = $this->createInvoice($order);
             $this->logger($result);
         }

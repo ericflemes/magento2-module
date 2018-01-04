@@ -60,7 +60,13 @@ class PayPalPlus extends Info
             $state = "<span style='color: #32dc13;'>" . __("APROVADO") . "</span>";
         }
 
-
+        if ($state == 'pending') {
+            $state = "<span style='color: #32dc13;'>" . __("EM ANÀLISE") . "</span>";
+        }
+        
+        if ($state == 'denied') {
+            $state = "<span style='color: #32dc13;'>" . __("NÃO APROVADO") . "</span>";
+        }
 
         return $state;
     }
