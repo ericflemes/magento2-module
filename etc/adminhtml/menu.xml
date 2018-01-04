@@ -3,7 +3,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
         <add id="PayPalBR_PayPalPlus::PayPalBR" 
-             title="PayPalBR" 
+             title="PayPal" 
              module="PayPalBR_PayPalPlus" 
              sortOrder="10"
              action = "adminhtml/system_config/edit/section/payment"
