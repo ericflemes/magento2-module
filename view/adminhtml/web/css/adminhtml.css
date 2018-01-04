@@ -1,0 +1,10 @@
+/* you may have to adjust the selector a bit*/
+.admin__menu .level-0.item-paypalbr > a:before {
+    background: url("../images/paypal.png") center center no-repeat;
+    content: "";
+    background-size: auto 95%;
+}
+
+.admin__data-grid-wrap .data-grid .data-grid-draggable .data-row .data-grid-thumbnail-cell .admin__control-thumbnail > img:before {
+    border:none;
+}
