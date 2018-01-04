@@ -6,12 +6,11 @@
 namespace PayPalBR\PayPalPlus\Model;
 
 /**
- * Class Checkmo
+ * Class PayPalPlus
  *
  * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
  *
  * @api
- * @since 100.0.2
  */
 class PayPalPlus extends \Magento\Payment\Model\Method\AbstractMethod
 {
