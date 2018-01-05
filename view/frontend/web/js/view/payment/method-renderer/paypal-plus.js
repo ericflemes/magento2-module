@@ -198,7 +198,7 @@ define([
                      * @returns {undefined}
                      */
                     onError: function (err) {
-                        alert("eita porra vai caralho");
+           
                         var message = JSON.stringify(err.cause);
                         var ppplusError = message.replace(/[\\"]/g, '');
                         if (typeof err.cause !== 'undefined') {
