@@ -46,8 +46,7 @@ define([
         paypalObject: {},
 
         initialize: function () {
-            alert("iniciou3");
-            
+
             fullScreenLoader.startLoader();
             this._super();
             this._render();
