@@ -96,6 +96,10 @@ class SalesOrderPlaceAfter implements ObserverInterface
         $order = $event->getOrder();
         $payment = $order->getPayment();
 
+        if ($payment->getMethod() != 'paypalbr_paypalplus') {
+            return $this;
+        }
+
         $status = $payment->getAdditionalInformation('state_payPal');
         
 
@@ -120,6 +124,8 @@ class SalesOrderPlaceAfter implements ObserverInterface
             $result = $this->createInvoice($order);
             $this->logger($result);
         }
+
+        return $this;
     }
 
     /**

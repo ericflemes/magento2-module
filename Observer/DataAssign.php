@@ -106,7 +106,7 @@ class DataAssign implements ObserverInterface
         );
 
         try {
-        $output = \PayPal\Api\Webhook::getAll($apiContext);
+            $output = \PayPal\Api\Webhook::getAll($apiContext);
         } catch (Exception $e) {
             print_r("Error in list webhooks was: {$e->getMessage()}");
             die;
@@ -169,5 +169,6 @@ class DataAssign implements ObserverInterface
 
         }
 
+        return $this;
     }
 }
