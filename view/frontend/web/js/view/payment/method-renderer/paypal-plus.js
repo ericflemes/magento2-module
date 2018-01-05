@@ -46,6 +46,7 @@ define([
         paypalObject: {},
 
         initialize: function () {
+            alert("iniciou3");
             
             fullScreenLoader.startLoader();
             this._super();
@@ -126,11 +127,7 @@ define([
                                 'email': email,
                                 'taxVat':taxVat,
                                 'telephone': telephone});
-            console.log(firstName);
-            console.log(lastName);
-            console.log(email);
-            console.log(taxVat);
-            console.log(telephone);
+
 
             this.paypalObject = PAYPAL.apps.PPP(
                 {
@@ -201,14 +198,68 @@ define([
                      * @returns {undefined}
                      */
                     onError: function (err) {
+                        alert("eita porra vai caralho");
+                        var message = JSON.stringify(err.cause);
+                        var ppplusError = message.replace(/[\\"]/g, '');
+                        if (typeof err.cause !== 'undefined') {
+                            switch (ppplusError)
+                            {
 
-                        this.breakError = true;
-                        var message = {
-                            message: JSON.stringify(err.cause)
-                        };
-                        console.log(message);
-                        alert("Ocorreu um erro no pagamento , tente novamente.");
-                        that.messageContainer.addErrorMessage(message);
+                            case "INTERNAL_SERVICE_ERROR":
+                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                                location.reload(); 
+                            case "SOCKET_HANG_UP": 
+                            case "socket hang up":
+                            case "connect ECONNREFUSED": 
+                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                                location.reload();
+                            case "connect ETIMEDOUT": //javascript fallthrough
+                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                                location.reload();
+                            case "UNKNOWN_INTERNAL_ERROR": //javascript fallthrough
+                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                                location.reload();
+                            case "fiWalletLifecycle_unknown_error": //javascript fallthrough
+                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                                location.reload();
+                            case "Failed to decrypt term info": //javascript fallthrough
+                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                                location.reload();
+                            case "RESOURCE_NOT_FOUND": 
+                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                                location.reload();
+                            case "INTERNAL_SERVER_ERROR":
+                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                                location.reload();
+                            break;
+                            case "RISK_N_DECLINE": 
+                                alert ("Por favor utilize outro cartão, caso o problema persista entre em contato com o PayPal (0800-047-4482)."); 
+                                location.reload();
+                            case "NO_VALID_FUNDING_SOURCE_OR_RISK_REFUSED": 
+                                alert ("Por favor utilize outro cartão, caso o problema persista entre em contato com o PayPal (0800-047-4482)."); 
+                                location.reload();
+                            case "TRY_ANOTHER_CARD": //javascript fallthrough
+                            case "NO_VALID_FUNDING_INSTRUMENT":
+                                alert ("Seu pagamento não foi aprovado. Por favor utilize outro cartão, caso o problema persista entre em contato com o PayPal (0800-047-4482)."); 
+                                location.reload();
+                            break;
+                            case "CARD_ATTEMPT_INVALID":
+                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                                location.reload();
+                            break;
+                            case "INVALID_OR_EXPIRED_TOKEN":
+                                alert ("A sua sessão expirou, por favor tente novamente."); //pt_BR
+                                location.reload();
+                            break;
+                            case "CHECK_ENTRY":
+                                alert ("Por favor revise os dados de Cartão de Crédito inseridos."); //pt_BR
+                                location.reload();
+                            break;
+                            default: //unknown error & reload payment flow
+                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                                location.reload();
+                            }
+                        }
 
 
                     }
