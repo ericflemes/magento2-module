@@ -1,8 +1,8 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Gateway\Transaction\PayPalPlus\Command;
+namespace PayPalBR\PayPal\Gateway\Transaction\PayPalPlus\Command;
 
-use PayPalBR\PayPalPlus\Gateway\Transaction\Base\Command\AbstractApiCommand;
+use PayPalBR\PayPal\Gateway\Transaction\Base\Command\AbstractApiCommand;
 
 class AuthorizeCommand extends AbstractApiCommand
 {

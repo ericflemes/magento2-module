@@ -1,10 +1,10 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Gateway\Transaction\Base\ResourceGateway\Request;
+namespace PayPalBR\PayPal\Gateway\Transaction\Base\ResourceGateway\Request;
 
 
 use Magento\Sales\Model\Order\Item;
-use PayPalBR\PayPalPlus\Api\CartItemRequestDataProviderInterface;
+use PayPalBR\PayPal\Api\CartItemRequestDataProviderInterface;
 
 class CartItemRequestDataProvider implements CartItemRequestDataProviderInterface
 {

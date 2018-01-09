@@ -1,9 +1,9 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Gateway\Transaction\PayPalPlus\ResourceGateway\Create\Response;
+namespace PayPalBR\PayPal\Gateway\Transaction\PayPalPlus\ResourceGateway\Create\Response;
 
 use Magento\Payment\Gateway\Response\HandlerInterface;
-use PayPalBR\PayPalPlus\Gateway\Transaction\Base\ResourceGateway\Response\AbstractHandler;
+use PayPalBR\PayPal\Gateway\Transaction\Base\ResourceGateway\Response\AbstractHandler;
 
 class GeneralHandler extends AbstractHandler implements HandlerInterface
 {

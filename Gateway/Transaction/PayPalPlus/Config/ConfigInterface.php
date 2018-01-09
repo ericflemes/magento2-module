@@ -1,6 +1,6 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Gateway\Transaction\PayPalPlus\Config;
+namespace PayPalBR\PayPal\Gateway\Transaction\PayPalPlus\Config;
 
 interface ConfigInterface
 {

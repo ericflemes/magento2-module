@@ -1,6 +1,6 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Model\Config\Source;
+namespace PayPalBR\PayPal\Model\Config\Source;
 
 class PaymentAction implements \Magento\Framework\Option\ArrayInterface
 {

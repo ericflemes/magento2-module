@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace PayPalBR\PayPalPlus\Block\Form;
+namespace PayPalBR\PayPal\Block\Form;
 
 class PayPalPlus extends \Magento\Payment\Block\Form
 {
@@ -12,5 +12,5 @@ class PayPalPlus extends \Magento\Payment\Block\Form
      *
      * @var string
      */
-    protected $_template = 'PayPalBR_PayPalPlus::form/paypal-plus.html';
+    protected $_template = 'PayPalBR_PayPal::form/paypal-plus.html';
 }

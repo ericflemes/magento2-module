@@ -1,5 +1,5 @@
 <?php
-namespace PayPalBR\PayPalPlus\Model\Config\Source;
+namespace PayPalBR\PayPal\Model\Config\Source;
 
 class Mode implements \Magento\Framework\Option\ArrayInterface
 {

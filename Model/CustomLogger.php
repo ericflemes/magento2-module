@@ -1,6 +1,6 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Model;
+namespace PayPalBR\PayPal\Model;
 use Monolog\Logger;
 
 class CustomLogger extends \Magento\Framework\Logger\Handler\Debug

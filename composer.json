@@ -46,7 +46,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "PayPalBR\\PayPalPlus\\": ""
+            "PayPalBR\\PayPal\\": ""
         }
     },
     "config":{

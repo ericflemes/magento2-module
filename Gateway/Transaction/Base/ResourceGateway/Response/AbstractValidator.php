@@ -1,6 +1,6 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Gateway\Transaction\Base\ResourceGateway\Response;
+namespace PayPalBR\PayPal\Gateway\Transaction\Base\ResourceGateway\Response;
 
 
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;

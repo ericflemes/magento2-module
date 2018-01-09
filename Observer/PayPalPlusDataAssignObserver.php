@@ -1,6 +1,6 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Observer;
+namespace PayPalBR\PayPal\Observer;
 
 
 use Magento\Framework\DataObject;

@@ -1,6 +1,6 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Helper;
+namespace PayPalBR\PayPal\Helper;
 
 /**
  * Profile Experience Helper

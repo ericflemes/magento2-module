@@ -1,6 +1,6 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Model;
+namespace PayPalBR\PayPal\Model;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Quote\Model\Quote;
@@ -25,7 +25,7 @@ use \PayPal\Api\PatchRequest;
 use \PayPal\Api\Patch;
 use \PayPal\Api\PaymentExecution;
 use \PayPal\Exception\PayPalConnectionException;
-use PayPalBR\PayPalPlus\Model\Config\Source\Mode;
+use PayPalBR\PayPal\Model\Config\Source\Mode;
 /**
  * PayPalBR PayPal Rest Api wrapper
  *
@@ -130,7 +130,7 @@ class Api
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \PayPalBR\PayPalPlus\Helper\Data $payPalPlusHelper
+     * @param \PayPalBR\PayPal\Helper\Data $payPalPlusHelper
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Webhook\EventFactory $payPalPlusWebhookEventFactory
@@ -146,10 +146,10 @@ class Api
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Registry $registry,
         \Magento\Customer\Model\Session $customerSession,
-        \PayPalBR\PayPalPlus\Helper\Data $payPalPlusHelper,
+        \PayPalBR\PayPal\Helper\Data $payPalPlusHelper,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \PayPalBR\PayPalPlus\Model\Webhook\EventFactory $payPalPlusWebhookEventFactory,
+        \PayPalBR\PayPal\Model\Webhook\EventFactory $payPalPlusWebhookEventFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Backend\Model\Session $backendSession,
         \Magento\Framework\App\Filesystem\DirectoryList $directoryList,
@@ -157,7 +157,7 @@ class Api
         EncryptorInterface $encryptor,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\UrlInterface $urlBuilder,
-         \PayPalBR\PayPalPlus\Model\ConfigProvider $configProvider
+         \PayPalBR\PayPal\Model\ConfigProvider $configProvider
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->registry = $registry;

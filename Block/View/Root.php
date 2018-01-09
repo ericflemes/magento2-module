@@ -1,6 +1,6 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Block\View;
+namespace PayPalBR\PayPal\Block\View;
 use Magento\Framework\View;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Helper;
+namespace PayPalBR\PayPal\Helper;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\LayoutFactory;
@@ -51,7 +51,7 @@ class Data extends \Magento\Payment\Helper\Data
         \Magento\Framework\Session\Generic $generic,
         \Magento\Framework\App\Request\Http $request,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \PayPalBR\PayPalPlus\Model\ApiFactory $payPalPlusApiFactory,
+        \PayPalBR\PayPal\Model\ApiFactory $payPalPlusApiFactory,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Config\Model\ResourceModel\Config $configResource,
         TypeListInterface $cacheTypeList

@@ -3,13 +3,13 @@
     <type name="Magento\Checkout\Model\CompositeConfigProvider">
         <arguments>
             <argument name="configProviders" xsi:type="array">
-                <item name="paypalbr_paypalplus_config_provider" xsi:type="object">PayPalBR\PayPalPlus\Model\Ui\PayPalPlus\PayPalPlusConfigProvider</item>
+                <item name="paypalbr_paypalplus_config_provider" xsi:type="object">PayPalBR\PayPal\Model\Ui\PayPalPlus\PayPalPlusConfigProvider</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\Result\Page">
         <arguments>
-           <argument name="template" xsi:type="string">PayPalBR_PayPalPlus::root.phtml</argument>
+           <argument name="template" xsi:type="string">PayPalBR_PayPal::root.phtml</argument>
     </arguments>
     </type>
 </config>
