@@ -46,7 +46,6 @@
             <argument name="commands" xsi:type="array">
                 <item name="initialize" xsi:type="string">PayPalBR\PayPalPlus\Gateway\Transaction\Base\Command\InitializeCommand</item>
                 <item name="authorize" xsi:type="string">PayPalPlusAuthorizeCommand</item>
-                <item name="refund" xsi:type="string">PayPalPlusRefundCommand</item>
             </argument>
         </arguments>
     </virtualType>
@@ -68,15 +67,4 @@
     </virtualType>
     <!-- /Command Pool -->
     <!-- /PayPalPlus Adapter -->
-
-        <!-- Refund Command -->
-    <virtualType name="PayPalPlusRefundCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
-        <arguments>
-            <argument name="client" xsi:type="object">PayPalBR\PayPalPlus\Gateway\Http\Client\TransactionRefund</argument>
-            <argument name="requestBuilder" xsi:type="object">PayPalPlusRefundBuilder</argument>
-            <argument name="validator" xsi:type="object">PayPalBR\PayPalPlus\Gateway\Validator\GeneralResponseValidator</argument>
-            <argument name="handler" xsi:type="object">PayPalBR\PayPalPlus\Gateway\Response\RefundHandler</argument>
-            <argument name="transferFactory" xsi:type="object">PayPalBR\PayPalPlus\Gateway\Http\TransferFactory</argument>
-        </arguments>
-    </virtualType>
 </config>
