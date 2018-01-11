@@ -26,10 +26,6 @@ class Data extends \Magento\Payment\Helper\Data
      */
     protected $storeManager;
     /**
-     * @var \Iways\PayPalPlus\Model\ApiFactory
-     */
-    protected $payPalPlusApiFactory;
-    /**
      * @var \Magento\Framework\Message\ManagerInterface
      */
     protected $messageManager;
@@ -51,7 +47,6 @@ class Data extends \Magento\Payment\Helper\Data
         \Magento\Framework\Session\Generic $generic,
         \Magento\Framework\App\Request\Http $request,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \PayPalBR\PayPal\Model\ApiFactory $payPalPlusApiFactory,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Config\Model\ResourceModel\Config $configResource,
         TypeListInterface $cacheTypeList
@@ -60,7 +55,6 @@ class Data extends \Magento\Payment\Helper\Data
         $this->generic = $generic;
         $this->request = $request;
         $this->storeManager = $storeManager;
-        $this->payPalPlusApiFactory = $payPalPlusApiFactory;
         $this->messageManager = $messageManager;
         $this->configResource = $configResource;
         $this->cacheTypeList = $cacheTypeList;
