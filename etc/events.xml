@@ -15,4 +15,7 @@
     <event name="sales_order_place_after">
        <observer name="paypalbr_payment_method_paypalbr_paypalplus_after_place_order" instance="PayPalBR\PayPalPlus\Observer\SalesOrderPlaceAfter" />
     </event>
+    <event name="sales_order_payment_refund">
+       <observer name="paypalbr_payment_method_paypalbr_paypalplus_payment_refund" instance="PayPalBR\PayPalPlus\Observer\Refund" />
+    </event>
 </config>
