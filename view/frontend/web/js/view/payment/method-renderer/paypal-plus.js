@@ -43,6 +43,10 @@ define([
             return "Cartão de Crédito " + window.checkoutConfig.payment.paypalbr_paypalplus.exibitionName;
         },
 
+        isActive: function(){
+            return window.checkoutConfig.payment.paypalbr_paypalplus.active;
+        },
+
         paypalObject: {},
 
         initialize: function () {
