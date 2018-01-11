@@ -11,7 +11,7 @@ use PayPal\Api\Sale;
 
 class Refund implements ObserverInterface
 {
-    const MODULE_NAME = 'PayPalBR_PayPalPlus';
+    const MODULE_NAME = 'PayPalBR_PayPal';
 
     protected $configProvider;
 

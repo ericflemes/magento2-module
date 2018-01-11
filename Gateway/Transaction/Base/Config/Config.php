@@ -42,10 +42,18 @@ class Config extends AbstractConfig implements ConfigInterface
      */
     public function getBaseUrl()
     {
-        if ($this->getConfig(static::PATH_TEST_MODE)) {
+        if ($this->getTestMode()) {
             return $this->getConfig(static::PATH_SAND_BOX_URL);
         }
 
         return $this->getConfig(static::PATH_PRODUCTION_URL);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getToggle()
+    {
+        return $this->getConfig(static::PATH_TOGGLE);
     }
 }

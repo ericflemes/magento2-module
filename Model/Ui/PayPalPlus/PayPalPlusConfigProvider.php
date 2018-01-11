@@ -26,6 +26,11 @@ final class PayPalPlusConfigProvider implements ConfigProviderInterface
     const XML_PATH_MODE = 'payment/paypalbr_paypalplus/mode';
 
     /**
+     * Contains the current mode, sandbox or production (live)
+     */
+    const XML_PATH_ACTIVE = 'payment/paypalbr_paypalplus/active';
+
+    /**
      * @var PaymentHelper
      */
     protected $paymentHelper;
@@ -65,6 +70,7 @@ final class PayPalPlusConfigProvider implements ConfigProviderInterface
         $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
         $exibition = $this->_scopeConfig->getValue(self::XML_CUSTOMER_EXHIBITION_SHOW, $storeScope);
         $mode = $this->_scopeConfig->getValue(self::XML_PATH_MODE, $storeScope);
+        $active = $this->_scopeConfig->getValue(self::XML_PATH_ACTIVE, $storeScope);
 
         if(empty($exibition)){
             $exibition = "";
@@ -85,6 +91,7 @@ final class PayPalPlusConfigProvider implements ConfigProviderInterface
         return [
             'payment' => [
                 $this->methodCode => [
+                    'active' => $active,
                     'text' => 'payment/paypalbr_paypalplus/text',
                     'exibitionName' => $exibition,
                     'mode' => $mode,
