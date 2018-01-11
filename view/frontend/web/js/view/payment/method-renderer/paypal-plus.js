@@ -25,7 +25,7 @@ define([
 
     return Component.extend({
         defaults: {
-            template: 'PayPalBR_PayPalPlus/payment/paypal-plus',
+            template: 'PayPalBR_PayPal/payment/paypal-plus',
             paymentReady: true,
             paypalPayerId: '',
             payerIdCustomer: '',

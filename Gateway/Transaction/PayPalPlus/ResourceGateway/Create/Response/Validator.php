@@ -1,9 +1,9 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Gateway\Transaction\PayPalPlus\ResourceGateway\Create\Response;
+namespace PayPalBR\PayPal\Gateway\Transaction\PayPalPlus\ResourceGateway\Create\Response;
 
 use Magento\Payment\Gateway\Validator\ValidatorInterface;
-use PayPalBR\PayPalPlus\Gateway\Transaction\Base\ResourceGateway\Response\AbstractValidator;
+use PayPalBR\PayPal\Gateway\Transaction\Base\ResourceGateway\Response\AbstractValidator;
 
 class Validator extends AbstractValidator implements ValidatorInterface
 {

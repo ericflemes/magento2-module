@@ -1,5 +1,5 @@
 <?php
-namespace PayPalBR\PayPalPlus\Model\Webhook;
+namespace PayPalBR\PayPal\Model\Webhook;
 
 /**
  * PayPalBR PayPalPlus Event Handler
@@ -8,7 +8,7 @@ namespace PayPalBR\PayPalPlus\Model\Webhook;
  * @package    PayPalBR_PayPalPlus
  * @author Dev
  */
-use PayPalBR\PayPalPlus\Api\EventsInterface;
+use PayPalBR\PayPal\Api\EventsInterface;
 use Magento\Sales\Model\Order\CreditmemoFactory;
 use Magento\Sales\Model\Service\CreditmemoService;
 

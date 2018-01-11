@@ -1,10 +1,10 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Observer;
+namespace PayPalBR\PayPal\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
-use PayPalBR\PayPalPlus\Model\ConfigProvider;
+use PayPalBR\PayPal\Model\ConfigProvider;
 use PayPal\Api\Amount;
 use PayPal\Api\Refund as PayPalRefund;
 use PayPal\Api\Sale;

@@ -1,13 +1,13 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Block\Info;
+namespace PayPalBR\PayPal\Block\Info;
 
 use Magento\Payment\Block\Info;
 use Magento\Framework\DataObject;
 
 class PayPalPlus extends Info
 {
-    const TEMPLATE = 'PayPalBR_PayPalPlus::info/paypal-plus.html';
+    const TEMPLATE = 'PayPalBR_PayPal::info/paypal-plus.html';
 
     public function _construct()
     {

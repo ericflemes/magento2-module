@@ -1,6 +1,6 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Gateway\Transaction\PayPalPlus\ResourceGateway\Create;
+namespace PayPalBR\PayPal\Gateway\Transaction\PayPalPlus\ResourceGateway\Create;
 
 use function Couchbase\defaultDecoder;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
@@ -10,15 +10,15 @@ use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Model\Order\Item;
 use Magento\Checkout\Model\Cart;
 use Magento\Checkout\Model\Session;
-use PayPalBR\PayPalPlus\Gateway\Transaction\Base\Config\Config;
-use PayPalBR\PayPalPlus\Api\PayPalPlusRequestDataProviderInterfaceFactory;
-use PayPalBR\PayPalPlus\Api\CartItemRequestDataProviderInterfaceFactory;
-use PayPalBR\PayPalPlus\Model\ConfigProvider;
+use PayPalBR\PayPal\Gateway\Transaction\Base\Config\Config;
+use PayPalBR\PayPal\Api\PayPalPlusRequestDataProviderInterfaceFactory;
+use PayPalBR\PayPal\Api\CartItemRequestDataProviderInterfaceFactory;
+use PayPalBR\PayPal\Model\ConfigProvider;
 
 
 class RequestBuilder implements BuilderInterface
 {
-    const MODULE_NAME = 'PayPalBR_PayPalPlus';
+    const MODULE_NAME = 'PayPalBR_PayPal';
 
     protected $requestDataProviderFactory;
     protected $cartItemRequestDataProviderFactory;

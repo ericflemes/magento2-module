@@ -1,5 +1,5 @@
 <?php
-namespace PayPalBR\PayPalPlus\Model\Payment;
+namespace PayPalBR\PayPal\Model\Payment;
 
 /**
  * Pay In Store payment method model

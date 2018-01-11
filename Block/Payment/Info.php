@@ -1,6 +1,6 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Block\Payment;
+namespace PayPalBR\PayPal\Block\Payment;
 
 class Info extends \Magento\Payment\Block\Info
 {

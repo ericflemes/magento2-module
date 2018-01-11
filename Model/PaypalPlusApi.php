@@ -1,5 +1,5 @@
 <?php
-namespace PayPalBR\PayPalPlus\Model;
+namespace PayPalBR\PayPal\Model;
 
 /**
  * Class PaypalPlusApi
@@ -85,7 +85,7 @@ class PaypalPlusApi
         \Magento\Checkout\Model\Cart $cart,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \PayPalBR\PayPalPlus\Model\ConfigProvider $configProvider,
+        \PayPalBR\PayPal\Model\ConfigProvider $configProvider,
         \Magento\Payment\Model\Cart\SalesModel\Factory $cartSalesModelFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Psr\Log\LoggerInterface $logger

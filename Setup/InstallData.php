@@ -1,6 +1,6 @@
 <?php
 
-namespace PayPalBR\PayPalPlusMx\Setup;
+namespace PayPalBR\PayPal\Setup;
 
 use Magento\Customer\Setup\CustomerSetupFactory;
 use Magento\Customer\Model\Customer;

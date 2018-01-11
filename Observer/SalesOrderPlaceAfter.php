@@ -1,6 +1,6 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Observer;
+namespace PayPalBR\PayPal\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;

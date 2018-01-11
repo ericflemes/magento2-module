@@ -30,7 +30,7 @@
                     <field id="mode" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Mode</label>
                         <config_path>payment/paypalbr_paypalplus/mode</config_path>
-                        <source_model>PayPalBR\PayPalPlus\Model\Config\Source\Mode</source_model>
+                        <source_model>PayPalBR\PayPal\Model\Config\Source\Mode</source_model>
                         <comment>Use this option to switch between Sandbox and Production modes. Sandbox is used for testing and production for actual purchases.</comment>
                     </field>
                     <field id="client_id_sandbox" translate="label comment" type="password" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -76,12 +76,12 @@
                     </field>
                     <field id="reject_order_status" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Reject Order Status</label>
-                        <source_model>PayPalBR\PayPalPlus\Model\Config\Source\Review</source_model>
+                        <source_model>PayPalBR\PayPal\Model\Config\Source\Review</source_model>
                         <config_path>payment/paypalbr_paypalplus/reject_order_status</config_path>
                     </field>
                    <field id="review_order_status" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                         <label>Review Order Status</label>
-                        <source_model>PayPalBR\PayPalPlus\Model\Config\Source\Review</source_model>
+                        <source_model>PayPalBR\PayPal\Model\Config\Source\Review</source_model>
                         <config_path>payment/paypalbr_paypalplus/review_order_status</config_path>
                     </field>
                     <field id="sort_order" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">

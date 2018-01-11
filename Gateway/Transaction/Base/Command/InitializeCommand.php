@@ -1,6 +1,6 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Gateway\Transaction\Base\Command;
+namespace PayPalBR\PayPal\Gateway\Transaction\Base\Command;
 
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Sales\Model\Order;

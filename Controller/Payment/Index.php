@@ -1,6 +1,6 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Controller\Payment;
+namespace PayPalBR\PayPal\Controller\Payment;
 
 class Index extends \Magento\Framework\App\Action\Action
 {
@@ -20,11 +20,11 @@ class Index extends \Magento\Framework\App\Action\Action
      * Index constructor.
      *
      * @param \Magento\Framework\App\Action\Context $context
-     * @param \PayPalBR\PayPalPlus\Model\PaypalPlusApi $paypalPlusApi
+     * @param \PayPalBR\PayPal\Model\PaypalPlusApi $paypalPlusApi
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
-        \PayPalBR\PayPalPlus\Model\PaypalPlusApi $paypalPlusApi,
+        \PayPalBR\PayPal\Model\PaypalPlusApi $paypalPlusApi,
         \Magento\Framework\Controller\Result\JsonFactory $jsonFactory
     ) {
         $this->paypalPlusApi = $paypalPlusApi;

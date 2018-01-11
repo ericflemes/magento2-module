@@ -1,6 +1,6 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Block\Checkout;
+namespace PayPalBR\PayPal\Block\Checkout;
 
 class Success extends \Magento\Checkout\Block\Onepage\Success
 {
@@ -59,7 +59,7 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
         $payment = $this->_order->getPayment();
         if ($payment) {
             $code = $payment->getMethod();
-            $result = ($code == \PayPalBR\PayPalPlus\Model\Payment\PayPalPlus::METHOD_NAME);
+            $result = ($code == \PayPalBR\PayPal\Model\Payment\PayPalPlus::METHOD_NAME);
         }
         return $result;
     }
@@ -108,7 +108,7 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
      */
     public function getPendingMessage()
     {
-        if($this->isPaymentPending() && $this->_order->getPayment()->getMethod() == \PayPalBR\PayPalPlus\Model\Payment::CODE) {
+        if($this->isPaymentPending() && $this->_order->getPayment()->getMethod() == \PayPalBR\PayPal\Model\Payment::CODE) {
             return $this->getConfigValue(self::XML_PATH_PENDING_PAYMENT_MESSAGE);
         }
         return '';
