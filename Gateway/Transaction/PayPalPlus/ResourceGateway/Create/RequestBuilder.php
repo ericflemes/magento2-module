@@ -10,7 +10,7 @@ use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Model\Order\Item;
 use Magento\Checkout\Model\Cart;
 use Magento\Checkout\Model\Session;
-use PayPalBR\PayPal\Gateway\Transaction\Base\Config\Config;
+use PayPalBR\PayPal\Gateway\Transaction\Base\Config\ConfigInterface;
 use PayPalBR\PayPal\Api\PayPalPlusRequestDataProviderInterfaceFactory;
 use PayPalBR\PayPal\Api\CartItemRequestDataProviderInterfaceFactory;
 use PayPalBR\PayPal\Model\ConfigProvider;
@@ -34,13 +34,13 @@ class RequestBuilder implements BuilderInterface
      * @param PayPalPlusRequestDataProviderInterfaceFactory $requestDataProviderFactory
      * @param CartItemRequestDataProviderInterfaceFactory $cartItemRequestDataProviderFactory
      * @param Cart $cart
-     * @param Config $config
+     * @param ConfigInterface $config
      */
     public function __construct(
         PayPalPlusRequestDataProviderInterfaceFactory $requestDataProviderFactory,
         CartItemRequestDataProviderInterfaceFactory $cartItemRequestDataProviderFactory,
         Cart $cart,
-        Config $config,
+        ConfigInterface $config,
         Session $checkoutSession,
         ConfigProvider $configProvider
     ) {
