@@ -1,10 +1,10 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Observer;
+namespace PayPalBR\PayPal\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
-use PayPalBR\PayPalPlus\Model\Http\Api;
+use PayPalBR\PayPal\Model\Http\Api;
 use Magento\Checkout\Model\Session;
 use Psr\Log\LoggerInterface;
 
@@ -44,7 +44,7 @@ class clearPaymentDataAfterSaveOrder implements ObserverInterface
         if (
             $order &&
             $order->getId() &&
-            $order->getPayment()->getMethod() == \PayPalBR\PayPalPlus\Model\Payment\PayPalPlus::METHOD_NAME
+            $order->getPayment()->getMethod() == \PayPalBR\PayPal\Model\Payment\PayPalPlus::METHOD_NAME
         ) {
             $this->checkoutSession->setPaymentId(false);
             $this->checkoutSession->setIframeUrl(false);
@@ -53,5 +53,7 @@ class clearPaymentDataAfterSaveOrder implements ObserverInterface
             $this->checkoutSession->setPaypalPaymentId( null );
             $this->checkoutSession->setQuoteUpdatedAt( null );
         }
+
+        return $this;
     }
 }

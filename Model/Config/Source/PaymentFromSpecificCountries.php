@@ -1,6 +1,6 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Model\Config\Source;
+namespace PayPalBR\PayPal\Model\Config\Source;
 
 class PaymentFromSpecificCountries implements \Magento\Framework\Option\ArrayInterface
 {

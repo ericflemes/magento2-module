@@ -1,6 +1,6 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Model\Ui\PayPalPlus;
+namespace PayPalBR\PayPal\Model\Ui\PayPalPlus;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\UrlInterface;
@@ -12,7 +12,7 @@ final class PayPalPlusConfigProvider implements ConfigProviderInterface
     /**
      * @var string[]
      */
-    protected $methodCode = \PayPalBR\PayPalPlus\Model\PayPalPlus::PAYMENT_METHOD_PAYPALPLUS_CODE;
+    protected $methodCode = \PayPalBR\PayPal\Model\PayPalPlus::PAYMENT_METHOD_PAYPALPLUS_CODE;
 
     /**
      * Contains the configuration path for showing exibition name

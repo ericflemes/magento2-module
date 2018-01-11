@@ -25,7 +25,7 @@ define([
 
     return Component.extend({
         defaults: {
-            template: 'PayPalBR_PayPalPlus/payment/paypal-plus',
+            template: 'PayPalBR_PayPal/payment/paypal-plus',
             paymentReady: true,
             paypalPayerId: '',
             payerIdCustomer: '',
@@ -46,7 +46,7 @@ define([
         paypalObject: {},
 
         initialize: function () {
-            
+
             fullScreenLoader.startLoader();
             this._super();
             this._render();
@@ -156,6 +156,7 @@ define([
                     /**
                      * Continue after payment is verifies (continueButton)
                      *
+                     * @param {string} rememberedCardsToken
                      * @param {string} payerId
                      * @param {string} token
                      * @param {string} term
@@ -169,13 +170,17 @@ define([
                         self.payerId = payerId;
 
                         var message = {
-                            message: $.mage.__('Payment has been authorized.')
+                            message: $.mage.__('Payment has been proccess.')
                         };
                         self.messageContainer.addSuccessMessage(message);
 
                         if (typeof term !== 'undefined') {
                             self.term = term;
+                        }else{
+                            term = '1';
+                            self.term = term;
                         }
+
                         $('#paypalbr_paypalplus_rememberedCardsToken').val(rememberedCardsToken);
                         $('#paypalbr_paypalplus_payerId').val(payerId);
                         $('#paypalbr_paypalplus_token').val(token);
@@ -192,14 +197,68 @@ define([
                      * @returns {undefined}
                      */
                     onError: function (err) {
+           
+                        var message = JSON.stringify(err.cause);
+                        var ppplusError = message.replace(/[\\"]/g, '');
+                        if (typeof err.cause !== 'undefined') {
+                            switch (ppplusError)
+                            {
 
-                        this.breakError = true;
-                        var message = {
-                            message: JSON.stringify(err.cause)
-                        };
-                        console.log(message);
-                        alert("Ocorreu um erro no pagamento , tente novamente.");
-                        that.messageContainer.addErrorMessage(message);
+                            case "INTERNAL_SERVICE_ERROR":
+                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                                location.reload(); 
+                            case "SOCKET_HANG_UP": 
+                            case "socket hang up":
+                            case "connect ECONNREFUSED": 
+                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                                location.reload();
+                            case "connect ETIMEDOUT": //javascript fallthrough
+                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                                location.reload();
+                            case "UNKNOWN_INTERNAL_ERROR": //javascript fallthrough
+                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                                location.reload();
+                            case "fiWalletLifecycle_unknown_error": //javascript fallthrough
+                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                                location.reload();
+                            case "Failed to decrypt term info": //javascript fallthrough
+                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                                location.reload();
+                            case "RESOURCE_NOT_FOUND": 
+                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                                location.reload();
+                            case "INTERNAL_SERVER_ERROR":
+                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                                location.reload();
+                            break;
+                            case "RISK_N_DECLINE": 
+                                alert ("Por favor utilize outro cartão, caso o problema persista entre em contato com o PayPal (0800-047-4482)."); 
+                                location.reload();
+                            case "NO_VALID_FUNDING_SOURCE_OR_RISK_REFUSED": 
+                                alert ("Por favor utilize outro cartão, caso o problema persista entre em contato com o PayPal (0800-047-4482)."); 
+                                location.reload();
+                            case "TRY_ANOTHER_CARD": //javascript fallthrough
+                            case "NO_VALID_FUNDING_INSTRUMENT":
+                                alert ("Seu pagamento não foi aprovado. Por favor utilize outro cartão, caso o problema persista entre em contato com o PayPal (0800-047-4482)."); 
+                                location.reload();
+                            break;
+                            case "CARD_ATTEMPT_INVALID":
+                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                                location.reload();
+                            break;
+                            case "INVALID_OR_EXPIRED_TOKEN":
+                                alert ("A sua sessão expirou, por favor tente novamente."); //pt_BR
+                                location.reload();
+                            break;
+                            case "CHECK_ENTRY":
+                                alert ("Por favor revise os dados de Cartão de Crédito inseridos."); //pt_BR
+                                location.reload();
+                            break;
+                            default: //unknown error & reload payment flow
+                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                                location.reload();
+                            }
+                        }
 
 
                     }
@@ -295,8 +354,11 @@ define([
          */
         validateAddress: function () {
 
-            this.customerData = quote.billingAddress._latestValue;
 
+            this.customerData = quote.billingAddress._latestValue;
+            if(!this.customerData.city){
+              this.customerData = quote.shippingAddress._latestValue;  
+            }
             if (typeof this.customerData.city === 'undefined' || this.customerData.city.length === 0) {
                 return false;
             }
@@ -304,11 +366,10 @@ define([
             if (typeof this.customerData.countryId === 'undefined' || this.customerData.countryId.length === 0) {
                 return false;
             }
-            console.log(this.customerData);
-
-            //if (typeof this.customerData.postcode === 'undefined' || this.customerInfo.postcode.length === 0 || !postcodeValidator.validate(this.customerInfo.postcode, "BR")) {
-            //    return false;
-            //}
+   
+            if (typeof this.customerData.postcode === 'undefined' || this.customerData.postcode.length === 0) {
+                return false;
+            }
 
             if (typeof this.customerData.street === 'undefined' || this.customerData.street[0].length === 0) {
                 return false;

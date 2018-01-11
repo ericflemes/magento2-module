@@ -1,5 +1,5 @@
 <?php
-namespace PayPalBR\PayPalPlus\Observer;
+namespace PayPalBR\PayPal\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\ObjectManager;
@@ -26,7 +26,7 @@ class DataAssign implements ObserverInterface
     protected $_urlBuilder;
 
     public function __construct(
-        \PayPalBR\PayPalPlus\Model\ConfigProvider $configProvider,
+        \PayPalBR\PayPal\Model\ConfigProvider $configProvider,
         \Magento\Framework\Message\ManagerInterface $messageManager,
          \Magento\Store\Model\StoreManagerInterface $storeManager,
          \Magento\Framework\UrlInterface $urlBuilder
@@ -106,7 +106,7 @@ class DataAssign implements ObserverInterface
         );
 
         try {
-        $output = \PayPal\Api\Webhook::getAll($apiContext);
+            $output = \PayPal\Api\Webhook::getAll($apiContext);
         } catch (Exception $e) {
             print_r("Error in list webhooks was: {$e->getMessage()}");
             die;
@@ -169,5 +169,6 @@ class DataAssign implements ObserverInterface
 
         }
 
+        return $this;
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace PayPalBR\PayPalPlus\Setup;
+namespace PayPalBR\PayPal\Setup;
 
 
 use \Magento\Framework\Setup\ModuleContextInterface as ModuleContextInterface;

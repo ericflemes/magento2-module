@@ -1,4 +1,4 @@
-"The experience of a transparent checkout processed with a PayPal security. The user makes the payment directly on your site, without a need to create an account, use only the credit card.","A experiência de um checkout transparente processado com a segurança do PayPal. O usuário efetua o pagamento diretamente em seu site, sem a necessidade de criar uma conta, utilizando apenas o cartão de crédito."
+"The experience of a transparent checkout processed with a PayPal security. The user makes the payment directly on your site, without a need to create an account, use only the credit card.","A experiência de um checkout transparente processado com a segurança do PayPal. O cliente não deixa o seu site para realizar o pagamento e utiliza apenas o cartão de crédito, não havendo a necessidade de ter uma conta PayPal."
 "Use this option to switch between Sandbox and Production modes. Sandbox is used for testing and production for actual purchases.","Utilize essa opção para alternar entre modos Sandbox e Produção. Sandbox é utilizado para testes e Produção para compras reais"
 "To generate the Client ID, access <a href="#">here</a> and look for the "REST API Apps" section.","Para gerar o Client ID acesse <a href="#">aqui</a> e procure pela seção "REST API Apps"."
 "To generate the Secret ID, access <a href="#">here</a> and look for the "REST API Apps" section.","Para gerar o Secret ID acesse <a href="#">aqui</a> e procure pela seção "REST API Apps"."
@@ -52,3 +52,7 @@
 "This payment method is currently unavailable.","Desculpe, no momento este método de pagamento não está disponível. Tente novamente mais tarde."
 "In order to use this payment method, please select it and add a Billing Address.","Para usar este método de pagamento, selecione-o e adicione um endereço de cobrança."
 "Merchant Account E-Mail", "E-Mail Comercial"
+"Installments: ","Parcelas: "
+"Payer Id: ","Id da Transação: "
+"State PayPal: ","Status do Pagamento: "
+"Payment has been proccess.","Pagamento está sendo processado."

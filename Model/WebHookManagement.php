@@ -1,9 +1,9 @@
 <?php
-namespace PayPalBR\PayPalPlus\Model;
+namespace PayPalBR\PayPal\Model;
 
 use oauth;
-use PayPalBR\PayPalPlus\Api\EventsInterface;
-use PayPalBR\PayPalPlus\Api\WebHookManagementInterface;
+use PayPalBR\PayPal\Api\EventsInterface;
+use PayPalBR\PayPal\Api\WebHookManagementInterface;
 
 class WebHookManagement implements WebHookManagementInterface
 {

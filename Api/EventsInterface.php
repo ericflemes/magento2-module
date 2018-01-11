@@ -1,5 +1,5 @@
 <?php
-namespace PayPalBR\PayPalPlus\Api;
+namespace PayPalBR\PayPal\Api;
 
 /**
  * PayPalBR PayPalPlus Event Handler

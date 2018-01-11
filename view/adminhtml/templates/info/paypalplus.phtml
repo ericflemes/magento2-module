@@ -1,1 +1,5 @@
-<span><?php echo __('Cartão de Crédito (PayPal Plus)') ?></span>
+<p><span><?php echo __('Cartão de Crédito (PayPal Plus)') ?></span></p>
+<p><span><b><?php echo __('Payer Id: ') ?></b><?php echo $block->getLastTransId() ?></span></p>
+<p><span><b><?php echo __('State PayPal: ') ?><?php echo $block->getStatePayPal() ?></b></span></p>
+<p><span><b><?php echo __('Installments: ') ?></b><?php echo $block->getTerm() ?></span></p>
+<p><span><b><?php echo __('Token PayPal: ') ?></b><?php echo $block->getToken() ?></span></p>

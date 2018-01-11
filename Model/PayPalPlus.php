@@ -3,15 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace PayPalBR\PayPalPlus\Model;
+namespace PayPalBR\PayPal\Model;
 
 /**
- * Class Checkmo
+ * Class PayPalPlus
  *
  * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
  *
  * @api
- * @since 100.0.2
  */
 class PayPalPlus extends \Magento\Payment\Model\Method\AbstractMethod
 {
@@ -27,12 +26,12 @@ class PayPalPlus extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * @var string
      */
-    protected $_formBlockType = \PayPalBR\PayPalPlus\Block\Form\PayPalPlus::class;
+    protected $_formBlockType = \PayPalBR\PayPal\Block\Form\PayPalPlus::class;
 
     /**
      * @var string
      */
-    protected $_infoBlockType = \PayPalBR\PayPalPlus\Block\Info\PayPalPlus::class;
+    protected $_infoBlockType = \PayPalBR\PayPal\Block\Info\PayPalPlus::class;
 
     /**
      * @var ConfigProvider
@@ -50,7 +49,7 @@ class PayPalPlus extends \Magento\Payment\Model\Method\AbstractMethod
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \PayPalBR\PayPalPlus\Model\ConfigProvider $configProvider
+        \PayPalBR\PayPal\Model\ConfigProvider $configProvider
     )
     {
         parent::__construct(

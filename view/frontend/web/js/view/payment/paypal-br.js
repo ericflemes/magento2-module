@@ -11,7 +11,7 @@ define(
         rendererList.push(
             {
                 type: 'paypalbr_paypalplus',
-                component: 'PayPalBR_PayPalPlus/js/view/payment/method-renderer/paypal-plus'
+                component: 'PayPalBR_PayPal/js/view/payment/method-renderer/paypal-plus'
             }
         );
 

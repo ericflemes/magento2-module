@@ -1,6 +1,6 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Controller\Payment;
+namespace PayPalBR\PayPal\Controller\Payment;
 
 use \Magento\Framework\Json\Helper\Data;
 

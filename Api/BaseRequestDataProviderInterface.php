@@ -1,6 +1,6 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Api;
+namespace PayPalBR\PayPal\Api;
 
 
 interface BaseRequestDataProviderInterface

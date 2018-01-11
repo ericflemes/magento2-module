@@ -1,9 +1,9 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Gateway\Transaction\PayPalPlus\ResourceGateway\Create\Response;
+namespace PayPalBR\PayPal\Gateway\Transaction\PayPalPlus\ResourceGateway\Create\Response;
 
 use Magento\Payment\Gateway\Response\HandlerInterface;
-use PayPalBR\PayPalPlus\Gateway\Transaction\Base\ResourceGateway\Response\AbstractHandler;
+use PayPalBR\PayPal\Gateway\Transaction\Base\ResourceGateway\Response\AbstractHandler;
 
 class GeneralHandler extends AbstractHandler implements HandlerInterface
 {
@@ -18,18 +18,11 @@ class GeneralHandler extends AbstractHandler implements HandlerInterface
     	foreach ($transactions as $id => $transaction) {
     		foreach ($transaction->getRelatedResources() as $id => $relatedResources) {
     			$sale = $relatedResources->getSale();
-                if ($sale->getState() == 'approved' || $sale->getState() == 'completed') {
-                    $parentTransactionId = $payment->getAdditionalInformation('pay_id');
-                    $payment
-                        ->setTransactionId($sale->getId())
-                        ->setParentTransactionId($parentTransactionId)
-                        ->setIsTransactionClosed(true)
-                        ->setAdditionalInformation('state_payPal', $sale->getState());
-                }else{
-                    $payment->setTransactionId($sale->getId());
-                    $payment->setIsTransactionClosed(false);
-                    $payment->setAdditionalInformation('state_payPal', $sale->getState());
-                }
+                $parentTransactionId = $payment->getAdditionalInformation('pay_id');
+                $payment->setTransactionId($sale->getId());
+                $payment->setParentTransactionId($parentTransactionId);
+                $payment->setIsTransactionClosed(false);
+                $payment->setAdditionalInformation('state_payPal', $sale->getState());
     		}
     	}
 

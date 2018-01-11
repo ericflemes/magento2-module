@@ -1,7 +1,7 @@
 <?php
-namespace PayPalBR\PayPalPlus\Model;
+namespace PayPalBR\PayPal\Model;
 
-use PayPalBR\PayPalPlus\Model\Config\Source\Mode;
+use PayPalBR\PayPal\Model\Config\Source\Mode;
 use \Magento\Store\Model\ScopeInterface;
 
 /**
@@ -9,7 +9,7 @@ use \Magento\Store\Model\ScopeInterface;
  *
  * This class provides access to Magento 2 configuration over PayPal Plus
  *
- * @package PayPalBR\PayPalPlus\Model
+ * @package PayPalBR\PayPal\Model
  */
 class ConfigProvider
 {

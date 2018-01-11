@@ -1,13 +1,13 @@
 <?php
 
-namespace PayPalBR\PayPalPlus\Gateway\Transaction\Base\Command;
+namespace PayPalBR\PayPal\Gateway\Transaction\Base\Command;
 
 use Magento\Payment\Gateway\CommandInterface;
 use Magento\Payment\Gateway\Request\BuilderInterface as RequestBuilder;
 use Magento\Payment\Gateway\Response\HandlerInterface as ResponseHandler;
 use Magento\Payment\Gateway\Validator\ValidatorInterface;
 use Magento\Payment\Gateway\Command\CommandException;
-use PayPalBR\PayPalPlus\Gateway\Transaction\Base\Config\ConfigInterface;
+use PayPalBR\PayPal\Gateway\Transaction\Base\Config\ConfigInterface;
 use Psr\Log\LoggerInterface;
 
 abstract class AbstractApiCommand implements CommandInterface
