@@ -5,7 +5,7 @@
         <add id="PayPalBR_PayPal::PayPalBR" 
              title="PayPal" 
              module="PayPalBR_PayPal" 
-             sortOrder="10"
+             sortOrder="70"
              action = "adminhtml/system_config/edit/section/payment"
              resource="PayPalBR_PayPal::PayPalBR"/>
 
