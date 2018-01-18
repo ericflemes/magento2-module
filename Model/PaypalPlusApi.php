@@ -228,6 +228,7 @@ class PaypalPlusApi
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->cart->getQuote();
+        $baseSubtotal = $this->cartSalesModelQuote->getBaseSubtotal();
 
         /** @var string $storeCurrency */
         $storeCurrency = $quote->getBaseCurrencyCode();
@@ -241,6 +242,16 @@ class PaypalPlusApi
                 ->setQuantity($cartItem->getQty())
                 ->setPrice($cartItem->getPrice())
                 ->setSku($cartItem->getSku())
+                ->setCurrency($storeCurrency);
+            $itemList->addItem($item);
+        }
+        if($this->cartSalesModelQuote->getBaseDiscountAmount()){
+            $item = new \PayPal\Api\Item();
+            $item->setName('Discount')
+                ->setDescription('Discount')
+                ->setQuantity('1')
+                ->setPrice($this->cartSalesModelQuote->getBaseDiscountAmount())
+                ->setSku('discountloja')
                 ->setCurrency($storeCurrency);
             $itemList->addItem($item);
         }
@@ -273,13 +284,19 @@ class PaypalPlusApi
         if ($quote->getBaseCustomerBalAmountUsed()) {
             $baseSubtotal -= $quote->getBaseCustomerBalAmountUsed();
         }
-
+        if($this->cartSalesModelQuote->getBaseDiscountAmount()){
+            $subtotal = $baseSubtotal + $this->cartSalesModelQuote->getBaseDiscountAmount(); 
+        }else{
+            $subtotal = $baseSubtotal;
+        }
 
         $details = new \PayPal\Api\Details();
-        $details
-            ->setShipping($this->cartSalesModelQuote->getBaseShippingAmount())
-            ->setSubtotal($baseSubtotal)
-            ->setShippingDiscount($this->cartSalesModelQuote->getBaseDiscountAmount());
+        $details->setShipping($this->cartSalesModelQuote->getBaseShippingAmount())
+            ->setSubtotal($subtotal);
+
+        if($this->cartSalesModelQuote->getBaseDiscountAmount()){
+            $details->setShippingDiscount('-0.0000');
+        }
         return $details;
     }
 
@@ -465,6 +482,7 @@ class PaypalPlusApi
     public function execute()
     {
         try {
+
             if ($this->isNotPaymentCreated()) {
                 $paypalPayment = $this->createAndGetPayment();
             }
@@ -474,6 +492,7 @@ class PaypalPlusApi
             else {
                 $paypalPayment = $this->restoreAndGetPayment();
             }
+
 
             $result = [
                 'status' => 'success',

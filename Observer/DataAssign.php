@@ -25,17 +25,27 @@ class DataAssign implements ObserverInterface
      */
     protected $_urlBuilder;
 
+
+    protected $_responseFactory;
+
+
     public function __construct(
         \PayPalBR\PayPal\Model\ConfigProvider $configProvider,
         \Magento\Framework\Message\ManagerInterface $messageManager,
          \Magento\Store\Model\StoreManagerInterface $storeManager,
-         \Magento\Framework\UrlInterface $urlBuilder
+         \Magento\Framework\UrlInterface $urlBuilder,
+         \Magento\Framework\App\ResponseFactory $responseFactory,
+         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
+        \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool
     )
     {
         $this->_storeManager = $storeManager;
         $this->configProvider = $configProvider;
         $this->messageManager = $messageManager;
         $this->_urlBuilder = $urlBuilder;
+        $this->_responseFactory = $responseFactory;
+        $this->_cacheTypeList = $cacheTypeList;
+        $this->_cacheFrontendPool = $cacheFrontendPool;
     }
 
     /**
@@ -49,25 +59,26 @@ class DataAssign implements ObserverInterface
         $disableMessage = "";
         $url = $this->_urlBuilder->getUrl('adminhtml/system_config/edit/section/customer');
 
-        if($this->configProvider->isStoreFrontActive() == false ){
+        if(! $this->configProvider->isStoreFrontActive() && $this->configProvider->isActive()){
             $disableModule = true;
-            $disableMessage = __('Identificamos que a sua loja não possui está ativo (TAXVAT) para usuários GUEST. Para adicionar o suporte, acesse <a href="%1">Aqui</a> ou vá em Clientes->Configurações de Clientes->Criar Nova Conta Para Clientes->Mostrar número VAT em frontend.' , 
+            $disableMessage = __('
+                Identificamos que a sua loja não está com o recurso de TAX/VAT ativo. Para adicionar o suporte, acesse <a href="%1">Aqui</a> ou vá em Clientes->Configurações de Clientes->Criar Nova Conta Para Clientes->Mostrar número VAT em frontend.' , 
                 $url
             );
         }
-        if(! $this->configProvider->isTelephoneSet()){
+        if(! $this->configProvider->isTelephoneSet() && $this->configProvider->isActive()){
             $disableModule = true;
             $disableMessage = __('Identificamos que a sua loja não possui um telefone ativo, favor habilitar para ativar o módulo');
         }
 
-        if( ! $this->configProvider->isCustomerTaxRequired() ){
+        if( ! $this->configProvider->isCustomerTaxRequired() && $this->configProvider->isActive()){
             $disableModule = true;
             $disableMessage = __('Identificamos que a sua loja não possui suporte para CPF/CNPJ (TAXVAT). Para adicionar o suporte, acesse <a href="%1"> Aqui</a> e vá em Loja->Configurações->Clientes->Opções de nome e  endereço->Mostrar número TAX/VAT.', 
                 $url
             );
         }
 
-        if (! $this->configProvider->isCurrencyBaseBRL() ) {
+        if (! $this->configProvider->isCurrencyBaseBRL() && $this->configProvider->isActive()) {
             $disableModule = true;
             $disableMessage = __("Your base currency has to be BRL in order to activate this module.");
         }
@@ -94,8 +105,26 @@ class DataAssign implements ObserverInterface
         }
 
         if ($disableModule) {
+
             $this->configProvider->desactivateModule();
-            return $this->messageManager->addError($disableMessage);
+
+            $this->messageManager->addError($disableMessage);
+
+            $types = array('config','layout','block_html','collections','reflection','db_ddl','eav','config_integration','config_integration_api','full_page','translate','config_webservice');
+ 
+            foreach ($types as $type) {  
+                $this->_cacheTypeList->cleanType($type);
+            }
+ 
+            foreach ($this->_cacheFrontendPool as $cacheFrontend) {
+                $cacheFrontend->getBackend()->clean();
+            }
+
+            $this->_responseFactory->create()
+                    ->setRedirect($url)
+                    ->sendResponse();
+            exit(0);
+            return $this;
         }
 
         $apiContext = new \PayPal\Rest\ApiContext(
@@ -170,5 +199,6 @@ class DataAssign implements ObserverInterface
         }
 
         return $this;
+      
     }
 }

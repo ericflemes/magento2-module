@@ -147,7 +147,6 @@ define([
                     "country": "BR",
                     "enableContinue": "continueButton",
                     "disableContinue": "continueButton",
-                    "iframeHeight": "420",
                     "rememberedCards": window.checkoutConfig.payment.paypalbr_paypalplus.rememberedCard,
                     /**
                      * Do stuff after iframe is loaded
@@ -209,35 +208,18 @@ define([
                             {
 
                             case "INTERNAL_SERVICE_ERROR":
-                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
-                                location.reload(); 
                             case "SOCKET_HANG_UP": 
                             case "socket hang up":
-                            case "connect ECONNREFUSED": 
-                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
-                                location.reload();
-                            case "connect ETIMEDOUT": //javascript fallthrough
-                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
-                                location.reload();
-                            case "UNKNOWN_INTERNAL_ERROR": //javascript fallthrough
-                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
-                                location.reload();
-                            case "fiWalletLifecycle_unknown_error": //javascript fallthrough
-                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
-                                location.reload();
-                            case "Failed to decrypt term info": //javascript fallthrough
-                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
-                                location.reload();
-                            case "RESOURCE_NOT_FOUND": 
-                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
-                                location.reload();
+                            case "connect ECONNREFUSED":
+                            case "connect ETIMEDOUT": 
+                            case "UNKNOWN_INTERNAL_ERROR":
+                            case "fiWalletLifecycle_unknown_error":
+                            case "Failed to decrypt term info": 
+                            case "RESOURCE_NOT_FOUND":                 
                             case "INTERNAL_SERVER_ERROR":
                                 alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
                                 location.reload();
-                            break;
                             case "RISK_N_DECLINE": 
-                                alert ("Por favor utilize outro cartão, caso o problema persista entre em contato com o PayPal (0800-047-4482)."); 
-                                location.reload();
                             case "NO_VALID_FUNDING_SOURCE_OR_RISK_REFUSED": 
                                 alert ("Por favor utilize outro cartão, caso o problema persista entre em contato com o PayPal (0800-047-4482)."); 
                                 location.reload();
