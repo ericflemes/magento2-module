@@ -70,3 +70,4 @@
 "Enable this mode to debug the application in homologation or errors case.","Ative esse modo para depurar o aplicativo em caso de homologação ou erros."
 "Create orders from declined transactions","Criar pedido com o pagamento não aprovado"
 "Use yes to avoid creating the order with an error.","Use sim para evitar criar o pedido com um erro."
+"Payment has been proccess.","Payment has been proccess."
