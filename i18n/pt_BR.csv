@@ -71,3 +71,5 @@
 "Create orders from declined transactions","Criar pedido com o pagamento não aprovado"
 "Use yes to avoid creating the order with an error.","Use sim para evitar criar o pedido com um erro."
 "Payment has been proccess.","Payment has been proccess."
+"Invoice #%1 ","Pedido #%1 "
+"- Store: #%1","- Loja: #%1"

@@ -72,7 +72,7 @@ class WebHookManagement implements WebHookManagementInterface
 
     protected function logger($array)
     {
-        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/paypalplus-webhook.log');
+        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/paypalbr/paypalplus-webhook.log');
         $logger = new \Zend\Log\Logger();
         $logger->addWriter($writer);
         $logger->info($array);

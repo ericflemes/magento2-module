@@ -32,7 +32,7 @@ class GeneralHandler extends AbstractHandler implements HandlerInterface
     		foreach ($transaction->getRelatedResources() as $id => $relatedResources) {
                 $sale = $relatedResources->getSale();
 
-                if ($this->getConfig()->getToggle()) {
+                if (!$this->getConfig()->getToggle()) {
                     if ($sale->getState() == 'failed') {
                         throw new \InvalidArgumentException('Error in Payment return failed');
                     }

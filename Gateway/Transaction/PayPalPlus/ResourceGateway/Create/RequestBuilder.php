@@ -295,7 +295,7 @@ class RequestBuilder implements BuilderInterface
                 'http.headers.PayPal-Partner-Attribution-Id' => 'MagentoBrazil_Ecom_PPPlus2',
                 'mode' => $this->configProvider->isModeSandbox() ? 'sandbox' : 'live',
                 'log.LogEnabled' => $debug,
-                'log.FileName' => BP . '/var/log/paypalplus.log',
+                'log.FileName' => BP . '/var/log/paypalbr/paypalplus.log',
                 'log.LogLevel' => 'DEBUG', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
                 'cache.enabled' => true,
                 'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2'
@@ -334,11 +334,17 @@ class RequestBuilder implements BuilderInterface
             ->setValue($order->getIncrementId());
         $patchRequest->addPatch($itemListPatch);
 
+        if ($this->getConfig()->getStoreName()) {
+            $descriptionValue = __('Invoice #%1 ', $order->getIncrementId()) . __('- Store: #%1', $this->getConfig()->getStoreName());
+        }else{
+            $descriptionValue = __('Invoice #%1 ', $order->getIncrementId());
+        }
+
         $description = new \PayPal\Api\Patch();
         $description
             ->setOp('add')
             ->setPath('/transactions/0/description')
-            ->setValue('description');
+            ->setValue($descriptionValue );
         $patchRequest->addPatch($description);
 
         $paypalPayment->update($patchRequest, $apiContext);

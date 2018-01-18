@@ -56,4 +56,12 @@ class Config extends AbstractConfig implements ConfigInterface
     {
         return $this->getConfig(static::PATH_TOGGLE);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStoreName()
+    {
+        return $this->getConfig(static::STORE_NAME);
+    }
 }
