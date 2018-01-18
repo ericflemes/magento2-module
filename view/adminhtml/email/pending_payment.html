@@ -6,8 +6,7 @@
             <p class="greeting">{{trans "%name," name=$order.getCustomerName()}}</p>
             <p>
                 {{trans
-                    "Your order <strong>#%increment_id</strong> is on hold due to a pending payment. \n\
-                     The order will be processed after the payment is approved at the payment gateway."
+                    "Your order <strong>#%increment_id</strong> is on hold due to a pending payment. \n\ The order will be processed after the payment is approved at the payment gateway."
                     increment_id=$order.increment_id
                     order_status=$order.getStatusLabel()
                 |raw}}

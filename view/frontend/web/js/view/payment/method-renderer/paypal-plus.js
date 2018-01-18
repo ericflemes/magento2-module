@@ -209,31 +209,31 @@ define([
                             case "Failed to decrypt term info": 
                             case "RESOURCE_NOT_FOUND":                 
                             case "INTERNAL_SERVER_ERROR":
-                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                                alert($.mage.__('An unexpected error occurred, please try again.'));
                                 location.reload();
                             case "RISK_N_DECLINE": 
                             case "NO_VALID_FUNDING_SOURCE_OR_RISK_REFUSED": 
-                                alert ("Por favor utilize outro cartão, caso o problema persista entre em contato com o PayPal (0800-047-4482)."); 
+                                alert($.mage.__('Please use another card if the problem persists please contact PayPal (0800-047-4482).')); 
                                 location.reload();
-                            case "TRY_ANOTHER_CARD": //javascript fallthrough
+                            case "TRY_ANOTHER_CARD":
                             case "NO_VALID_FUNDING_INSTRUMENT":
-                                alert ("Seu pagamento não foi aprovado. Por favor utilize outro cartão, caso o problema persista entre em contato com o PayPal (0800-047-4482)."); 
+                                alert($.mage.__('Your payment was not approved. Please use another card if the problem persists please contact PayPal (0800-047-4482).')); 
                                 location.reload();
                             break;
                             case "CARD_ATTEMPT_INVALID":
-                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                                alert ($.mage.__('An unexpected error occurred, please try again.'));
                                 location.reload();
                             break;
                             case "INVALID_OR_EXPIRED_TOKEN":
-                                alert ("A sua sessão expirou, por favor tente novamente."); //pt_BR
+                                alert ($.mage.__('Your session has expired, please try again.'));
                                 location.reload();
                             break;
                             case "CHECK_ENTRY":
-                                alert ("Por favor revise os dados de Cartão de Crédito inseridos."); //pt_BR
+                                alert ($.mage.__('Please review the credit card data entered.'));
                                 location.reload();
                             break;
                             default: //unknown error & reload payment flow
-                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                                alert ($.mage.__('An unexpected error occurred, please try again.')); 
                                 location.reload();
                             }
                         }
@@ -266,7 +266,7 @@ define([
                 var iframeErrorElem = '#iframe-error';
 
                 $(iframeErrorElem).html('');
-                $(iframeErrorElem).append($.mage.__('<div><span>Error to load iframe</span></div>'));
+                $(iframeErrorElem).append($.mage.__('<div><span>Error loading the payment method. Please try again, if problem persists contact us.</span></div>'));
 
                 $(iframeErrorElem).show();
                 $('#iframe-warning').hide();

@@ -25,7 +25,7 @@
                         <label>Exhibition Name</label>
                         <config_path>payment/paypalbr_paypalplus/exhibition_name</config_path>
                         <comment>Will be displayed in checkout: Credit Card (Parceled in 12x)</comment>
-                        <tooltip>By default, the PayPal Plus solution is displayed as a "Credit Card". Use this option to set additional text, such as installments or discounts.</tooltip>
+                        <tooltip>By default, the PayPal Plus solution is displayed as a 'Credit Card'. Use this option to set additional text, such as installments or discounts.</tooltip>
                     </field>
                     <field id="mode" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Mode</label>
@@ -96,7 +96,7 @@
                         <tooltip>Enable this mode to debug the application in homologation or errors case.</tooltip>
                     </field>
                     <field id="toggle" translate="label comment tooltip" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Toggle</label>
+                        <label>Create orders from declined transactions</label>
                         <config_path>payment/paypalbr_paypalplus/toggle</config_path>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <comment>Use yes to avoid creating the order with an error.</comment>
