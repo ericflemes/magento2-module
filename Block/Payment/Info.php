@@ -4,9 +4,9 @@ namespace PayPalBR\PayPal\Block\Payment;
 
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Payment\Model\Config;
-use Magento\Payment\Block\Info;
+use Magento\Payment\Block\Info as BlockInfo;
 
-class Info extends Info
+class Info extends BlockInfo
 {
     protected  $_disallowedFiledNames = array(
         'execute_url',

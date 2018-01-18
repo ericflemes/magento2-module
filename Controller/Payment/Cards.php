@@ -6,7 +6,6 @@ use Magento\Framework\Json\Helper\Data;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\Result\RawFactory;
-use Magento\Framework\App\Action\Context;
 use Psr\Log\LoggerInterface;
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\Session;
