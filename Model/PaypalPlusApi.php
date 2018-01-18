@@ -124,7 +124,7 @@ class PaypalPlusApi
                 'mode' => $this->configProvider->isModeSandbox() ? 'sandbox' : 'live',
                 'log.LogEnabled' => $debug,
                 'log.FileName' => BP . '/var/log/paypalplus.log',
-                'log.LogLevel' => 'DEBUG', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
+                'log.LogLevel' => 'DEBUG', 
                 'cache.enabled' => true,
                 'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2'
         );

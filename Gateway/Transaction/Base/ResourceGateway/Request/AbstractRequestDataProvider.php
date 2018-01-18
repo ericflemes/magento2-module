@@ -67,7 +67,7 @@ abstract class AbstractRequestDataProvider
      */
     public function getPersonType()
     {
-        return \Gateway\One\DataContract\Enum\PersonTypeEnum::COMPANY;
+        return 'CPF';
     }
 
     /**
@@ -85,8 +85,8 @@ abstract class AbstractRequestDataProvider
     {
         $identity = (int) preg_replace('/[^0-9]/','', $this->getDocumentNumber());
         return (strlen($identity) === 14) ?
-            \Gateway\One\DataContract\Enum\DocumentTypeEnum::CNPJ :
-            \Gateway\One\DataContract\Enum\DocumentTypeEnum::CPF;
+            'CNPJ' :
+            'CPF';
     }
 
 
@@ -175,7 +175,7 @@ abstract class AbstractRequestDataProvider
      */
     public function getBillingAddressCountry()
     {
-        return \Gateway\One\DataContract\Enum\CountryEnum::BRAZIL;
+        return 'BR';
     }
 
     /**
@@ -247,7 +247,7 @@ abstract class AbstractRequestDataProvider
      */
     public function getShippingAddressCountry()
     {
-        return \Gateway\One\DataContract\Enum\CountryEnum::BRAZIL;
+        return 'BR';
     }
 
     /**

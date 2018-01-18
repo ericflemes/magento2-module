@@ -1,15 +1,12 @@
 <?php /** @var $block PayPalBR\PayPal\Block\Checkout\Success */ ?>
 
-<!-- Custom PPPlus additional info -->
 <?php $block->_initOrder(); ?>
 
 <?php if($block->getIsMethodActive()) : ?>
-    <!-- Add Custom PayPal Message for pending payments -->
     <?php if ($block->isPaymentPending() && !empty($block->getPendingMessage())) : ?>
         <div id="warning" class="message notice">
             <div><?php echo $block->escapeHtml($block->getPendingMessage()) ?></div>
         </div>
     <?php endif; ?>
 <?php endif; ?>
-<!-- End of Custom PPPlus additional info -->
 

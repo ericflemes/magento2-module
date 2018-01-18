@@ -2,8 +2,14 @@
 
 namespace PayPalBR\PayPal\Controller\Payment;
 
-use \Magento\Framework\Json\Helper\Data;
-
+use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\App\Action\Context;
+use Psr\Log\LoggerInterface;
+use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\Session;
 
 class Cards extends \Magento\Framework\App\Action\Action
 {
@@ -14,18 +20,20 @@ class Cards extends \Magento\Framework\App\Action\Action
     protected $_objectManager;
     protected $_encryptor;
     protected $_logger;
-
-    const CUSTOMER_INSTANCE_NAME =   'Magento\Customer\Model\Customer';
-    const SESSION_INSTANCE_NAME  =   'Magento\Customer\Model\Session';
+    protected $_customer;
+    protected $_session;
+    
     /**
      * @param Context $context
      */
     public function __construct(
-            \Magento\Framework\App\Action\Context $context,
-            \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-            \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-            \Magento\Framework\Json\Helper\Data $helper,
-            \Psr\Log\LoggerInterface $logger
+            Context $context,
+            JsonFactory $resultJsonFactory,
+            RawFactory $resultRawFactory,
+            Data $helper,
+            LoggerInterface $logger,
+            Customer $customer,
+            Session $session
 
     ){
         $this->_resultJsonFactory = $resultJsonFactory;
@@ -33,6 +41,8 @@ class Cards extends \Magento\Framework\App\Action\Action
         $this->_helper = $helper;
         $this->_objectManager = $context->getObjectManager();
         $this->_logger = $logger;
+        $this->_customer = $customer;
+        $this->_session = $session;
         parent::__construct($context);
     }
     /**
@@ -62,8 +72,8 @@ class Cards extends \Magento\Framework\App\Action\Action
             return $resultRaw->setHttpResponseCode($httpBadRequestCode);
         }
         try{
-            $customer = $this->_objectManager->create(self::CUSTOMER_INSTANCE_NAME);
-            $customerSession = $this->_objectManager->create(self::SESSION_INSTANCE_NAME);
+            $customer = $this->_customer;
+            $customerSession = $this->_session;
             if($customerSession->isLoggedIn()){
                 $customerId = $customerSession->getCustomerId();
                 $customer->load($customerId);

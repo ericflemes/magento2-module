@@ -125,11 +125,16 @@ define([
             }
                         
 
-            storage.set('paypal-data',{'firstName': firstName,
-                                'lastName': lastName,
-                                'email': email,
-                                'taxVat':taxVat,
-                                'telephone': telephone});
+            storage.set(
+                'paypal-data',
+                {
+                    'firstName': firstName,
+                    'lastName': lastName,
+                    'email': email,
+                    'taxVat':taxVat,
+                    'telephone': telephone
+                }
+            );
 
 
             this.paypalObject = PAYPAL.apps.PPP(
@@ -148,25 +153,11 @@ define([
                     "enableContinue": "continueButton",
                     "disableContinue": "continueButton",
                     "rememberedCards": window.checkoutConfig.payment.paypalbr_paypalplus.rememberedCard,
-                    /**
-                     * Do stuff after iframe is loaded
-                     * @returns {undefined}
-                     */
+
                     onLoad: function () {
                         fullScreenLoader.stopLoader();
                         console.log("Iframe successfully lo aded !");
                     },
-
-                    /**
-                     * Continue after payment is verifies (continueButton)
-                     *
-                     * @param {string} rememberedCardsToken
-                     * @param {string} payerId
-                     * @param {string} token
-                     * @param {string} term
-                     * @returns {}
-                     */
-
                     onContinue: function (rememberedCardsToken, payerId, token, term) {
                         $('#continueButton').hide();
                         $('#payNowButton').show();
@@ -267,7 +258,6 @@ define([
                         approvalUrl = response.links[i].href;
                     }
                 }
-                //console.log("Approval URL: " + approvalUrl);
                 self.runPayPal(approvalUrl);
             })
             .fail(function (response) {
@@ -291,7 +281,6 @@ define([
         placePendingOrder: function () {
             var self = this;
             if (this.placeOrder()) {
-                // capture all click events
                 document.addEventListener('click', iframe.stopEventPropagation, true);
             }
         },
