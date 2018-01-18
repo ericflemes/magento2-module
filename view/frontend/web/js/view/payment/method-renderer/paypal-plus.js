@@ -73,7 +73,7 @@ define([
         },
 
         runPayPal: function(approvalUrl) {
-
+            fullScreenLoader.startLoader();
             var storage;
             var self = this;
             var telephone = '';
@@ -153,6 +153,7 @@ define([
                      * @returns {undefined}
                      */
                     onLoad: function () {
+                        fullScreenLoader.stopLoader();
                         console.log("Iframe successfully lo aded !");
                     },
 
