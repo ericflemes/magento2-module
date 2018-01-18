@@ -178,7 +178,7 @@ define([
                         self.messageContainer.addSuccessMessage(message);
 
                         if (typeof term !== 'undefined') {
-                            self.term = term;
+                            self.term = term.term;
                         }else{
                             term = '1';
                             self.term = term;
