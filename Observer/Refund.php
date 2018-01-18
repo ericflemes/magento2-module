@@ -54,7 +54,7 @@ class Refund implements ObserverInterface
 
                 $order->addStatusHistoryComment(
                     __(
-                        'Notified customer about creditmemo #%1.',
+                        'Notified customer about refund #%1.',
                         $order->getIncrementId()
                     )
                 )->setIsCustomerNotified(true)
@@ -70,7 +70,7 @@ class Refund implements ObserverInterface
 
         $order->addStatusHistoryComment(
             __(
-                'Notified customer about creditmemo #%1.',
+                'Notified customer about refund #%1.',
                 $order->getIncrementId()
             )
         )->setIsCustomerNotified(true)

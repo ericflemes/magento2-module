@@ -11,7 +11,7 @@
             <group id="paypalbr" sortOrder="6" showInDefault="0" showInWebsite="0" showInStore="0">
             	<group id="paypalbr_paypalplus" translate="label comment" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>PayPal Plus</label>
-                    <comment>The experience of a transparent checkout processed with a PayPal security. The user makes the payment directly on your site, without a need to create an account, use only the credit card.</comment>
+                    <comment>The experience of an unbranded checkout processed with PayPal security. The user makes the payment directly on your website using only his credit card, without the need of a PayPal account.</comment>
                     <fieldset_css>complex paypalbr-section</fieldset_css>
                     <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
                     <attribute type="activity_path">payment/paypalbr_paypalplus/active</attribute>
@@ -24,7 +24,7 @@
                     <field id="exhibition_name" translate="label comment tooltip" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Exhibition Name</label>
                         <config_path>payment/paypalbr_paypalplus/exhibition_name</config_path>
-                        <comment>Will be displayed in checkout: Credit Card (Parceled in 12x)</comment>
+                        <comment>Will be displayed in checkout: Credit Card (Up to 12x installments)</comment>
                         <tooltip>By default, the PayPal Plus solution is displayed as a 'Credit Card'. Use this option to set additional text, such as installments or discounts.</tooltip>
                     </field>
                     <field id="mode" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -93,13 +93,13 @@
                         <config_path>payment/paypalbr_paypalplus/depuration_mode</config_path>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <comment>The logs will be saved at: var/log/paypalbr/</comment>
-                        <tooltip>Enable this mode to debug the application in homologation or errors case.</tooltip>
+                        <tooltip>Enable this mode to debug the application.</tooltip>
                     </field>
                     <field id="toggle" translate="label comment tooltip" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Create orders from declined transactions</label>
+                        <label>Create order from declined transactions</label>
                         <config_path>payment/paypalbr_paypalplus/toggle</config_path>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                        <comment>Use yes to avoid creating the order with an error.</comment>
+                        <comment>Use yes to create the order with an error.</comment>
                     </field>
             	</group>
             </group>

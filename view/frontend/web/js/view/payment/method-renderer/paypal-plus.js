@@ -165,7 +165,7 @@ define([
                         self.payerId = payerId;
 
                         var message = {
-                            message: $.mage.__('Payment has been proccess.')
+                            message: $.mage.__('Payment is being processed.')
                         };
                         self.messageContainer.addSuccessMessage(message);
 

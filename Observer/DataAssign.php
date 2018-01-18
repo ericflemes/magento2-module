@@ -61,7 +61,7 @@ class DataAssign implements ObserverInterface
 
         if(! $this->configProvider->isStoreFrontActive() && $this->configProvider->isActive()){
             $disableModule = true;
-            $disableMessage = __('We have identified that your store does not have the active TAX / VAT feature. To add support, go to <a href="%1"> Here </a> or go to Customers-> Customer Settings-> Create New Customer Account-> Display VAT number in frontend.' , 
+            $disableMessage = __("We have identified that your store does not have the active TAX / VAT feature. To add it's support, go to <a href='%1'> Here </a> or go to Customers-> Customer Settings-> Create New Customer Account-> Display VAT number in frontend." , 
                 $url
             );
         }
@@ -100,7 +100,7 @@ class DataAssign implements ObserverInterface
         } catch (\Exception $e) {
 
             $disableModule = true;
-            $disableMessage = __('Incorrect API credentials, please check.');
+            $disableMessage = __('Incorrect API credentials, please review it.');
         }
 
         if ($disableModule) {
