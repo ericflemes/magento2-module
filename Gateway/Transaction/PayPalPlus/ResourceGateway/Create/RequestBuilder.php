@@ -296,7 +296,7 @@ class RequestBuilder implements BuilderInterface
                 'mode' => $this->configProvider->isModeSandbox() ? 'sandbox' : 'live',
                 'log.LogEnabled' => $debug,
                 'log.FileName' => BP . '/var/log/paypalbr/paypalplus.log',
-                'log.LogLevel' => 'DEBUG', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
+                'log.LogLevel' => 'DEBUG',
                 'cache.enabled' => true,
                 'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2'
             ]
@@ -359,8 +359,32 @@ class RequestBuilder implements BuilderInterface
     {
         $paymentExecution = new \PayPal\Api\PaymentExecution();
         $paymentExecution->setPayerId($payerId);
+        try {
+            $paypalPayment->execute($paymentExecution, $apiContext);
+        } catch (\Exception $e) {
+            $error_msg = json_decode($e->getData());
+            switch ($error_msg->name) {
+                case 'INSTRUMENT_DECLINED':
+                case 'CREDIT_CARD_REFUSED':
+                case 'TRANSACTION_REFUSED_BY_PAYPAL_RISK':
+                case 'PAYER_CANNOT_PAY':
+                case 'PAYER_ACCOUNT_RESTRICTED':
+                case 'PAYER_ACCOUNT_LOCKED_OR_CLOSED':
+                case 'PAYEE_ACCOUNT_RESTRICTED':
+                case 'TRANSACTION_REFUSED':
+                    if (!$this->getConfig()->getToggle()) {
+                        throw new \InvalidArgumentException($error_msg->name);
+                    }
+                    break;
+                
+                default:
+                    throw new \LogicException($error_msg->name);
+                    break;
+            }
 
-        $paypalPayment->execute($paymentExecution, $apiContext);
+            return $error_msg;
+        }
+        
 
         return $paypalPayment;
     }

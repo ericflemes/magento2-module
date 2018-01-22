@@ -1,5 +1,5 @@
 define([
-    'Magento_Checkout/js/view/payment/default',
+    'PayPalBR_PayPal/js/view/payment/default',
     'Magento_Paypal/js/model/iframe',
     'jquery',
     'Magento_Checkout/js/model/quote',
