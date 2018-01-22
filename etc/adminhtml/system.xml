@@ -24,7 +24,7 @@
                     <field id="exhibition_name" translate="label comment tooltip" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Exhibition Name</label>
                         <config_path>payment/paypalbr_paypalplus/exhibition_name</config_path>
-                        <comment>Will be displayed in checkout: Credit Card (Up to 12x installments)</comment>
+                        <comment>It's going to be display on checkout: Credit Card 'Exhibition Name'</comment>
                         <tooltip>By default, the PayPal Plus solution is displayed as a 'Credit Card'. Use this option to set additional text, such as installments or discounts.</tooltip>
                     </field>
                     <field id="mode" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -99,7 +99,7 @@
                         <label>Create order from declined transactions</label>
                         <config_path>payment/paypalbr_paypalplus/toggle</config_path>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                        <comment>Use yes to create the order with an error.</comment>
+                        <comment>When activated, declined transactions will generate orders</comment>
                     </field>
             	</group>
             </group>
