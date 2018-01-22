@@ -113,7 +113,7 @@ class SalesOrderPlaceAfter implements ObserverInterface
             $customer = $this->customerRepository->save($customer);
         }
 
-        if ($order->canCancel() && $status == 'failed') {
+        if ($order->canCancel() && $status == 'denied') {
             $result = $this->cancelOrder($order);
             $this->logger($result);
         }
