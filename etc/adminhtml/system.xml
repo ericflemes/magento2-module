@@ -74,12 +74,12 @@
                         <source_model>Magento\Sales\Model\Config\Source\Order\Status\Processing</source_model>
                         <config_path>payment/paypalbr_paypalplus/new_order_status</config_path>
                     </field>
-                    <field id="reject_order_status" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <field id="reject_order_status" translate="label" type="select" sortOrder="0" showInDefault="0" showInWebsite="0" showInStore="0" canRestore="1">
                         <label>Reject Order Status</label>
                         <source_model>PayPalBR\PayPal\Model\Config\Source\Review</source_model>
                         <config_path>payment/paypalbr_paypalplus/reject_order_status</config_path>
                     </field>
-                   <field id="review_order_status" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                   <field id="review_order_status" translate="label" type="select" sortOrder="0" showInDefault="0" showInWebsite="0" showInStore="0" canRestore="1">
                         <label>Review Order Status</label>
                         <source_model>PayPalBR\PayPal\Model\Config\Source\Review</source_model>
                         <config_path>payment/paypalbr_paypalplus/review_order_status</config_path>
