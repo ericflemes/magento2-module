@@ -50,7 +50,7 @@ class Refund implements ObserverInterface
         } catch (\Exception $e) {
             $data = json_decode($e->getData());
             if ('TRANSACTION_REFUSED' == $data->name) {
-                $payment->setAdditionalInformation('refund', $data->name)->save();
+                $payment->setAdditionalInformation('refund', $data->name)->setAdditionalInformation('state_payPal', 'refunded')->save();
 
                 $order->addStatusHistoryComment(
                     __(
@@ -66,7 +66,7 @@ class Refund implements ObserverInterface
             }
         }
 
-        $payment->setAdditionalInformation('refund', $refundedSale->getId())->save();
+        $payment->setAdditionalInformation('refund', $refundedSale->getId())->setAdditionalInformation('state_payPal', 'refunded')->save();
 
         $order->addStatusHistoryComment(
             __(
