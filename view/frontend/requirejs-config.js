@@ -5,7 +5,10 @@ var config = {
     },
     shim:{
         'ppplus':{
-            'deps':['legalize', 'jquery/jquery.cookie']
+            'deps':[
+            	'legalize', 
+            	'jquery/jquery.cookie'
+            ]
         }
     }
 };

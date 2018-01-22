@@ -2,7 +2,11 @@
 
 namespace PayPalBR\PayPal\Block\Payment;
 
-class Info extends \Magento\Payment\Block\Info
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Payment\Model\Config;
+use Magento\Payment\Block\Info as BlockInfo;
+
+class Info extends BlockInfo
 {
     protected  $_disallowedFiledNames = array(
         'execute_url',
@@ -17,8 +21,8 @@ class Info extends \Magento\Payment\Block\Info
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Payment\Model\Config $paymentConfig,
+        Context $context,
+        Config $paymentConfig,
         array $data = []
     ) {
         parent::__construct($context, $data);

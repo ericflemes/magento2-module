@@ -63,7 +63,7 @@ class ConfigProvider
     const XML_CUSTOMER_TAX_SHOW = 'customer/address/taxvat_show';
 
 
-        /**
+    /**
      * Contains the configuration path for showing telephone
      */
     const XML_CUSTOMER_TEL = 'customer/address/telephone_show';
@@ -236,7 +236,7 @@ class ConfigProvider
         return $secretId;
     }
 
-        /**
+    /**
      * Returns if the store front is activate
      *
      * This configuration uses \Magento\Config\Model\Config\Source\Yesno as backend.
@@ -278,7 +278,7 @@ class ConfigProvider
         return $customerTaxShow == 'req';
     }
 
-        /**
+    /**
      * Checks if customer tax number is required or not.
      *
      * @return bool

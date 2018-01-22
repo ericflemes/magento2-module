@@ -61,19 +61,18 @@ class DataAssign implements ObserverInterface
 
         if(! $this->configProvider->isStoreFrontActive() && $this->configProvider->isActive()){
             $disableModule = true;
-            $disableMessage = __('
-                Identificamos que a sua loja não está com o recurso de TAX/VAT ativo. Para adicionar o suporte, acesse <a href="%1">Aqui</a> ou vá em Clientes->Configurações de Clientes->Criar Nova Conta Para Clientes->Mostrar número VAT em frontend.' , 
+            $disableMessage = __("We have identified that your store does not have the active TAX / VAT feature. To add it's support, go to <a href='%1'> Here </a> or go to Customers-> Customer Settings-> Create New Customer Account-> Display VAT number in frontend." , 
                 $url
             );
         }
         if(! $this->configProvider->isTelephoneSet() && $this->configProvider->isActive()){
             $disableModule = true;
-            $disableMessage = __('Identificamos que a sua loja não possui um telefone ativo, favor habilitar para ativar o módulo');
+            $disableMessage = __('We have identified that your store does not have an active phone, please enable to activate the module');
         }
 
         if( ! $this->configProvider->isCustomerTaxRequired() && $this->configProvider->isActive()){
             $disableModule = true;
-            $disableMessage = __('Identificamos que a sua loja não possui suporte para CPF/CNPJ (TAXVAT). Para adicionar o suporte, acesse <a href="%1"> Aqui</a> e vá em Loja->Configurações->Clientes->Opções de nome e  endereço->Mostrar número TAX/VAT.', 
+            $disableMessage = __('We have identified that your store does not have support for CPF / CNPJ (TAXVAT). To add support, go to <a href="%1"> Here </a> and go to Shop-> Settings-> Clients-> Name and address options-> Show TAX / VAT number.', 
                 $url
             );
         }
@@ -91,7 +90,7 @@ class DataAssign implements ObserverInterface
                 'http.headers.PayPal-Partner-Attribution-Id' => 'MagentoBrazil_Ecom_PPPlus2',
                 'mode' => $this->configProvider->isModeSandbox() ? 'sandbox' : 'live',
                 'log.LogEnabled' => true,
-                'log.FileName' => BP . '/var/log/paypalplus.log',
+                'log.FileName' => BP . '/var/log/paypalbr/paypalplus.log',
                 'log.LogLevel' => 'DEBUG', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
                 'cache.enabled' => true,
                 'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2'
@@ -101,7 +100,7 @@ class DataAssign implements ObserverInterface
         } catch (\Exception $e) {
 
             $disableModule = true;
-            $disableMessage = __('Credenciais de API incorretas, favor revisar.');
+            $disableMessage = __('Incorrect API credentials, please review it.');
         }
 
         if ($disableModule) {

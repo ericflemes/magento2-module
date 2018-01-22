@@ -1,5 +1,5 @@
 define([
-    'Magento_Checkout/js/view/payment/default',
+    'PayPalBR_PayPal/js/view/payment/default',
     'Magento_Paypal/js/model/iframe',
     'jquery',
     'Magento_Checkout/js/model/quote',
@@ -73,7 +73,7 @@ define([
         },
 
         runPayPal: function(approvalUrl) {
-
+            fullScreenLoader.startLoader();
             var storage;
             var self = this;
             var telephone = '';
@@ -125,11 +125,16 @@ define([
             }
                         
 
-            storage.set('paypal-data',{'firstName': firstName,
-                                'lastName': lastName,
-                                'email': email,
-                                'taxVat':taxVat,
-                                'telephone': telephone});
+            storage.set(
+                'paypal-data',
+                {
+                    'firstName': firstName,
+                    'lastName': lastName,
+                    'email': email,
+                    'taxVat':taxVat,
+                    'telephone': telephone
+                }
+            );
 
 
             this.paypalObject = PAYPAL.apps.PPP(
@@ -148,24 +153,11 @@ define([
                     "enableContinue": "continueButton",
                     "disableContinue": "continueButton",
                     "rememberedCards": window.checkoutConfig.payment.paypalbr_paypalplus.rememberedCard,
-                    /**
-                     * Do stuff after iframe is loaded
-                     * @returns {undefined}
-                     */
+
                     onLoad: function () {
+                        fullScreenLoader.stopLoader();
                         console.log("Iframe successfully lo aded !");
                     },
-
-                    /**
-                     * Continue after payment is verifies (continueButton)
-                     *
-                     * @param {string} rememberedCardsToken
-                     * @param {string} payerId
-                     * @param {string} token
-                     * @param {string} term
-                     * @returns {}
-                     */
-
                     onContinue: function (rememberedCardsToken, payerId, token, term) {
                         $('#continueButton').hide();
                         $('#payNowButton').show();
@@ -173,11 +165,12 @@ define([
                         self.payerId = payerId;
 
                         var message = {
-                            message: $.mage.__('Payment has been proccess.')
+                            message: $.mage.__('Payment is being processed.')
                         };
                         self.messageContainer.addSuccessMessage(message);
 
                         if (typeof term !== 'undefined') {
+                            term = term.term;
                             self.term = term.term;
                         }else{
                             term = '1';
@@ -217,31 +210,31 @@ define([
                             case "Failed to decrypt term info": 
                             case "RESOURCE_NOT_FOUND":                 
                             case "INTERNAL_SERVER_ERROR":
-                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                                alert($.mage.__('An unexpected error occurred, please try again.'));
                                 location.reload();
                             case "RISK_N_DECLINE": 
                             case "NO_VALID_FUNDING_SOURCE_OR_RISK_REFUSED": 
-                                alert ("Por favor utilize outro cartão, caso o problema persista entre em contato com o PayPal (0800-047-4482)."); 
+                                alert($.mage.__('Please use another card if the problem persists please contact PayPal (0800-047-4482).')); 
                                 location.reload();
-                            case "TRY_ANOTHER_CARD": //javascript fallthrough
+                            case "TRY_ANOTHER_CARD":
                             case "NO_VALID_FUNDING_INSTRUMENT":
-                                alert ("Seu pagamento não foi aprovado. Por favor utilize outro cartão, caso o problema persista entre em contato com o PayPal (0800-047-4482)."); 
+                                alert($.mage.__('Your payment was not approved. Please use another card if the problem persists please contact PayPal (0800-047-4482).')); 
                                 location.reload();
                             break;
                             case "CARD_ATTEMPT_INVALID":
-                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                                alert ($.mage.__('An unexpected error occurred, please try again.'));
                                 location.reload();
                             break;
                             case "INVALID_OR_EXPIRED_TOKEN":
-                                alert ("A sua sessão expirou, por favor tente novamente."); //pt_BR
+                                alert ($.mage.__('Your session has expired, please try again.'));
                                 location.reload();
                             break;
                             case "CHECK_ENTRY":
-                                alert ("Por favor revise os dados de Cartão de Crédito inseridos."); //pt_BR
+                                alert ($.mage.__('Please review the credit card data entered.'));
                                 location.reload();
                             break;
                             default: //unknown error & reload payment flow
-                                alert ("Ocorreu um erro inesperado, por favor tente novamente."); //pt_BR
+                                alert ($.mage.__('An unexpected error occurred, please try again.')); 
                                 location.reload();
                             }
                         }
@@ -266,7 +259,6 @@ define([
                         approvalUrl = response.links[i].href;
                     }
                 }
-                //console.log("Approval URL: " + approvalUrl);
                 self.runPayPal(approvalUrl);
             })
             .fail(function (response) {
@@ -275,7 +267,7 @@ define([
                 var iframeErrorElem = '#iframe-error';
 
                 $(iframeErrorElem).html('');
-                $(iframeErrorElem).append($.mage.__('<div><span>Error to load iframe</span></div>'));
+                $(iframeErrorElem).append($.mage.__('<div><span>Error loading the payment method. Please try again, if problem persists contact us.</span></div>'));
 
                 $(iframeErrorElem).show();
                 $('#iframe-warning').hide();
@@ -290,7 +282,6 @@ define([
         placePendingOrder: function () {
             var self = this;
             if (this.placeOrder()) {
-                // capture all click events
                 document.addEventListener('click', iframe.stopEventPropagation, true);
             }
         },

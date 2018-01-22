@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 
-<!-- Use the above configuration o fix Magento bug duplicating additional info block below footer -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="order.success.additional.info" label="Order Success Additional Info">

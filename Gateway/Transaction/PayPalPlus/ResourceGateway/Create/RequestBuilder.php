@@ -295,8 +295,8 @@ class RequestBuilder implements BuilderInterface
                 'http.headers.PayPal-Partner-Attribution-Id' => 'MagentoBrazil_Ecom_PPPlus2',
                 'mode' => $this->configProvider->isModeSandbox() ? 'sandbox' : 'live',
                 'log.LogEnabled' => $debug,
-                'log.FileName' => BP . '/var/log/paypalplus.log',
-                'log.LogLevel' => 'DEBUG', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
+                'log.FileName' => BP . '/var/log/paypalbr/paypalplus.log',
+                'log.LogLevel' => 'DEBUG',
                 'cache.enabled' => true,
                 'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2'
             ]
@@ -334,11 +334,17 @@ class RequestBuilder implements BuilderInterface
             ->setValue($order->getIncrementId());
         $patchRequest->addPatch($itemListPatch);
 
+        if ($this->getConfig()->getStoreName()) {
+            $descriptionValue = __('Invoice #%1 ', $order->getIncrementId()) . __('- Store: #%1', $this->getConfig()->getStoreName());
+        }else{
+            $descriptionValue = __('Invoice #%1 ', $order->getIncrementId());
+        }
+
         $description = new \PayPal\Api\Patch();
         $description
             ->setOp('add')
             ->setPath('/transactions/0/description')
-            ->setValue('description');
+            ->setValue($descriptionValue );
         $patchRequest->addPatch($description);
 
         $paypalPayment->update($patchRequest, $apiContext);
@@ -353,8 +359,32 @@ class RequestBuilder implements BuilderInterface
     {
         $paymentExecution = new \PayPal\Api\PaymentExecution();
         $paymentExecution->setPayerId($payerId);
+        try {
+            $paypalPayment->execute($paymentExecution, $apiContext);
+        } catch (\Exception $e) {
+            $error_msg = json_decode($e->getData());
+            switch ($error_msg->name) {
+                case 'INSTRUMENT_DECLINED':
+                case 'CREDIT_CARD_REFUSED':
+                case 'TRANSACTION_REFUSED_BY_PAYPAL_RISK':
+                case 'PAYER_CANNOT_PAY':
+                case 'PAYER_ACCOUNT_RESTRICTED':
+                case 'PAYER_ACCOUNT_LOCKED_OR_CLOSED':
+                case 'PAYEE_ACCOUNT_RESTRICTED':
+                case 'TRANSACTION_REFUSED':
+                    if (!$this->getConfig()->getToggle()) {
+                        throw new \InvalidArgumentException($error_msg->name);
+                    }
+                    break;
+                
+                default:
+                    throw new \LogicException($error_msg->name);
+                    break;
+            }
 
-        $paypalPayment->execute($paymentExecution, $apiContext);
+            return $error_msg;
+        }
+        
 
         return $paypalPayment;
     }

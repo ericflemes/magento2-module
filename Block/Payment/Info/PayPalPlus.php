@@ -44,7 +44,7 @@ class PayPalPlus extends Info
     {
         $term = $this->getInfo()->getAdditionalInformation('term');
         if ($term == '1') {
-            $term = $term . "x " . __("(À vista)");
+            $term = $term . "x " . __("(In cash)");
         }else{
             $term = $term . "x";
         }
@@ -57,15 +57,15 @@ class PayPalPlus extends Info
         $state = $this->getInfo()->getAdditionalInformation('state_payPal');
 
         if ($state == 'completed' || $state == 'approved') {
-            $state = "<span style='color: #32dc13;'>" . __("APROVADO") . "</span>";
+            $state = "<span style='color: #32dc13;'>" . __("APPROVED") . "</span>";
         }
 
         if ($state == 'pending') {
-            $state = "<span style='color: #efef0b;'>" . __("EM ANÀLISE") . "</span>";
+            $state = "<span style='color: #efef0b;'>" . __("IN ANALYSIS") . "</span>";
         }
         
         if ($state == 'denied') {
-            $state = "<span style='color: red;'>" . __("NÃO APROVADO") . "</span>";
+            $state = "<span style='color: red;'>" . __("NOT APPROVED") . "</span>";
         }
 
         return $state;

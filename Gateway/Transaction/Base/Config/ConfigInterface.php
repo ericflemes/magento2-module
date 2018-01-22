@@ -10,6 +10,7 @@ interface ConfigInterface
     const PATH_SECRET_KEY         = 'payment/paypalbr_paypalplus/secret_key';
     const PATH_TEST_MODE          = 'payment/paypalbr_paypalplus/test_mode';
     const PATH_TOGGLE             = 'payment/paypalbr_paypalplus/toggle';
+    const STORE_NAME              = 'general/store_information/name';
 
     /**
      * @return string
@@ -35,4 +36,9 @@ interface ConfigInterface
      * @return string
      */
     public function getToggle();
+
+    /**
+     * @return string
+     */
+    public function getStoreName();
 }

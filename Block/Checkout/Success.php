@@ -2,12 +2,17 @@
 
 namespace PayPalBR\PayPal\Block\Checkout;
 
-class Success extends \Magento\Checkout\Block\Onepage\Success
+use Magento\Framework\View\Element\Template\Context as TemplateContext;
+use Magento\Checkout\Model\Session;
+use Magento\Sales\Model\Order\Config;
+use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Sales\Model\OrderFactory;
+use Magento\Checkout\Block\Onepage\Success as OnepageSuccess;
+
+class Success extends OnepageSuccess
 {
     const SCOPE_STORE = 'store';
-    const XML_PATH_PENDING_PAYMENT_MESSAGE = 'payment/paypalbr_paypalplus/pending_payment_message';
     const XML_PATH_IS_METHOD_ACTIVE        = 'payment/paypalbr_paypalplus/active';
-    const PAYPAL_LOGO                      = 'https://www.paypalobjects.com/webstatic/mktg/logo-center/logotipo_paypal_pagos_seguros.png';
     const PENDING_PAYMENT_STATUS_CODE      = 'payment_review';
 
     /**
@@ -36,11 +41,11 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Sales\Model\Order\Config $orderConfig,
-        \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Sales\Model\OrderFactory $orderFactory,
+        TemplateContext $context,
+        Session $checkoutSession,
+        Config $orderConfig,
+        HttpContext $httpContext,
+        OrderFactory $orderFactory,
         array $data = []
     )
     {
@@ -61,6 +66,7 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
             $code = $payment->getMethod();
             $result = ($code == \PayPalBR\PayPal\Model\Payment\PayPalPlus::METHOD_NAME);
         }
+
         return $result;
     }
 
@@ -74,6 +80,7 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
         if($this->isPaymentPaypal()) {
             return $this->getConfigValue(self::XML_PATH_IS_METHOD_ACTIVE);
         }
+
         return false;
     }
 
@@ -98,32 +105,8 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
         if($this->_order->getStatus() == self::PENDING_PAYMENT_STATUS_CODE){
             return true;
         }
+
         return false;
-    }
-
-    /**
-     * Get if payment has pending status
-     *
-     * @return string
-     */
-    public function getPendingMessage()
-    {
-        if($this->isPaymentPending() && $this->_order->getPayment()->getMethod() == \PayPalBR\PayPal\Model\Payment::CODE) {
-            return $this->getConfigValue(self::XML_PATH_PENDING_PAYMENT_MESSAGE);
-        }
-        return '';
-    }
-
-    /**
-     * Get Paypal logo for success page
-     *
-     * @return srtring
-     */
-    public function getPayPalLogo()
-    {
-        if($this->isPaymentPaypal()) {
-           return self::PAYPAL_LOGO;
-        }
     }
 
    /**
@@ -137,6 +120,7 @@ class Success extends \Magento\Checkout\Block\Onepage\Success
             $configPath,
             self::SCOPE_STORE
         );
+
         return $value;
     }
 }

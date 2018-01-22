@@ -27,16 +27,19 @@ class GeneralHandler extends AbstractHandler implements HandlerInterface
      */
     protected function _handle($payment, $response)
     {
+        if (get_class($response) == 'stdClass') {
+            $payment->setAdditionalInformation('state_payPal', 'denied');
+            $payment->setAdditionalInformation('state_error_name', $response->name);
+            $payment->setAdditionalInformation('state_error_message', $response->message);
+            $payment->setAdditionalInformation('state_error_details', $response->details);
+
+            return $this;
+        }
+
     	$transactions = $response->getTransactions();
     	foreach ($transactions as $id => $transaction) {
     		foreach ($transaction->getRelatedResources() as $id => $relatedResources) {
                 $sale = $relatedResources->getSale();
-
-                if ($this->getConfig()->getToggle()) {
-                    if ($sale->getState() == 'failed') {
-                        throw new \InvalidArgumentException('Error in Payment return failed');
-                    }
-                }
 
                 $parentTransactionId = $payment->getAdditionalInformation('pay_id');
                 $payment->setTransactionId($sale->getId());

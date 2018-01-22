@@ -20,16 +20,11 @@ class PayPalPlus extends Info
     protected function _prepareSpecificInformation($transport = null)
     {
         $transport = new DataObject([
-            (string)__('Print Billet') => $this->getInfo()->getAdditionalInformation('billet_url')
+            (string)__('Title') => $this->getTitle()
         ]);
 
         $transport = parent::_prepareSpecificInformation($transport);
         return $transport;
-    }
-
-    public function getBilletUrl()
-    {
-        return $this->getInfo()->getAdditionalInformation('billet_url');
     }
 
     public function getTitle()

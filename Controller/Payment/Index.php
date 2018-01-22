@@ -2,6 +2,10 @@
 
 namespace PayPalBR\PayPal\Controller\Payment;
 
+use Magento\Framework\App\Action\Context;
+use PayPalBR\PayPal\Model\PaypalPlusApi;
+use Magento\Framework\Controller\Result\JsonFactory;
+
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**
@@ -23,9 +27,9 @@ class Index extends \Magento\Framework\App\Action\Action
      * @param \PayPalBR\PayPal\Model\PaypalPlusApi $paypalPlusApi
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \PayPalBR\PayPal\Model\PaypalPlusApi $paypalPlusApi,
-        \Magento\Framework\Controller\Result\JsonFactory $jsonFactory
+        Context $context,
+        PaypalPlusApi $paypalPlusApi,
+        JsonFactory $jsonFactory
     ) {
         $this->paypalPlusApi = $paypalPlusApi;
         $this->jsonFactory = $jsonFactory;
@@ -33,25 +37,10 @@ class Index extends \Magento\Framework\App\Action\Action
         parent::__construct($context);
     }
 
-    /**
-     * This is the ajax call that gets called when user arrives to the checkout
-     *
-     * Get and validate Payment data and send it to PayPal API.
-     * If we get no errors, return data to window.checkoutconfig so
-     * it can be accessed by the method-renderer.js
-     */
     public function execute()
     {
         $resultJson = $this->jsonFactory->create();
 
-        /**
-         * Returns an array with the following structure
-         *
-         * [
-         *     'status' => 'success',
-         *     'message' => ...
-         * ]
-         */
         $response = $this->paypalPlusApi->execute();
         if ($response['status'] == 'success') {
             $resultJson

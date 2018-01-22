@@ -30,7 +30,7 @@ abstract class AbstractHandler implements HandlerInterface
         $response = $response['response'];
         $paymentDO = $handlingSubject['payment'];
         $payment = $paymentDO->getPayment();
-        /** @TODO CREATE A BUILD RESPONSE */
+        
         $this->_handle($payment, $response);
     }
 }

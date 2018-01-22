@@ -175,7 +175,7 @@ class SalesOrderPlaceAfter implements ObserverInterface
      */
     protected function logger($data){
 
-        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/paypal-SalesOrderPlaceAfter-' . date('Y-m-d') . '.log');
+        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/paypalbr/paypal-SalesOrderPlaceAfter-' . date('Y-m-d') . '.log');
         $logger = new \Zend\Log\Logger();
         $logger->addWriter($writer);
         $logger->info('Debug Initial SalesOrderPlaceAfter');
