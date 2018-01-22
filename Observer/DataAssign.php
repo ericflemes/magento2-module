@@ -85,8 +85,7 @@ class DataAssign implements ObserverInterface
         try {
             $clientId = $this->configProvider->getClientId();
             $secretId = $this->configProvider->getSecretId();
-            var_dump($this->configProvider->isModeSandbox());
-            exit;
+            
             $paypalConfig = [
                 'http.headers.PayPal-Partner-Attribution-Id' => 'MagentoBrazil_Ecom_PPPlus2',
                 'mode' => $this->configProvider->isModeSandbox()? 'sandbox' : 'live',
