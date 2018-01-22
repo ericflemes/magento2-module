@@ -88,17 +88,36 @@ class DataAssign implements ObserverInterface
 
             $paypalConfig = [
                 'http.headers.PayPal-Partner-Attribution-Id' => 'MagentoBrazil_Ecom_PPPlus2',
-                'mode' => $this->configProvider->isModeSandbox() ? 'sandbox' : 'live',
+                'mode' => $this->configProvider->isModeSandbox()? 'sandbox' : 'live',
                 'log.LogEnabled' => true,
                 'log.FileName' => BP . '/var/log/paypalbr/paypalplus.log',
                 'log.LogLevel' => 'DEBUG', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
-                'cache.enabled' => true,
                 'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2'
             ];
+
+
+            $apiContext = new \PayPal\Rest\ApiContext(
+                new \PayPal\Auth\OAuthTokenCredential(
+                    $clientId,
+                    $secretId
+                )
+            );
+
+            $apiContext->setConfig(
+                array(
+                    'http.headers.PayPal-Partner-Attribution-Id' => 'MagentoBrazil_Ecom_PPPlus2',
+                    'mode' => $this->configProvider->isModeSandbox() ? 'sandbox' : 'live',
+                    'log.LogEnabled' => true,
+                    'log.FileName' => BP . '/var/log/paypalbr/paypalplus.log',
+                    'log.LogLevel' => 'DEBUG', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
+                    'cache.enabled' => true,
+                    'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2'
+                )
+            );
+
             $oauth = new \PayPal\Auth\OAuthTokenCredential($clientId, $secretId);
             $oauth->getAccessToken($paypalConfig);
         } catch (\Exception $e) {
-
             $disableModule = true;
             $disableMessage = __('Incorrect API credentials, please review it.');
         }
@@ -120,6 +139,8 @@ class DataAssign implements ObserverInterface
             foreach ($this->_cacheFrontendPool as $cacheFrontend) {
                 $cacheFrontend->getBackend()->clean();
             }
+
+            $url = $this->_urlBuilder->getUrl('adminhtml/system_config/edit/section/payment');
 
             $this->_responseFactory->create()
                     ->setRedirect($url)
