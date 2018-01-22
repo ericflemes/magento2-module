@@ -68,6 +68,10 @@ class PayPalPlus extends Info
             $state = "<span style='color: red;'>" . __("NOT APPROVED") . "</span>";
         }
 
+        if ($state == 'refunded') {
+            $state = "<span style='color: blue;'>" . __("Refunded") . "</span>";
+        }
+
         return $state;
     }
 }

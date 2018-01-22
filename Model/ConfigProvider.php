@@ -312,9 +312,9 @@ class ConfigProvider
     public function desactivateClientId()
     {
         if ($this->isModeSandbox()) {
-            $this->config->saveConfig(self::XML_PATH_CLIENT_ID_SBOX, 0, 'default', 0);
+            $this->config->saveConfig(self::XML_PATH_CLIENT_ID_SBOX, '', 'default', 0);
         } else if ($this->isModeProduction()) {
-            $this->config->saveConfig(self::XML_PATH_CLIENT_ID_PROD, 0, 'default', 0);
+            $this->config->saveConfig(self::XML_PATH_CLIENT_ID_PROD, '', 'default', 0);
         }
     }
 
@@ -326,9 +326,9 @@ class ConfigProvider
     public function desactivateSecretId()
     {
         if ($this->isModeSandbox()) {
-            $this->config->saveConfig(self::XML_PATH_SECRET_ID_SBOX, 0, 'default', 0);
+            $this->config->saveConfig(self::XML_PATH_SECRET_ID_SBOX, '', 'default', 0);
         } else if ($this->isModeProduction()) {
-            $this->config->saveConfig(self::XML_PATH_SECRET_ID_PROD, 0, 'default', 0);
+            $this->config->saveConfig(self::XML_PATH_SECRET_ID_PROD, '', 'default', 0);
         }
     }
 
