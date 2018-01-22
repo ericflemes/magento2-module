@@ -106,6 +106,8 @@ class DataAssign implements ObserverInterface
         if ($disableModule) {
 
             $this->configProvider->desactivateModule();
+            $this->configProvider->desactivateClientId();
+            $this->configProvider->desactivateSecretId();
 
             $this->messageManager->addError($disableMessage);
 
