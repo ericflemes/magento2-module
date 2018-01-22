@@ -128,6 +128,16 @@ class PaypalPlusApi
                 'cache.enabled' => true,
                 'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2'
         );
+
+        $apiContext = new \PayPal\Rest\ApiContext(
+                new \PayPal\Auth\OAuthTokenCredential(
+                    $clientId,
+                    $secretId
+                )
+            );
+
+        $apiContext->setConfig($sdkConfig);
+
         $cred = new \PayPal\Auth\OAuthTokenCredential(
             $this->configId,
              $this->secretId
