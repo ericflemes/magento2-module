@@ -131,8 +131,8 @@ class PaypalPlusApi
 
         $apiContext = new \PayPal\Rest\ApiContext(
                 new \PayPal\Auth\OAuthTokenCredential(
-                    $clientId,
-                    $secretId
+                    $this->configId,
+                    $this->secretId
                 )
             );
 
