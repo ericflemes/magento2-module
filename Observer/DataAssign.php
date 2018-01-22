@@ -85,7 +85,8 @@ class DataAssign implements ObserverInterface
         try {
             $clientId = $this->configProvider->getClientId();
             $secretId = $this->configProvider->getSecretId();
-
+            var_dump($this->configProvider->isModeSandbox());
+            exit;
             $paypalConfig = [
                 'http.headers.PayPal-Partner-Attribution-Id' => 'MagentoBrazil_Ecom_PPPlus2',
                 'mode' => $this->configProvider->isModeSandbox()? 'sandbox' : 'live',
@@ -103,17 +104,7 @@ class DataAssign implements ObserverInterface
                 )
             );
 
-            $apiContext->setConfig(
-                array(
-                    'http.headers.PayPal-Partner-Attribution-Id' => 'MagentoBrazil_Ecom_PPPlus2',
-                    'mode' => $this->configProvider->isModeSandbox() ? 'sandbox' : 'live',
-                    'log.LogEnabled' => true,
-                    'log.FileName' => BP . '/var/log/paypalbr/paypalplus.log',
-                    'log.LogLevel' => 'DEBUG', // PLEASE USE `INFO` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
-                    'cache.enabled' => true,
-                    'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2'
-                )
-            );
+            $apiContext->setConfig($paypalConfig);
 
             $oauth = new \PayPal\Auth\OAuthTokenCredential($clientId, $secretId);
             $oauth->getAccessToken($paypalConfig);
