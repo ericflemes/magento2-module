@@ -301,6 +301,34 @@ class ConfigProvider
     }
 
     /**
+     * Deactivates module
+     *
+     * This functions sets the active configuration to 0 (zero), which will disable the module.
+     */
+    public function desactivateClientId()
+    {
+        if ($this->isModeSandbox()) {
+            $this->config->saveConfig(self::XML_PATH_CLIENT_ID_SBOX, 0, 'default', 0);
+        } else if ($this->isModeProduction()) {
+            $this->config->saveConfig(self::XML_PATH_CLIENT_ID_PROD, 0, 'default', 0);
+        }
+    }
+
+    /**
+     * Deactivates module
+     *
+     * This functions sets the active configuration to 0 (zero), which will disable the module.
+     */
+    public function desactivateSecretId()
+    {
+        if ($this->isModeSandbox()) {
+            $this->config->saveConfig(self::XML_PATH_SECRET_ID_SBOX, 0, 'default', 0);
+        } else if ($this->isModeProduction()) {
+            $this->config->saveConfig(self::XML_PATH_SECRET_ID_PROD, 0, 'default', 0);
+        }
+    }
+
+    /**
      * Returns the base currency
      *
      * @return string
