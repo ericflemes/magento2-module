@@ -141,7 +141,11 @@ class ConfigProvider
      */
     public function isModeSandbox()
     {
-        return $this->getMode() == Mode::SANDBOX;
+        if ($this->getMode() == Mode::SANDBOX) {
+            return true;
+        }
+
+        return $this->isModeProduction();
     }
 
     /**
