@@ -40,7 +40,7 @@ class Event implements EventsInterface
     const RISK_DISPUTE_CREATED = 'RISK.DISPUTE.CREATED';
 
     /**
-     * Risk dispute created event type code
+     * Customer dispute created event type code
      */
     const CUSTOMER_DISPUTE_CREATED = 'CUSTOMER.DISPUTE.CREATED';
 
@@ -186,13 +186,6 @@ class Event implements EventsInterface
         $creditmemo = $this->creditmemoFactory->createByOrder($this->_order);
 
         $creditmemoServiceRefund = $this->creditmemoService->refund($creditmemo, true);
-    }
-
-    protected function createCreditMemo($order)
-    {
-        
-
-        return $creditmemoServiceRefund->getData();
     }
 
     /**

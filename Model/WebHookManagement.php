@@ -4,15 +4,19 @@ namespace PayPalBR\PayPal\Model;
 use oauth;
 use PayPalBR\PayPal\Api\EventsInterface;
 use PayPalBR\PayPal\Api\WebHookManagementInterface;
+use PayPalBR\PayPal\Model\ConfigProvider;
 
 class WebHookManagement implements WebHookManagementInterface
 {
     protected $eventWebhook;
+    protected $configProvider;
 
     public function __construct(
-        EventsInterface $eventWebhook
+        EventsInterface $eventWebhook,
+        ConfigProvider $configProvider
     ) {
         $this->setEventWebhook($eventWebhook);
+        $this->setConfigProvider($configProvider);
     }
 
     /**
@@ -46,7 +50,9 @@ class WebHookManagement implements WebHookManagementInterface
                 'links' => $links,
                 'event_version' => $event_version,
             ];
-            $this->logger($array);
+            if ($this->getConfigProvider()->isDebugEnabled()) {
+                $this->logger($array);
+            }
             $this->getEventWebhook()->processWebhookRequest($webhookApi);
             $return = [
                 [
@@ -94,6 +100,26 @@ class WebHookManagement implements WebHookManagementInterface
     public function setEventWebhook($eventWebhook)
     {
         $this->eventWebhook = $eventWebhook;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getConfigProvider()
+    {
+        return $this->configProvider;
+    }
+
+    /**
+     * @param mixed $configProvider
+     *
+     * @return self
+     */
+    public function setConfigProvider($configProvider)
+    {
+        $this->configProvider = $configProvider;
 
         return $this;
     }
