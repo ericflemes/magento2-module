@@ -255,7 +255,8 @@ class PaypalPlusApi
                 ->setCurrency($storeCurrency);
             $itemList->addItem($item);
         }
-        if($this->cartSalesModelQuote->getBaseDiscountAmount()){
+
+        if($this->cartSalesModelQuote->getBaseDiscountAmount() !== '0.0000'){
             $item = new \PayPal\Api\Item();
             $item->setName('Discount')
                 ->setDescription('Discount')
@@ -268,6 +269,7 @@ class PaypalPlusApi
 
         $shippingAddress = $this->getShippingAddress();
         $itemList->setShippingAddress($shippingAddress);
+
         return $itemList;
     }
 
@@ -304,9 +306,10 @@ class PaypalPlusApi
         $details->setShipping($this->cartSalesModelQuote->getBaseShippingAmount())
             ->setSubtotal($subtotal);
 
-        if($this->cartSalesModelQuote->getBaseDiscountAmount()){
+        if($this->cartSalesModelQuote->getBaseDiscountAmount() !== '0.0000'){
             $details->setShippingDiscount('-0.0000');
         }
+
         return $details;
     }
 
@@ -493,14 +496,10 @@ class PaypalPlusApi
     {
         try {
 
-            if ($this->isNotPaymentCreated()) {
-                $paypalPayment = $this->createAndGetPayment();
-            }
-            else if ($this->isQuoteChanged()) {
+            if ($this->isQuoteChanged()) {
                 $paypalPayment = $this->patchAndGetPayment();
-            }
-            else {
-                $paypalPayment = $this->restoreAndGetPayment();
+            } else {
+                $paypalPayment = $this->createAndGetPayment();
             }
 
 

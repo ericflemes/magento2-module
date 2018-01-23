@@ -252,7 +252,7 @@ define([
             fullScreenLoader.startLoader();
             storage.post(serviceUrl, '')
             .done(function (response) {
-                console.log(response);
+                // console.log(response);
                 $('#paypalbr_paypalplus_payId').val(response.id);
                 for (var i = 0; i < response.links.length; i++) {
                     if (response.links[i].rel == 'approval_url') {
@@ -262,7 +262,7 @@ define([
                 self.runPayPal(approvalUrl);
             })
             .fail(function (response) {
-                console.log("ERRO");
+                console.log("ERROR");
                 console.log(response);
                 var iframeErrorElem = '#iframe-error';
 
