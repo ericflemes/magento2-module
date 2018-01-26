@@ -6,6 +6,9 @@ define([
     'mage/storage',
     'Magento_Checkout/js/model/error-processor',
     'Magento_Checkout/js/model/full-screen-loader',
+    'PayPalBR_PayPal/js/model/full-screen-loader-paypal',
+    'Magento_Checkout/js/checkout-data',
+    'Magento_Checkout/js/action/select-payment-method',
     'Magento_Checkout/js/model/postcode-validator',
     'ko',
     'mage/url'
@@ -17,6 +20,9 @@ define([
     storage,
     errorProcesor,
     fullScreenLoader,
+    fullScreenLoaderPayPal,
+    checkoutData, 
+    selectPaymentMethodAction, 
     postcodeValidator,
     ko,
     urlBuilder
@@ -30,7 +36,8 @@ define([
             paypalPayerId: '',
             payerIdCustomer: '',
             token: '',
-            term: ''
+            term: '',
+            isPaymentReady: false,
         },
         breakError: false,
         errorProcessor: errorProcesor,
@@ -51,11 +58,18 @@ define([
 
         initialize: function () {
 
-            fullScreenLoader.startLoader();
             this._super();
             this._render();
             var self = this;
-            var iframeLoaded = setInterval(function () {
+        },
+
+        /**
+         * Select current payment token
+         */
+        selectPaymentMethod: function () {
+            fullScreenLoaderPayPal.startLoader();
+            var self = this;
+            if (!self.isPaymentReady) {
                 if ($('#ppplus').length) {
 
                     if (this.breakError) {
@@ -66,14 +80,20 @@ define([
                     }
 
                     self.initializeIframe();
-                    fullScreenLoader.stopLoader();
-                    clearInterval(iframeLoaded);
                 }
-            }, 300);
+
+                self.isPaymentReady = true;
+            }
+            
+
+            selectPaymentMethodAction(this.getData());
+            checkoutData.setSelectedPaymentMethod(this.item.method);
+
+            return true;
         },
 
         runPayPal: function(approvalUrl) {
-            fullScreenLoader.startLoader();
+            // fullScreenLoaderPayPal.startLoader();
             var storage;
             var self = this;
             var telephone = '';
@@ -155,8 +175,12 @@ define([
                     "rememberedCards": window.checkoutConfig.payment.paypalbr_paypalplus.rememberedCard,
 
                     onLoad: function () {
-                        fullScreenLoader.stopLoader();
+                        fullScreenLoaderPayPal.stopLoader();
                         console.log("Iframe successfully lo aded !");
+                        var height = $('#ppplus iframe').css('height');
+
+                        $('#ppplus').css('max-height', height);
+
                     },
                     onContinue: function (rememberedCardsToken, payerId, token, term) {
                         $('#continueButton').hide();
@@ -249,7 +273,7 @@ define([
             var self = this;
             var serviceUrl = urlBuilder.build('paypalplus/payment/index');
             var approvalUrl = '';
-            fullScreenLoader.startLoader();
+            // fullScreenLoader.startLoader();
             storage.post(serviceUrl, '')
             .done(function (response) {
                 // console.log(response);
@@ -274,7 +298,7 @@ define([
                 $('#continueButton').prop("disabled", true);
             })
             .always(function () {
-                fullScreenLoader.stopLoader();
+                // fullScreenLoader.stopLoader();
             });
         },
 
