@@ -64,4 +64,20 @@ class Config extends AbstractConfig implements ConfigInterface
     {
         return $this->getConfig(static::STORE_NAME);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIframeActiveHeight()
+    {
+        return $this->getConfig(static::PATH_IFRAME_ACTIVE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIframeHeight()
+    {
+        return $this->getConfig(static::PATH_IFRAME_HEIGHT);
+    }
 }

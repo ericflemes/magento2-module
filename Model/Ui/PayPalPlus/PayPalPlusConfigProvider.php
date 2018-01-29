@@ -26,9 +26,19 @@ final class PayPalPlusConfigProvider implements ConfigProviderInterface
     const XML_PATH_MODE = 'payment/paypalbr_paypalplus/mode';
 
     /**
-     * Contains the current mode, sandbox or production (live)
+     * Contains the module active
      */
     const XML_PATH_ACTIVE = 'payment/paypalbr_paypalplus/active';
+
+    /**
+     * Contains the module iframe height active
+     */
+    const XML_PATH_IFRAME_ACTIVE = 'payment/paypalbr_paypalplus/iframe_height_active';
+
+    /**
+     * Contains the module iframe height
+     */
+    const XML_PATH_IFRAME_HEIGHT = 'payment/paypalbr_paypalplus/iframe_height';
 
     /**
      * @var PaymentHelper
@@ -71,6 +81,8 @@ final class PayPalPlusConfigProvider implements ConfigProviderInterface
         $exibition = $this->_scopeConfig->getValue(self::XML_CUSTOMER_EXHIBITION_SHOW, $storeScope);
         $mode = $this->_scopeConfig->getValue(self::XML_PATH_MODE, $storeScope);
         $active = $this->_scopeConfig->getValue(self::XML_PATH_ACTIVE, $storeScope);
+        $iframeHeightActive = $this->_scopeConfig->getValue(self::XML_PATH_IFRAME_ACTIVE, $storeScope);
+        $iframeHeight = $this->_scopeConfig->getValue(self::XML_PATH_IFRAME_HEIGHT, $storeScope);
 
         if(empty($exibition)){
             $exibition = "";
@@ -95,7 +107,9 @@ final class PayPalPlusConfigProvider implements ConfigProviderInterface
                     'text' => 'payment/paypalbr_paypalplus/text',
                     'exibitionName' => $exibition,
                     'mode' => $mode,
-                    'rememberedCard' => $rememberedCard
+                    'rememberedCard' => $rememberedCard,
+                    'iframe_height_active' => $iframeHeightActive,
+                    'iframe_height' => $iframeHeight
                 ]
             ]
         ];
