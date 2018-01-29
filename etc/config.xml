@@ -24,6 +24,7 @@
                 <can_use_checkout>1</can_use_checkout>
                 <allow_multiple_address>1</allow_multiple_address>
                 <toggle>0</toggle>
+                <iframe_height_active>0</iframe_height_active>
             </paypalbr_paypalplus>
         </payment>
     </default>

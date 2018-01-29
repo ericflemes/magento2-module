@@ -156,6 +156,12 @@ define([
                 }
             );
 
+            if (window.checkoutConfig.payment.paypalbr_paypalplus.iframe_height_active === '1') {
+                var height = window.checkoutConfig.payment.paypalbr_paypalplus.iframe_height;
+            }else{
+                var height = null;
+            }
+
 
             this.paypalObject = PAYPAL.apps.PPP(
                 {
@@ -173,6 +179,7 @@ define([
                     "enableContinue": "continueButton",
                     "disableContinue": "continueButton",
                     "rememberedCards": window.checkoutConfig.payment.paypalbr_paypalplus.rememberedCard,
+                    "iframeHeight": height,
 
                     onLoad: function () {
                         fullScreenLoaderPayPal.stopLoader();
@@ -180,7 +187,6 @@ define([
                         var height = $('#ppplus iframe').css('height');
 
                         $('#ppplus').css('max-height', height);
-
                     },
                     onContinue: function (rememberedCardsToken, payerId, token, term) {
                         $('#continueButton').hide();

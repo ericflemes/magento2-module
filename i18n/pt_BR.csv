@@ -74,3 +74,6 @@
 "Invoice #%1 ","Pedido #%1 "
 "- Store: #%1","- Loja: #%1"
 "Refunded","Reembolsado"
+"Enable Fixed Height Iframe","Habilitar Altura Fixa Iframe"
+"Height Iframe","Altura Iframe"
+"Height in pixel ex: 500","Altura em pixel exemplo: 500"

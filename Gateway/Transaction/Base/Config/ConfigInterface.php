@@ -11,6 +11,8 @@ interface ConfigInterface
     const PATH_TEST_MODE          = 'payment/paypalbr_paypalplus/test_mode';
     const PATH_TOGGLE             = 'payment/paypalbr_paypalplus/toggle';
     const STORE_NAME              = 'general/store_information/name';
+    const PATH_IFRAME_ACTIVE      = 'payment/paypalbr_paypalplus/iframe_height_active';
+    const PATH_IFRAME_HEIGHT      = 'payment/paypalbr_paypalplus/iframe_height';
 
     /**
      * @return string
@@ -41,4 +43,14 @@ interface ConfigInterface
      * @return string
      */
     public function getStoreName();
+
+    /**
+     * @return string
+     */
+    public function getIframeActiveHeight();
+
+    /**
+     * @return string
+     */
+    public function getIframeHeight();
 }
