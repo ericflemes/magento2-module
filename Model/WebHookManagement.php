@@ -57,7 +57,7 @@ class WebHookManagement implements WebHookManagementInterface
             $return = [
                 [
                     'status' => 200,
-                    'message' => $e->getMessage()
+                    'message' => $summary
                 ]
             ];
         } catch (\Exception $e) {
