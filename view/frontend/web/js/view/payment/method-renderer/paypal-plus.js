@@ -67,9 +67,10 @@ define([
          * Select current payment token
          */
         selectPaymentMethod: function () {
-            fullScreenLoaderPayPal.startLoader();
+            
             var self = this;
             if (!self.isPaymentReady) {
+                fullScreenLoaderPayPal.startLoader();
                 if ($('#ppplus').length) {
 
                     if (this.breakError) {
@@ -302,6 +303,7 @@ define([
                 $(iframeErrorElem).show();
                 $('#iframe-warning').hide();
                 $('#continueButton').prop("disabled", true);
+                fullScreenLoaderPayPal.stopLoader();
             })
             .always(function () {
                 // fullScreenLoader.stopLoader();
