@@ -11,7 +11,8 @@ define([
     'Magento_Checkout/js/action/select-payment-method',
     'Magento_Checkout/js/model/postcode-validator',
     'ko',
-    'mage/url'
+    'mage/url',
+    'mage/translate'
 ], function (
     Component,
     iframe,
@@ -61,6 +62,8 @@ define([
             this._super();
             this._render();
             var self = this;
+            console.log(self.isPaymentReady);
+            console.log(checkoutData);
         },
 
         /**
