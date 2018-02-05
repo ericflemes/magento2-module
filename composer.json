@@ -29,7 +29,7 @@
         "phpdocumentor/phpdocumentor": "^2.8",
         "magento-ecg/coding-standard":"dev-master",
         "rregeer/phpunit-coverage-check": "^0.1.3",
-        "paypal/rest-api-sdk-php" : "v1.7.1"
+        "paypal/rest-api-sdk-php" : "^1.13.0"
     },
     "authors":[
         {

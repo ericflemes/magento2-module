@@ -346,6 +346,14 @@ class ConfigProvider
     }
 
     /**
+     * Get webhook id module
+     */
+    public function getWebhookId()
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_WEBHOOK_ID, ScopeInterface::SCOPE_STORE);
+    }
+
+    /**
      * Returns the base currency
      *
      * @return string

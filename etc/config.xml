@@ -25,6 +25,7 @@
                 <allow_multiple_address>1</allow_multiple_address>
                 <toggle>0</toggle>
                 <iframe_height_active>0</iframe_height_active>
+                <webhook_id>0</webhook_id>
             </paypalbr_paypalplus>
         </payment>
     </default>
