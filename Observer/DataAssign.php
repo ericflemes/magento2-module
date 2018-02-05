@@ -152,8 +152,16 @@ class DataAssign implements ObserverInterface
             print_r("Error in list webhooks was: {$e->getMessage()}");
             die;
         }
+        $newWebhook = true;
+        foreach ($output->webhooks as $webhook) {
+            $baseUrl = $this->_storeManager->getStore()->getBaseUrl('link', true) .'rest/default/V1/notifications/webhooks';
+            if ($webhook->url == $baseUrl) {
+                $newWebhook = false;
+                $this->configProvider->saveWebhookId($webhook->id);
+            }
+        }
 
-        if(empty($output->webhooks)){
+        if($newWebhook){
 
             $baseUrl = $this->_storeManager->getStore()->getBaseUrl('link', true) .'rest/default/V1/notifications/webhooks';
 
@@ -196,11 +204,16 @@ class DataAssign implements ObserverInterface
 
             try {
                 $output = $webhook->create($apiContext);
+                $this->configProvider->saveWebhookId($output->id);
             } catch (\PayPal\Exception\PayPalConnectionException $ex) {
                 if ($ex->getData()) {
                     $data = json_decode($ex->getData(), true);
                     if (isset($data['name']) && $data['name'] == self::WEBHOOK_URL_ALREADY_EXISTS) {
                         return true;
+                    }
+                    if (isset($data['details']) && isset($data['details'][0]) && isset($data['details'][0]['field']) && $data['details'][0]['field'] == 'url') {
+                        $disableMessage = $data['details'][0]['issue'] . '. Url must be contain https.';
+                        $this->messageManager->addError(__($disableMessage));
                     }
                 }
                 return false;
