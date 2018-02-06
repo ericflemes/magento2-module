@@ -31,7 +31,7 @@
                         <label>Mode</label>
                         <config_path>payment/paypalbr_paypalplus/mode</config_path>
                         <source_model>PayPalBR\PayPal\Model\Config\Source\Mode</source_model>
-                        <comment>Use this option to switch between Sandbox and Production modes. Sandbox is used for testing and production for actual purchases.</comment>
+                        <comment>Use this option to switch between Sandbox and Live modes. Sandbox is used for testing and Live for actual purchases.</comment>
                     </field>
                     <field id="client_id_sandbox" translate="label comment" type="password" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Client ID (Sandbox)</label>
@@ -52,7 +52,7 @@
                          <validate>required-entry</validate>
                     </field>
                     <field id="client_id_production" translate="label comment" type="password" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Client ID (Production)</label>
+                        <label>Client ID (Live)</label>
                         <comment><![CDATA[To generate the Client ID, access <a href="#">here</a> and look for the "REST API Apps" section.]]></comment>
                         <config_path>payment/paypalbr_paypalplus/client_id_production</config_path>
                         <depends>
@@ -61,7 +61,7 @@
                         <validate>required-entry</validate>
                     </field>
                     <field id="secret_id_production" translate="label comment" type="password" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Secret ID (Production)</label>
+                        <label>Secret ID (Live)</label>
                         <config_path>payment/paypalbr_paypalplus/secret_id_production</config_path>
                         <comment><![CDATA[To generate the Secret ID, access <a href="#">here</a> and look for the "REST API Apps" section.]]></comment>
                         <depends>

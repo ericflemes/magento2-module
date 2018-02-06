@@ -199,9 +199,8 @@ class Event implements EventsInterface
         $this->_order->getPayment()
             ->setPreparedMessage($webhookEvent->getSummary())
             ->setTransactionId($paymentResource['id'])
-            ->setIsTransactionClosed(0)
-            ->registerPaymentReviewAction(\Magento\Sales\Model\Order\Payment::REVIEW_ACTION_UPDATE, false);
-        $this->_order->save();
+            ->setIsTransactionClosed(0);
+        $this->_order->getPayment()->save();
     }
 
     /**
