@@ -101,6 +101,7 @@ class WebHookManagement implements WebHookManagementInterface
             if ($output->verification_status == 'FAILURE') {
                 $this->logger('initial debug');
                 $this->logger($signatureVerification);
+                $this->logger($output);
                 $this->logger('final debug');
 
                 $return = [
