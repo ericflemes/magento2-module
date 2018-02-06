@@ -157,8 +157,7 @@ class Event implements EventsInterface
         // notify customer
         $invoice = $payment->getCreatedInvoice();
         if ($invoice && !$this->_order->getEmailSent()) {
-            $this->_order->queueNewOrderEmail()
-                ->addStatusHistoryComment(
+            $this->_order->addStatusHistoryComment(
                     __(
                         'Notified customer about invoice #%1.',
                         $invoice->getIncrementId()
