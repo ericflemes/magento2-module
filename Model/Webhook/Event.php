@@ -149,6 +149,7 @@ class Event implements EventsInterface
             ->setCurrencyCode($paymentResource['amount']['currency'])
             ->setParentTransactionId($parentTransactionId)
             ->setIsTransactionClosed(true)
+            ->setAdditionalInformation('state_payPal', 'completed')
             ->registerCaptureNotification(
                 $paymentResource['amount']['total'],
                 true
@@ -178,7 +179,7 @@ class Event implements EventsInterface
         $paymentResource = $webhookEvent->getResource();
         $parentTransactionId = $paymentResource['parent_payment'];
         /** @var \Magento\Sales\Model\Order\Payment $payment */
-        $payment = $this->_order->getPayment();
+        $this->_order->getPayment()->setAdditionalInformation('state_payPal', 'refunded')->save();
         $amount = $paymentResource['amount']['total'];
         $transactionId = $paymentResource['id'];
 
@@ -217,6 +218,7 @@ class Event implements EventsInterface
                 \Magento\Paypal\Model\Info::ORDER_STATUS_REVERSED
             )->setIsCustomerNotified(false)
             ->save();
+        $this->_order->getPayment()->setAdditionalInformation('state_payPal', 'refunded')->save();
     }
 
     /**
