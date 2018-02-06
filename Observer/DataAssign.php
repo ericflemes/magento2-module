@@ -82,6 +82,29 @@ class DataAssign implements ObserverInterface
             $disableMessage = __("Your base currency has to be BRL in order to activate this module.");
         }
 
+        if ($disableModule) {
+
+            $this->configProvider->desactivateModule();
+
+            $this->messageManager->addError($disableMessage);
+
+            $types = array('config','layout','block_html','collections','reflection','db_ddl','eav','config_integration','config_integration_api','full_page','translate','config_webservice');
+ 
+            foreach ($types as $type) {  
+                $this->_cacheTypeList->cleanType($type);
+            }
+ 
+            foreach ($this->_cacheFrontendPool as $cacheFrontend) {
+                $cacheFrontend->getBackend()->clean();
+            }
+
+            $this->_responseFactory->create()
+                    ->setRedirect($url)
+                    ->sendResponse();
+            exit(0);
+            return $this;
+        }
+
         try {
             $clientId = $this->configProvider->getClientId();
             $secretId = $this->configProvider->getSecretId();
