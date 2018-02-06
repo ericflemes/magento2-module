@@ -27,7 +27,7 @@
 "or call us at <a href="tel:%store_phone">%store_phone</a>","ou ligue para <a href="tel:%store_phone">%store_phone</a>"
 "Credit Card (PayPal Plus)","Cartão de Crédito (PayPal Plus)"
 "Transaction Id: ","Id da Transação: "
-"State PayPal: ","Status PayPal: "
+"State Payment: ","Status do Pagamento: "
 "Installments: ","Parcelas: "
 "Token PayPal: ","Token PayPal: "
 "Credit Card","Cartão de Crédito"

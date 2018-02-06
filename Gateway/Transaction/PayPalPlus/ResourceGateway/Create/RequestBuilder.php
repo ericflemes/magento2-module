@@ -320,7 +320,7 @@ class RequestBuilder implements BuilderInterface
     /**
      * @return mixed
      */
-    protected function createPatch($apiContext)
+    protected function createPatch($apiContext, $requestDataProvider)
     {
         $paypalPayment = $this->restoreAndGetPayment($apiContext);
         $patchRequest = new \PayPal\Api\PatchRequest();
@@ -331,13 +331,13 @@ class RequestBuilder implements BuilderInterface
         $itemListPatch
             ->setOp('add')
             ->setPath('/transactions/0/invoice_number')
-            ->setValue($order->getIncrementId());
+            ->setValue($requestDataProvider->getTransactionReference());
         $patchRequest->addPatch($itemListPatch);
 
         if ($this->getConfig()->getStoreName()) {
-            $descriptionValue = __('Invoice #%1 ', $order->getIncrementId()) . __('- Store: #%1', $this->getConfig()->getStoreName());
+            $descriptionValue = __('Invoice #%1 ', $requestDataProvider->getTransactionReference()) . __('- Store: #%1', $this->getConfig()->getStoreName());
         }else{
-            $descriptionValue = __('Invoice #%1 ', $order->getIncrementId());
+            $descriptionValue = __('Invoice #%1 ', $requestDataProvider->getTransactionReference());
         }
 
         $description = new \PayPal\Api\Patch();
@@ -396,7 +396,7 @@ class RequestBuilder implements BuilderInterface
     protected function createNewRequest($requestDataProvider)
     {
         $apiContext = $this->getApiContext();
-        $paypalPayment = $this->createPatch($apiContext);
+        $paypalPayment = $this->createPatch($apiContext, $requestDataProvider);
         $paypalPaymentExecution = $this->createPaymentExecution($paypalPayment, $apiContext, $requestDataProvider->getPayerId());
 
         return $paypalPaymentExecution;
