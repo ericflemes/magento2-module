@@ -45,7 +45,7 @@ class WebHookManagement implements WebHookManagementInterface
         );
         $apiContext->setConfig(
             [
-                'http.headers.PayPal-Partner-Attribution-Id' => 'MagentoBrazil_Ecom_PPPlus2',
+                //'http.headers.PayPal-Partner-Attribution-Id' => 'MagentoBrazil_Ecom_PPPlus2',
                 'mode' => $this->configProvider->isModeSandbox() ? 'sandbox' : 'live',
                 'log.LogEnabled' => $debug,
                 'log.FileName' => BP . '/var/log/paypalbr/paypalplus.log',
@@ -80,7 +80,7 @@ class WebHookManagement implements WebHookManagementInterface
             $paypalCertUrl = $httpRequestObject->getHeader('Paypal-Cert-Url');
             $paypalTransmissionSig = $httpRequestObject->getHeader('Paypal-Transmission-Sig');
             $paypalTransmissionTime = $httpRequestObject->getHeader('Paypal-Transmission-Time');
-            $requestBody = json_encode($array);
+            $requestBody = $httpRequestObject->getRawBody();
             
             $signatureVerification = new VerifyWebhookSignature();
             $signatureVerification->setAuthAlgo($paypalAuthAlgo);
@@ -106,7 +106,7 @@ class WebHookManagement implements WebHookManagementInterface
 
                 $return = [
                     [
-                        'status' => 400,
+                        'status' => 401,
                         'message' => 'Validation FAILURE'
                     ]
                 ];
@@ -120,7 +120,7 @@ class WebHookManagement implements WebHookManagementInterface
 
             $return = [
                 [
-                    'status' => 400,
+                    'status' => 200,
                     'message' => 'Validation FAILURE'
                 ]
             ];
@@ -161,7 +161,7 @@ class WebHookManagement implements WebHookManagementInterface
 
             $return = [
                 [
-                    'status' => 400,
+                    'status' => 200,
                     'message' => $e->getMessage()
                 ]
             ];
