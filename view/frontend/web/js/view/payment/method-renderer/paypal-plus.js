@@ -11,7 +11,8 @@ define([
     'Magento_Checkout/js/action/select-payment-method',
     'Magento_Checkout/js/model/postcode-validator',
     'ko',
-    'mage/url'
+    'mage/url',
+    'mage/translate'
 ], function (
     Component,
     iframe,
@@ -44,6 +45,8 @@ define([
         customerInfo: quote.billingAddress._latestValue,
         paymentApiServiceUrl: 'paypalplus/payment',
         isPaymentReady: false,
+        defaultQuote: quote,
+        shippingValue: quote.totals().base_shipping_amount,
 
 
         getNamePay: function(){
@@ -67,9 +70,9 @@ define([
          * Select current payment token
          */
         selectPaymentMethod: function () {
-            
             var self = this;
-            if (!self.isPaymentReady) {
+            if (!self.isPaymentReady || self.shippingValue != this.defaultQuote.totals().base_shipping_amount) {
+                
                 fullScreenLoaderPayPal.startLoader();
                 if ($('#ppplus').length) {
 
@@ -274,6 +277,11 @@ define([
                     }
                 }
             );
+
+            if (self.shippingValue != this.defaultQuote.totals().base_shipping_amount) {
+                self.shippingValue = this.defaultQuote.totals().base_shipping_amount;
+                fullScreenLoaderPayPal.stopLoader();
+            }
         },
 
         initializeIframe: function () {

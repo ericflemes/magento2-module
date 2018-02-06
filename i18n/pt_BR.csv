@@ -78,3 +78,4 @@
 "Height Iframe","Altura Iframe"
 "Height in pixel ex: 500","Altura em pixel exemplo: 500"
 "State Payment: ","Status Pagamento: "
+"Not a valid webhook URL. Url must be contain https.","Não é um URL de webhook válido. Url deve conter https."

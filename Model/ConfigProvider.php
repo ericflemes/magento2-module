@@ -53,6 +53,11 @@ class ConfigProvider
     const XML_PATH_SECRET_ID_PROD = 'payment/paypalbr_paypalplus/secret_id_production';
 
     /**
+     * Contains the secret ID of PayPal Plus (Production)
+     */
+    const XML_PATH_WEBHOOK_ID = 'payment/paypalbr_paypalplus/webhook_id';
+
+    /**
      * Contains the current mode, sandbox or production (live)
      */
     const XML_PATH_MODE = 'payment/paypalbr_paypalplus/mode';
@@ -330,6 +335,22 @@ class ConfigProvider
         } else if ($this->isModeProduction()) {
             $this->config->saveConfig(self::XML_PATH_SECRET_ID_PROD, '', 'default', 0);
         }
+    }
+
+    /**
+     * Save webhook id module
+     */
+    public function saveWebhookId($id)
+    {
+        $this->config->saveConfig(self::XML_PATH_WEBHOOK_ID, $id, 'default', 0);
+    }
+
+    /**
+     * Get webhook id module
+     */
+    public function getWebhookId()
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_WEBHOOK_ID, ScopeInterface::SCOPE_STORE);
     }
 
     /**
