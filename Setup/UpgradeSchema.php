@@ -9,6 +9,7 @@ use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Filesystem;
 
 class UpgradeData implements UpgradeDataInterface
 {
@@ -19,17 +20,24 @@ class UpgradeData implements UpgradeDataInterface
     private $customerSetupFactory;
 
     /**
-     * @var CustomerSetupFactory
+     * @var file
      */
     private $file;
 
+    /**
+     * @var fileSystem
+     */
+    protected $fileSystem;
+
     public function __construct(
         CustomerSetupFactory $customerSetupFactory,
-        File $file;
+        File $file,
+        Filesystem $fileSystem
     )
     {
         $this->customerSetupFactory = $customerSetupFactory;
         $this->file = $file;
+        $this->fileSystem = $fileSystem;
     }
 
     /**
@@ -45,6 +53,8 @@ class UpgradeData implements UpgradeDataInterface
     ){
         $dbVersion = $context->getVersion();
 
+        $this->createDir();
+
         if (version_compare($context->getVersion(), "0.2.10", "<")) {
             $setup = $this->updateVersionZeroTwoTen($setup);
         }
@@ -52,12 +62,12 @@ class UpgradeData implements UpgradeDataInterface
         if (version_compare($dbVersion, '0.3.4', '<')) {
             $setup = $this->updateVersionZeroTreeFour($setup);
         }
-
-        $this->createDir();
     }
 
     protected function createDir()
     {
+        $varDir = $this->fileSystem->getDirectoryRead(\Magento\Framework\App\Filesystem\DirectoryList::LOG);
+        $varRootDir = $varDir->getAbsolutePath();
         $paypalDir = $varRootDir . 'paypalbr/';
 
         if (!$this->file->isDirectory($paypalDir)) {
