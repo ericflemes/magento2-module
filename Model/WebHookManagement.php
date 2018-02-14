@@ -48,7 +48,7 @@ class WebHookManagement implements WebHookManagementInterface
                 //'http.headers.PayPal-Partner-Attribution-Id' => 'MagentoBrazil_Ecom_PPPlus2',
                 'mode' => $this->configProvider->isModeSandbox() ? 'sandbox' : 'live',
                 'log.LogEnabled' => $debug,
-                'log.FileName' => BP . '/var/log/paypalbr/paypalplus.log',
+                'log.FileName' => BP . '/var/log/paypalbr/paypalplus-' . date('Y-m-d') . '.log',
                 'log.LogLevel' => 'DEBUG',
                 'cache.enabled' => true,
                 'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2'
@@ -172,7 +172,7 @@ class WebHookManagement implements WebHookManagementInterface
 
     protected function logger($array)
     {
-        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/paypalbr/paypalplus-webhook.log');
+        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/paypalbr/paypalplus-webhook-' . date('Y-m-d') . '.log');
         $logger = new \Zend\Log\Logger();
         $logger->addWriter($writer);
         $logger->info($array);

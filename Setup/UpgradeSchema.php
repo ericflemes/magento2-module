@@ -8,6 +8,7 @@ use Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
+use Magento\Framework\Filesystem\Driver\File;
 
 class UpgradeData implements UpgradeDataInterface
 {
@@ -17,9 +18,18 @@ class UpgradeData implements UpgradeDataInterface
      */
     private $customerSetupFactory;
 
-    public function __construct(CustomerSetupFactory $customerSetupFactory)
+    /**
+     * @var CustomerSetupFactory
+     */
+    private $file;
+
+    public function __construct(
+        CustomerSetupFactory $customerSetupFactory,
+        File $file;
+    )
     {
         $this->customerSetupFactory = $customerSetupFactory;
+        $this->file = $file;
     }
 
     /**
@@ -41,7 +51,17 @@ class UpgradeData implements UpgradeDataInterface
 
         if (version_compare($dbVersion, '0.3.4', '<')) {
             $setup = $this->updateVersionZeroTreeFour($setup);
-            
+        }
+
+        $this->createDir();
+    }
+
+    protected function createDir()
+    {
+        $paypalDir = $varRootDir . 'paypalbr/';
+
+        if (!$this->file->isDirectory($paypalDir)) {
+            $this->file->createDirectory($paypalDir, $permissions = 0755);
         }
     }
 
