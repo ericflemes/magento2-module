@@ -51,9 +51,14 @@ define([
          * Coupon code application procedure
          */
         apply: function () {
+            var self = this;
             if (this.validate()) {
-                setCouponCodeAction(couponCode(), isApplied);
-                this.initializeIframe();
+                var response = setCouponCodeAction(couponCode(), isApplied);
+                fullScreenLoader.startLoader();
+                setTimeout(function(){ 
+                    self.initializeIframe(); 
+                }, 3000);
+                
             }
         },
 
@@ -61,10 +66,14 @@ define([
          * Cancel using coupon
          */
         cancel: function () {
+            var self = this;
             if (this.validate()) {
-                couponCode('');
-                cancelCouponAction(isApplied);
-                this.initializeIframe();
+                var response = couponCode('');
+                var response = cancelCouponAction(isApplied);
+                fullScreenLoader.startLoader();
+                setTimeout(function(){ 
+                    self.initializeIframe(); 
+                }, 3000);
             }
         },
 
@@ -268,7 +277,7 @@ define([
             var self = this;
             var serviceUrl = urlBuilder.build('paypalplus/payment/index');
             var approvalUrl = '';
-            fullScreenLoader.startLoader();
+            
             storage.post(serviceUrl, '')
             .done(function (response) {
                 // console.log(response);
