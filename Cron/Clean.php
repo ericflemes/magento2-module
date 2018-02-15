@@ -71,7 +71,6 @@ class Clean
         } catch (Exception $e) {
             $this->logger->info('error' . $e);
         }
-        
 
         return $this;
     }
