@@ -1,116 +1,91 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
 define([
-    'PayPalBR_PayPal/js/view/payment/default',
-    'Magento_Paypal/js/model/iframe',
     'jquery',
-    'Magento_Checkout/js/model/quote',
-    'mage/storage',
-    'Magento_Checkout/js/model/error-processor',
-    'Magento_Checkout/js/model/full-screen-loader',
-    'PayPalBR_PayPal/js/model/full-screen-loader-paypal',
-    'Magento_Checkout/js/checkout-data',
-    'Magento_Checkout/js/action/select-payment-method',
-    'Magento_Checkout/js/model/postcode-validator',
     'ko',
+    'uiComponent',
+    'Magento_Checkout/js/model/quote',
+    'Magento_SalesRule/js/action/set-coupon-code',
+    'Magento_Checkout/js/model/full-screen-loader',
+    'Magento_SalesRule/js/action/cancel-coupon',
     'mage/url',
-    'mage/translate'
+    'mage/storage'
 ], function (
-    Component,
-    iframe,
-    $,
-    quote,
-    storage,
-    errorProcesor,
-    fullScreenLoader,
-    fullScreenLoaderPayPal,
-    checkoutData, 
-    selectPaymentMethodAction, 
-    postcodeValidator,
-    ko,
-    urlBuilder
-    ) {
+    $, 
+    ko, 
+    Component, 
+    quote, 
+    setCouponCodeAction,
+    fullScreenLoader, 
+    cancelCouponAction,
+    urlBuilder,
+    storage
+) {
     'use strict';
+
+    var totals = quote.getTotals(),
+        couponCode = ko.observable(null),
+        isApplied;
+
+
+    if (totals()) {
+        couponCode(totals()['coupon_code']);
+    }
+    isApplied = ko.observable(couponCode() != null);
 
     return Component.extend({
         defaults: {
-            template: 'PayPalBR_PayPal/payment/paypal-plus',
-            paymentReady: true,
-            paypalPayerId: '',
-            payerIdCustomer: '',
-            token: '',
-            term: '',
-            isPaymentReady: false,
+            template: 'Magento_SalesRule/payment/discount'
         },
-        breakError: false,
-        errorProcessor: errorProcesor,
-        customerInfo: quote.billingAddress._latestValue,
-        paymentApiServiceUrl: 'paypalplus/payment',
-        isPaymentReady: false,
+        couponCode: couponCode,
         defaultQuote: quote,
-        shippingValue: quote.totals().base_shipping_amount,
+        /**
+         * Applied flag
+         */
+        isApplied: isApplied,
 
-
-        getNamePay: function(){
-            return "Cartão de Crédito " + window.checkoutConfig.payment.paypalbr_paypalplus.exibitionName;
-        },
-
-        isActive: function(){
-            return window.checkoutConfig.payment.paypalbr_paypalplus.active;
-        },
-
-        paypalObject: {},
-
-        initialize: function () {
-
-            this._super();
-            this._render();
+        /**
+         * Coupon code application procedure
+         */
+        apply: function () {
             var self = this;
-
-            if (window.checkoutConfig.payment.paypalbr_paypalplus.options_payments === 1) {
-                fullScreenLoaderPayPal.startLoader();
-                if (!$('#ppplus').length) {
-
-                    if (this.breakError) {
-                        $('#iframe-warning').hide();
-                        $('#iframe-error').show();
-                        $('#continueButton').prop("disabled", true);
-                        return false;
-                    }
-
-                    self.initializeIframe();
-                }
-
-                self.isPaymentReady = true;
+            if (this.validate()) {
+                var response = setCouponCodeAction(couponCode(), isApplied);
+                fullScreenLoader.startLoader();
+                setTimeout(function(){ 
+                    self.initializeIframe(); 
+                }, 3000);
+                
             }
         },
 
         /**
-         * Select current payment token
+         * Cancel using coupon
          */
-        selectPaymentMethod: function () {
+        cancel: function () {
             var self = this;
-            if (!self.isPaymentReady || self.shippingValue != this.defaultQuote.totals().base_shipping_amount) {
-                
-                fullScreenLoaderPayPal.startLoader();
-                if ($('#ppplus').length) {
-
-                    if (this.breakError) {
-                        $('#iframe-warning').hide();
-                        $('#iframe-error').show();
-                        $('#continueButton').prop("disabled", true);
-                        return false;
-                    }
-
-                    self.initializeIframe();
-                }
-
-                self.isPaymentReady = true;
+            if (this.validate()) {
+                var response = couponCode('');
+                var response = cancelCouponAction(isApplied);
+                fullScreenLoader.startLoader();
+                setTimeout(function(){ 
+                    self.initializeIframe(); 
+                }, 3000);
             }
-            
+        },
 
-            selectPaymentMethodAction(this.getData());
-            checkoutData.setSelectedPaymentMethod(this.item.method);
+        /**
+         * Coupon form validation
+         *
+         * @returns {Boolean}
+         */
+        validate: function () {
+            var form = '#discount-form';
 
-            return true;
+            return $(form).validation() && $(form).validation('isValid');
         },
 
         runPayPal: function(approvalUrl) {
@@ -295,17 +270,14 @@ define([
                 }
             );
 
-            if (self.shippingValue != this.defaultQuote.totals().base_shipping_amount) {
-                self.shippingValue = this.defaultQuote.totals().base_shipping_amount;
-                fullScreenLoaderPayPal.stopLoader();
-            }
+            fullScreenLoader.stopLoader();
         },
 
         initializeIframe: function () {
             var self = this;
             var serviceUrl = urlBuilder.build('paypalplus/payment/index');
             var approvalUrl = '';
-            // fullScreenLoader.startLoader();
+            
             storage.post(serviceUrl, '')
             .done(function (response) {
                 // console.log(response);
@@ -315,7 +287,7 @@ define([
                         approvalUrl = response.links[i].href;
                     }
                 }
-                self.runPayPal(approvalUrl);
+                var teste = self.runPayPal(approvalUrl);
             })
             .fail(function (response) {
                 console.log("ERROR");
@@ -333,91 +305,6 @@ define([
             .always(function () {
                 // fullScreenLoader.stopLoader();
             });
-        },
-
-
-        placePendingOrder: function () {
-            var self = this;
-            if (this.placeOrder()) {
-                document.addEventListener('click', iframe.stopEventPropagation, true);
-            }
-        },
-
-        doContinue: function () {
-            var self = this;
-            if (this.validateAddress() !== false) {
-                self.paypalObject.doContinue();
-            } else {
-                var message = {
-                    message: $.mage.__('Please verify shipping address.')
-                };
-                self.messageContainer.addErrorMessage(message);
-            }
-        },
-
-        getData: function () {
-            return {
-                'method': this.item.method,
-                'additional_data': {
-                    'payId': $('#paypalbr_paypalplus_payId').val(),
-                    'rememberedCardsToken': $('#paypalbr_paypalplus_rememberedCardsToken').val(),
-                    'payerId': $('#paypalbr_paypalplus_payerId').val(),
-                    'token': $('#paypalbr_paypalplus_token').val(),
-                    'term': $('#paypalbr_paypalplus_term').val(),
-                }
-            };
-        },
-
-        initObservable: function () {
-                this._super()
-                    .observe([
-                        'payId',
-                        'rememberedCardsToken',
-                        'payerId',
-                        'token',
-                        'term',
-                    ]);
-
-                return this;
-            },
-
-        /**
-         * Validate shipping address.
-         *
-         * @returns {Boolean}
-         */
-        validateAddress: function () {
-
-
-            this.customerData = quote.billingAddress._latestValue;
-            if(!this.customerData.city){
-              this.customerData = quote.shippingAddress._latestValue;  
-            }
-            if (typeof this.customerData.city === 'undefined' || this.customerData.city.length === 0) {
-                return false;
-            }
-
-            if (typeof this.customerData.countryId === 'undefined' || this.customerData.countryId.length === 0) {
-                return false;
-            }
-   
-            if (typeof this.customerData.postcode === 'undefined' || this.customerData.postcode.length === 0) {
-                return false;
-            }
-
-            if (typeof this.customerData.street === 'undefined' || this.customerData.street[0].length === 0) {
-                return false;
-            }
-            if (typeof this.customerData.region === 'undefined' || this.customerData.region.length === 0) {
-                return false;
-            }
-            return true;
-        },
-
-        _render: function () {
-
         }
     });
 });
-
-

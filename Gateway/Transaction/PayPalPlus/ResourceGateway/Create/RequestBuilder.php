@@ -295,7 +295,7 @@ class RequestBuilder implements BuilderInterface
                 'http.headers.PayPal-Partner-Attribution-Id' => 'MagentoBrazil_Ecom_PPPlus2',
                 'mode' => $this->configProvider->isModeSandbox() ? 'sandbox' : 'live',
                 'log.LogEnabled' => $debug,
-                'log.FileName' => BP . '/var/log/paypalbr/paypalplus.log',
+                'log.FileName' => BP . '/var/log/paypalbr/paypalplus-' . date('Y-m-d') . '.log',
                 'log.LogLevel' => 'DEBUG',
                 'cache.enabled' => true,
                 'http.CURLOPT_SSLVERSION' => 'CURL_SSLVERSION_TLSv1_2'

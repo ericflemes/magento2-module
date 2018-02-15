@@ -6,6 +6,7 @@ use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Customer\Model\SessionFactory;
+use \Magento\Payment\Model\Config;
 
 final class PayPalPlusConfigProvider implements ConfigProviderInterface
 {
@@ -61,18 +62,25 @@ final class PayPalPlusConfigProvider implements ConfigProviderInterface
     protected $sessionFactory;
 
     /**
+     * @var Config
+     */
+    protected $_paymentModelConfig;
+
+    /**
      * @param ConfigInterface $payPalPlusConfig
      */
     public function __construct(
         PaymentHelper $paymentHelper,
         UrlInterface $urlBuilder,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        SessionFactory $sessionFactory
+        SessionFactory $sessionFactory,
+        Config $paymentModelConfig
     ) {
         $this->sessionFactory = $sessionFactory;
         $this->paymentHelper = $paymentHelper;
         $this->urlBuilder = $urlBuilder;
         $this->_scopeConfig = $scopeConfig;
+        $this->_paymentModelConfig = $paymentModelConfig;
     }
 
     public function getConfig()
@@ -109,9 +117,27 @@ final class PayPalPlusConfigProvider implements ConfigProviderInterface
                     'mode' => $mode,
                     'rememberedCard' => $rememberedCard,
                     'iframe_height_active' => $iframeHeightActive,
-                    'iframe_height' => $iframeHeight
+                    'iframe_height' => $iframeHeight,
+                    'options_payments' => $this->toOptionArrayPayments()
                 ]
             ]
         ];
+    }
+
+    public function toOptionArrayPayments()
+    {
+        $payments = $this->_paymentModelConfig->getActiveMethods();
+        $methods = array();
+        foreach ($payments as $paymentCode => $paymentModel) {
+            if ($paymentCode == 'free' || $paymentCode == 'paypal_billing_agreement') {
+                continue;
+            }
+            $paymentTitle = $this->_scopeConfig->getValue('payment/'.$paymentCode.'/title');
+            $methods[$paymentCode] = array(
+                'label' => $paymentTitle,
+                'value' => $paymentCode
+            );
+        }
+        return count($methods);
     }
 }
