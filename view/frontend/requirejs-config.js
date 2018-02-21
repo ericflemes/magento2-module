@@ -2,7 +2,8 @@ var config = {
     map: {
         '*': {
             'Magento_Checkout/js/action/select-shipping-method':'PayPalBR_PayPal/js/action/select-shipping-method',
-            'Magento_SalesRule/js/view/payment/discount':'PayPalBR_PayPal/js/view/payment/discount'
+            'Magento_SalesRule/js/view/payment/discount':'PayPalBR_PayPal/js/view/payment/discount',
+            'Magento_Checkout/js/model/step-navigator':'PayPalBR_PayPal/js/model/step-navigator'
         }
     },
     paths:{

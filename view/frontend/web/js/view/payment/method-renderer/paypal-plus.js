@@ -62,7 +62,7 @@ define([
         initialize: function () {
 
             this._super();
-            this._render();
+            // this._render();
             var self = this;
 
             if (window.checkoutConfig.payment.paypalbr_paypalplus.options_payments === 1) {
@@ -78,7 +78,7 @@ define([
 
                     self.initializeIframe();
                 }
-
+                window.checkoutConfig.payment.paypalbr_paypalplus.is_payment_ready = true;
                 self.isPaymentReady = true;
             }
         },
@@ -102,7 +102,7 @@ define([
 
                     self.initializeIframe();
                 }
-
+                window.checkoutConfig.payment.paypalbr_paypalplus.is_payment_ready = true;
                 self.isPaymentReady = true;
             }
             
@@ -180,7 +180,7 @@ define([
             if (window.checkoutConfig.payment.paypalbr_paypalplus.iframe_height_active === '1') {
                 var height = window.checkoutConfig.payment.paypalbr_paypalplus.iframe_height;
             }else{
-                var height = null;
+                var height = '';
             }
 
 
@@ -412,10 +412,6 @@ define([
                 return false;
             }
             return true;
-        },
-
-        _render: function () {
-
         }
     });
 });

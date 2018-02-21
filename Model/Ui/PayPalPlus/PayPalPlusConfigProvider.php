@@ -118,7 +118,8 @@ final class PayPalPlusConfigProvider implements ConfigProviderInterface
                     'rememberedCard' => $rememberedCard,
                     'iframe_height_active' => $iframeHeightActive,
                     'iframe_height' => $iframeHeight,
-                    'options_payments' => $this->toOptionArrayPayments()
+                    'options_payments' => $this->toOptionArrayPayments(),
+                    'is_payment_ready' => false
                 ]
             ]
         ];
